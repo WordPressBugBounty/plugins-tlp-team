@@ -4,7 +4,7 @@ Donate link:
 Tags: team, team showcase, team slider, team plugin, team members
 Requires at least: 4.5
 Tested up to: 6.6
-Stable tag: 4.4.2
+Stable tag: 4.4.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -252,6 +252,9 @@ If you like The Post Grid Plugin, then consider checking out our other WordPress
 09. Elementor Team Grid layout
 
 == Changelog ==
+
+= 4.4.3  (October 29, 2024 ) =
+* Fixed: Elementor grid widget designation color control issue.
 
 = 4.4.2  (September 12, 2024 ) =
 * Updated: Proper sanitization shortcode preview page.
