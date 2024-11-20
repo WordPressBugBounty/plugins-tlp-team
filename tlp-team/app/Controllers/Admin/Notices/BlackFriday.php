@@ -25,12 +25,10 @@ class BlackFriday {
 	 */
 	protected function init() {
 		$current      = time();
-		$black_friday = mktime( 0, 0, 0, 11, 20, 2023 ) <= $current && $current <= mktime( 0, 0, 0, 1, 5, 2024 );
-
+		$black_friday = mktime( 0, 0, 0, 11, 19, 2024 ) <= $current && $current <= mktime( 0, 0, 0, 1, 5, 2025 );
 		if ( ! $black_friday ) {
 			return;
 		}
-
 		add_action( 'admin_init', [ $this, 'bf_notice' ] );
 	}
 
@@ -40,9 +38,9 @@ class BlackFriday {
 	 * @return void|string
 	 */
 	public function bf_notice() {
-		if ( get_option( 'rtteam_ny_2023' ) != '1' ) {
-			if ( ! isset( $GLOBALS['rt_team_ny_2023_notice'] ) ) {
-				$GLOBALS['rt_team_ny_2023_notice'] = 'rtteam_ny_2023';
+		if ( get_option( 'rtteam_ny_2025' ) != '1' ) {
+			if ( ! isset( $GLOBALS['rt_team_ny_2025_notice'] ) ) {
+				$GLOBALS['rt_team_ny_2025_notice'] = 'rtteam_ny_2025';
 				self::notice();
 			}
 		}
@@ -74,23 +72,25 @@ class BlackFriday {
                         margin-top: 15px;
                     }
                 </style>
-				<div class="notice notice-info is-dismissible rttm-black-friday" data-rtteamdismissable="rtteam_ny_2023"
-					style="display:grid;grid-template-columns: 100px auto;padding-top: 25px; padding-bottom: 22px;">
-					<img alt="<?php echo esc_attr( $plugin_name ); ?>"
-						src="<?php echo esc_url( rttlp_team()->assets_url() . 'images/team-pro-gif.gif' ); ?>" width="74px"
-						height="74px" style="grid-row: 1 / 4; align-self: center;justify-self: center"/>
-					<h3 style="margin:0;"><?php echo sprintf( '%s Black Friday Sale 2023!!', esc_html( $plugin_name ) ); ?></h3>
+                <div class="notice notice-info is-dismissible rttm-black-friday" data-rtteamdismissable="rtteam_ny_2025"
+                    style="display:grid;grid-template-columns: 100px auto;padding-top: 25px; padding-bottom: 22px;">
+                    <img alt="<?php echo esc_attr( $plugin_name ); ?>"
+                        src="<?php echo esc_url( rttlp_team()->assets_url() . 'images/team-pro-gif.gif' ); ?>" width="74px"
+                        height="74px" style="grid-row: 1 / 4; align-self: center;justify-self: center"/>
+                    <h3 style="margin:0; display:flex; align-items: center"><?php echo sprintf( '%s Team Pro - Black Friday ', esc_html( $plugin_name ) ); ?>
+                        <img alt="<?php echo esc_attr( $plugin_name ); ?>" src="<?php echo esc_url( rttlp_team()->assets_url() . 'images/deal.gif' ); ?>" width="40px" />
+                    </h3>
 
-					<p style="margin:0 0 2px;">
-					<?php echo esc_html__( "🚀 Exciting News: Team Pro Black Friday sale is now live!", 'tlp-team' ); ?>
+                    <p style="margin:0 0 2px;">
+                    <?php echo __( "🚀 Exciting News: <b>Team Pro </b> Black Friday sale is now live!", 'tlp-team' ); ?>
                         Get the plugin today and enjoy discounts up to <b> 50%.</b>
-					</p>
+                    </p>
 
-					<p style="margin:0;" class="rttm-btn-wrapper">
-						<a class="button button-primary" href="<?php echo esc_url( $download_link ); ?>" target="_blank">Buy Now</a>
-						<a class="button button-dismiss" href="#">Dismiss</a>
-					</p>
-				</div>
+                    <p style="margin:0;" class="rttm-btn-wrapper">
+                        <a class="button button-primary" href="<?php echo esc_url( $download_link ); ?>" target="_blank">Buy Now</a>
+                        <a class="button button-dismiss" href="#">Dismiss</a>
+                    </p>
+                </div>
 					<?php
 			}
 		);
@@ -125,7 +125,7 @@ class BlackFriday {
 			function () {
 				check_ajax_referer( 'rtteam-dismissible-notice', 'nonce' );
 
-				update_option( 'rtteam_ny_2023', '1' );
+				update_option( 'rtteam_ny_2025', '1' );
 				wp_die();
 			}
 		);

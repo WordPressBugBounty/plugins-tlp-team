@@ -173,11 +173,12 @@ class Fields {
 
 	private function text() {
 		$h  = null;
+        $value = $this->value ?? '';
 		$h .= '<input
 				type="text"
 				class="' . esc_attr( $this->class ) . '"
 				id="' . esc_attr( $this->id ) . '"
-				value="' . esc_attr( $this->value ) . '"
+				value="' . esc_attr( $value ) . '"
 				name="' . esc_attr( $this->name ) . '"
 				placeholder="' . esc_attr( $this->placeholder ) . '"
 				' . Fns::htmlKses( $this->attr, 'basic' ) . '
@@ -250,11 +251,12 @@ class Fields {
 
 	private function url() {
 		$h  = null;
+        $value = $this->value ?? '';;
 		$h .= '<input
 				type="url"
 				class="' . esc_attr( $this->class ) . '"
 				id="' . esc_attr( $this->id ) . '"
-				value="' . esc_url( $this->value ) . '"
+				value="' . esc_url( $value ) . '"
 				name="' . esc_attr( $this->name ) . '"
 				placeholder="' . esc_attr( $this->placeholder ) . '"
 				' . Fns::htmlKses( $this->attr, 'basic' ) . '
@@ -265,11 +267,12 @@ class Fields {
 
 	private function email() {
 		$h  = null;
+        $value = $this->value;
 		$h .= '<input
 				type="email"
 				class="' . esc_attr( $this->class ) . '"
 				id="' . esc_attr( $this->id ) . '"
-				value="' . esc_attr( $this->value ) . '"
+				value="' . esc_attr( $value ) . '"
 				name="' . esc_attr( $this->name ) . '"
 				placeholder="' . esc_attr( $this->placeholder ) . '"
 				' . Fns::htmlKses( $this->attr, 'basic' ) . '
@@ -280,11 +283,12 @@ class Fields {
 
 	private function number() {
 		$h  = null;
+        $value = $this->value;
 		$h .= '<input
 				type="number"
 				class="' . esc_attr( $this->class ) . '"
 				id="' . esc_attr( $this->id ) . '"
-				value="' . ( ! empty( $this->value ) ? absint( $this->value ) : null ) . '"
+				value="' . ( ! empty( $value ) ? absint( $value ) : null ) . '"
 				name="' . esc_attr( $this->name ) . '"
 				placeholder="' . esc_attr( $this->placeholder ) . '"
 				' . Fns::htmlKses( $this->attr, 'basic' ) . '
@@ -324,13 +328,14 @@ class Fields {
 
 	private function textArea() {
 		$h  = null;
+        $value = $this->value ?? '';
 		$h .= '<textarea
 				class="' . esc_attr( $this->class ) . ' rt-textarea"
 				id="' . esc_attr( $this->id ) . '"
 				name="' . esc_attr( $this->name ) . '"
 				placeholder="' . esc_attr( $this->placeholder ) . '"
 				' . Fns::htmlKses( $this->attr, 'basic' ) . '
-				>' . wp_kses_post( $this->value ) . '</textarea>';
+				>' . wp_kses_post( $value ) . '</textarea>';
 
 		return $h;
 	}

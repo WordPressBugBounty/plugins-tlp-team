@@ -32,6 +32,8 @@ class LoadMore {
 		add_action( 'wp_ajax_nopriv_ttp_Layout_Ajax_Action', [ $this, 'response' ] );
 	}
 
+    private string $order = 'DESC';
+
 	/**
 	 * Ajax Response.
 	 *

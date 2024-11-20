@@ -173,7 +173,6 @@ class Fns {
 				$html .= $tlpField->Field( $fieldKey, $field );
 			}
 		}
-
 		return $html;
 	}
 

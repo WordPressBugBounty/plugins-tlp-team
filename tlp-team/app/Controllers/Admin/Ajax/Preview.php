@@ -30,6 +30,8 @@ class Preview {
 		add_action( 'wp_ajax_tlpTeamPreviewAjaxCall', [ $this, 'response' ] );
 	}
 
+    private array $scA = [];
+
 	/**
 	 * Ajax Response.
 	 *
@@ -730,9 +732,7 @@ class Preview {
 			} else {
 				$html .= '<p>' . esc_html__( 'No member found', 'tlp-team' ) . '</p>';
 			}
-
 			$html .= '</div>';// end container
-
 			$scriptGenerator               = [];
 			$scriptGenerator['layout']     = $layoutID;
 			$scriptGenerator['rand']       = $rand;
