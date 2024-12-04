@@ -138,6 +138,9 @@ span.rt-loading {
   border-bottom: 1px solid #eeeeee;
 }
 
+#tlp_team_meta .tlp-field-holder{
+  display: flex !important;
+}
 .tlp-field-holder .tlp-field {
   flex: 1;
   padding: 12px 15px 5px 10px;

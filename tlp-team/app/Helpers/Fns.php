@@ -456,11 +456,15 @@ class Fns {
 			foreach ( $image_ids as $id ) {
 				$img_alt  = trim( wp_strip_all_tags( get_post_meta( $id, '_wp_attachment_image_alt', true ) ) );
 				$alt_tag  = ! empty( $img_alt ) ? $img_alt : get_the_title( $post_id );
+                $image_html = wp_get_attachment_image( $id, 'large', false, [
+                    'alt' => $alt_tag
+                ]);
+                error_log( print_r( $image_html, true ), 3, __DIR__.'/log.txt');
 				$full_url = wp_get_attachment_image_src( $id, 'large' );
 				if ( isset( $full_url[0] ) ) {
 					$html .= '<div class="swiper-slide">';
 					$html .= '<div class="profile-img-wrapper">';
-					$html .= "<img class='profile-img' src='{$full_url[0]}' alt='" . $alt_tag . "'>";
+					$html .=  $image_html;;
 					$html .= '</div>';
 					$html .= '</div>';
 				}
@@ -548,7 +552,7 @@ class Fns {
 					[
 						'taxonomy'   => $taxonomy,
 						'orderby'    => 'meta_value_num',
-						'meta_key'   => '_rt_order',
+						'meta_key'   => '_rt_order', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 						'order'      => 'ASC',
 						'hide_empty' => false,
 					]
@@ -1406,17 +1410,21 @@ class Fns {
 			$css = sprintf( '/*sc-%2$d-start*/%1$s/*sc-%2$d-end*/', $css, $scID );
 			if ( file_exists( $cssFile ) && ( $oldCss = $wp_filesystem->get_contents( $cssFile ) ) ) {
 				if ( strpos( $oldCss, '/*sc-' . $scID . '-start' ) !== false ) {
-					$oldCss = preg_replace( '/\/\*sc-' . $scID . '-start[\s\S]+?sc-' . $scID . '-end\*\//', '', $oldCss );
-					$oldCss = preg_replace( "/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", '', $oldCss );
+                    if (!empty($oldCss)) {
+                        $oldCss = preg_replace('/\/\*sc-' . $scID . '-start[\s\S]+?sc-' . $scID . '-end\*\//', '', $oldCss);
+                        $oldCss = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", '', $oldCss);
+                    } else {
+                        $oldCss = '';
+                    }
 				}
 				$css = $oldCss . $css;
 			} elseif ( ! file_exists( $cssFile ) ) {
 				$upload_basedir_trailingslashit = trailingslashit( $upload_basedir );
 				$wp_filesystem->mkdir( $upload_basedir_trailingslashit . 'tlp-team' );
 			}
-			if ( ! $wp_filesystem->put_contents( $cssFile, $css ) ) {
-				error_log( print_r( 'Team: Error Generated css file ', true ) );
-			}
+//			if ( ! $wp_filesystem->put_contents( $cssFile, $css ) ) {
+//				error_log( print_r( 'Team: Error Generated css file ', true ) );
+//			}
 		}
 	}
 
@@ -1427,19 +1435,28 @@ class Fns {
 	 *
 	 * @return void
 	 */
-	public static function removeGeneratorShortcodeCss( $scID ) {
-		$upload_dir     = wp_upload_dir();
-		$upload_basedir = $upload_dir['basedir'];
-		$cssFile        = $upload_basedir . '/tlp-team/team-sc.css';
+    public static function removeGeneratorShortcodeCss( $scID ) {
+        $upload_dir     = wp_upload_dir();
+        $upload_basedir = $upload_dir['basedir'];
+        $cssFile        = $upload_basedir . '/tlp-team/team-sc.css';
         // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
-		if ( file_exists( $cssFile ) && ( $oldCss = file_get_contents( $cssFile ) ) && strpos( $oldCss, '/*sc-' . $scID . '-start' ) !== false ) {
+        if ( file_exists( $cssFile ) ) {
+            $oldCss = file_get_contents( $cssFile );
+            if ( $oldCss !== false && strpos( $oldCss, '/*sc-' . $scID . '-start' ) !== false ) {
+                // Ensure $oldCss is a string before passing to preg_replace
+                $css = preg_replace('/\/\*sc-' . $scID . '-start[\s\S]+?sc-' . $scID . '-end\*\//', '', $oldCss);
 
-			$css = preg_replace( '/\/\*sc-' . $scID . '-start[\s\S]+?sc-' . $scID . '-end\*\//', '', $oldCss );
-			$css = preg_replace( "/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", '', $css );
-			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
-			file_put_contents( $cssFile, $css );
-		}
-	}
+                // Ensure $css is a string before cleaning up line breaks
+                if (!empty($css)) {
+                    $css = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", '', $css);
+                } else {
+                    $css = ''; // Default to an empty string if preg_replace returns null
+                }
+                // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
+                file_put_contents( $cssFile, $css );
+            }
+        }
+    }
 
 	public static function rt_plugin_team_sc_pro_information() {
 		?>

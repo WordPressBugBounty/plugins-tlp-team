@@ -180,7 +180,7 @@ if ( ! class_exists( 'ReSizer' ) ) {
 
 				return $image;
 			} catch ( TTPException $ex ) {
-				error_log( 'ReSizer.process() error: ' . $ex->getMessage() );
+				//error_log( 'ReSizer.process() error: ' . $ex->getMessage() );
 
 				if ( $this->throwOnError ) {
 					// Bubble up exception.

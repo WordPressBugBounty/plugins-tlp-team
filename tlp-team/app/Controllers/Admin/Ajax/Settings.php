@@ -40,11 +40,12 @@ class Settings {
 		$settings = [];
 
 		if ( wp_verify_nonce( Fns::getNonce(), Fns::nonceText()) ) {
-			$_REQUEST['team-slug'] = isset( $_REQUEST['team-slug'] ) ? sanitize_title_with_dashes( $_REQUEST['team-slug'] ) : 'team';
+			$_REQUEST['team-slug'] = isset( $_REQUEST['team-slug'] ) ? sanitize_title_with_dashes( wp_unslash( $_REQUEST['team-slug'] ) ) : 'team';
 			$options               = Options::getAllSettingOptions();
 			if ( ! empty( $options ) ) {
 				foreach ( $options as $optionId => $option ) {
 					if ( isset( $_REQUEST[ $optionId ] ) ) {
+                        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 						$settings[ $optionId ] = Fns::sanitize( $option, $_REQUEST[ $optionId ] );
 					}
 				}

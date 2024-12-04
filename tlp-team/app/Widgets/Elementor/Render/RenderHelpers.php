@@ -126,7 +126,7 @@ class RenderHelpers {
 				]
 			);
 
-			$html = null;
+			$html = '';
 
 			if ( rttlp_team()->has_pro() ) {
 				$html .= '<div class="md-el-modal tlp-md-effect" id="tlp-modal">
@@ -320,7 +320,7 @@ class RenderHelpers {
 		$arg['tlp_skill'] = $skill ? maybe_unserialize( $skill ) : [];
 
 		foreach ( $arg['soLink'] as $soc ) {
-			if ( in_array( $soc['id'], $meta['social_profiles'], true ) ) {
+            if ( is_array( $soc ) && isset( $soc['id'] ) && in_array( $soc['id'], $meta['social_profiles'], true ) ) {
 				$arg['sLink'][] = $soc;
 			}
 		}

@@ -38,7 +38,7 @@ class Social {
 	
 	public function response() {
 		if (wp_verify_nonce( Fns::getNonce(), Fns::nonceText())){
-			$count = absint( $_REQUEST['id'] );
+			$count = isset( $_REQUEST['id'] ) ? absint( sanitize_text_field( wp_unslash( $_REQUEST['id'] ) ) ): '';
 			$html  = null;
 			$html         .= '<div class="tlp-field-holder socialLink" id="slh-' . $count . '">';
 			$html     .= '<div class="tlp-label">';

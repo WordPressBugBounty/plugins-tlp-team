@@ -53,7 +53,7 @@ class TaxSorting {
 		$html  = $msg = null;
 		$error = true;
 		if ( wp_verify_nonce( Fns::getNonce(), Fns::nonceText()) ) {
-			$tax = ! empty( $_REQUEST['tax'] ) ? sanitize_text_field( $_REQUEST['tax'] ) : null;
+			$tax = ! empty( $_REQUEST['tax'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['tax'] ) ) : null;
 			if ( $tax ) {
 				$error = false;
 				/*old code*/
@@ -69,7 +69,7 @@ class TaxSorting {
 				$terms = get_terms( array(
 					'taxonomy'   => $tax,
 					'orderby'    => 'meta_value_num',
-					'meta_key'   => '_rt_order',
+					'meta_key'   => '_rt_order', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 					'order'      => 'ASC',
 					'hide_empty' => false,
 				) );
@@ -204,7 +204,7 @@ class TaxSorting {
 	 */
 	function ttp_term_update_order() {
 		if (wp_verify_nonce( Fns::getNonce(), Fns::nonceText() )){
-			$data = ( ! empty( $_POST['terms'] ) ? explode( ',', sanitize_text_field( $_POST['terms'] ) ) : [] );
+			$data = ( ! empty( $_POST['terms'] ) ? explode( ',', sanitize_text_field( wp_unslash( $_POST['terms'] ) ) ) : [] );
 
 			if ( ! is_array( $data ) && empty( $data ) ) {
 				return false;

@@ -42,6 +42,7 @@ class Shortcode {
 				'posts_per_page' => - 1,
 			]
 		);
+
 		if ( $scQ->have_posts() ) {
 			?>
 			<div class='mce-container mce-form'>
@@ -54,7 +55,7 @@ class Shortcode {
 						while ( $scQ->have_posts() ) {
 							$scQ->the_post();
 							?>
-							<option value='<?php get_the_ID(); ?>'><?php get_the_title(); ?></option>
+							<option value='<?php echo esc_attr( get_the_ID() ); ?>'><?php echo esc_html( get_the_title() ); ?></option>
 							<?php
 						}
 						wp_reset_postdata();

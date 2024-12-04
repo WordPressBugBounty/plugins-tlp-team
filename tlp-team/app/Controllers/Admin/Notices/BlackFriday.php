@@ -77,12 +77,16 @@ class BlackFriday {
                     <img alt="<?php echo esc_attr( $plugin_name ); ?>"
                         src="<?php echo esc_url( rttlp_team()->assets_url() . 'images/team-pro-gif.gif' ); ?>" width="74px"
                         height="74px" style="grid-row: 1 / 4; align-self: center;justify-self: center"/>
-                    <h3 style="margin:0; display:flex; align-items: center"><?php echo sprintf( '%s Team Pro - Black Friday ', esc_html( $plugin_name ) ); ?>
+                    <h3 style="margin:0; display:flex; align-items: center"><?php echo sprintf( '%s - Black Friday ', esc_html( $plugin_name ) ); ?>
                         <img alt="<?php echo esc_attr( $plugin_name ); ?>" src="<?php echo esc_url( rttlp_team()->assets_url() . 'images/deal.gif' ); ?>" width="40px" />
                     </h3>
 
                     <p style="margin:0 0 2px;">
-                    <?php echo __( "🚀 Exciting News: <b>Team Pro </b> Black Friday sale is now live!", 'tlp-team' ); ?>
+
+                        <?php
+                            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                            echo __( "🚀 Exciting News: <b>Team Pro </b> Black Friday sale is now live!", "tlp-team" );
+                        ?>
                         Get the plugin today and enjoy discounts up to <b> 50%.</b>
                     </p>
 

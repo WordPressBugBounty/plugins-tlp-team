@@ -54,7 +54,7 @@ class LoadMore {
 			] );
 		}
 
-		$scID = absint( $_REQUEST['scID'] );
+		$scID = isset( $_REQUEST['scID'] ) ? absint( $_REQUEST['scID'] ): '';
 
 		if ( $scID && ! is_null( get_post( $scID ) ) ) {
 			$scMeta = get_post_meta( $scID );
@@ -186,8 +186,8 @@ class LoadMore {
 			}
 
 			// Advance Filter
-			$action_taxonomy = ! empty( $_REQUEST['taxonomy'] ) ? sanitize_text_field( $_REQUEST['taxonomy'] ) : null;
-			$action_term     = ! empty( $_REQUEST['term'] ) ? ( sanitize_text_field( $_REQUEST['term'] ) == 'all' ? 'all' : absint( $_REQUEST['term'] ) ) : 0;
+			$action_taxonomy = ! empty( $_REQUEST['taxonomy'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['taxonomy'] ) ) : null;
+			$action_term     = ! empty( $_REQUEST['term'] ) ? ( sanitize_text_field( wp_unslash( $_REQUEST['term'] ) ) == 'all' ? 'all' : absint( $_REQUEST['term'] ) ) : 0;
 
 			if ( $action_taxonomy && $action_term && $action_term != 'all' ) {
 				$taxQ              = [
@@ -197,25 +197,25 @@ class LoadMore {
 						'terms'    => $action_term,
 					],
 				];
-				$args['tax_query'] = $taxQ;
+				$args['tax_query'] = $taxQ; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
 			}
 
 			// override shortcode filter
-			$action_order = ! empty( $_REQUEST['order'] ) ? sanitize_text_field( $_REQUEST['order'] ) : null;
+			$action_order = ! empty( $_REQUEST['order'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['order'] ) ) : null;
 
 			if ( $action_order ) {
 				$args['order'] = $action_order;
 			}
 
-			$action_order_by = ! empty( $_REQUEST['order_by'] ) ? sanitize_text_field( $_REQUEST['order_by'] ) : null;
+			$action_order_by = ! empty( $_REQUEST['order_by'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['order_by'] ) ) : null;
 
 			if ( $action_order_by ) {
 				$args['orderby'] = $action_order_by;
 			}
 
-			$this->order = ! empty( $args['order'] ) ? sanitize_text_field( $args['order'] ) : 'DESC';
+			$this->order = ! empty( $args['order'] ) ? sanitize_text_field( wp_unslash( $args['order'] ) ) : 'DESC';
 
-			$sAction = ( ! empty( $_REQUEST['search'] ) ? sanitize_text_field( $_REQUEST['search'] ) : null );
+			$sAction = ( ! empty( $_REQUEST['search'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['search'] ) )  : null );
 
 			if ( $sAction ) {
 				$this->s = [
@@ -230,7 +230,7 @@ class LoadMore {
 				// add_filter( 'posts_join', [ $this, 'tlp_team_search_join' ] );
 				add_filter( 'posts_groupby', [ $this, 'tlp_team_search_groupby' ] );
 
-				$args['meta_query'] = [
+				$args['meta_query'] = [ // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
 					'relation' => 'OR',
 					[
 						'key'     => 'location',

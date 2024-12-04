@@ -47,7 +47,7 @@ class Preview {
 			$layoutID = 'rt-container-' . $rand;
 			$lazyLoad = false;
 
-			$layout = ( ! empty( $_REQUEST['layout'] ) ? sanitize_text_field( $_REQUEST['layout'] ) : 'layout1' );
+			$layout = ( ! empty( $_REQUEST['layout'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['layout'] ) ) : 'layout1' );
 
 			if ( ! in_array( $layout, array_keys( Options::scLayout() ) ) ) {
 				$layout = 'layout1';
@@ -55,7 +55,7 @@ class Preview {
 			$isIsotope  = preg_match( '/isotope/', $layout );
 			$isCarousel = preg_match( '/carousel/', $layout );
 			$isGrid     = preg_match( '/layout/', $layout );
-			$allCol     = ! empty( $_REQUEST['ttp_column'] ) && is_array( $_REQUEST['ttp_column'] ) ? array_map( 'sanitize_text_field', $_REQUEST['ttp_column'] ) : [];
+			$allCol     = ! empty( $_REQUEST['ttp_column'] ) && is_array( $_REQUEST['ttp_column'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_REQUEST['ttp_column'] ) ) : [];
 			$dCol       = ! empty( $allCol['desktop'] ) ? absint( $allCol['desktop'] ) : 4;
 			$tCol       = ! empty( $allCol['tab'] ) ? absint( $allCol['tab'] ) : 2;
 			$mCol       = ! empty( $allCol['mobile'] ) ? absint( $allCol['mobile'] ) : 1;
@@ -85,16 +85,15 @@ class Preview {
 
 			/* post__not_in */
 			$post__not_in = isset( $_REQUEST['ttp_post__not_in'] ) && is_array( $_REQUEST['ttp_post__not_in'] ) ? array_map( 'absint', $_REQUEST['ttp_post__not_in'] ) : null;
-
 			if ( $post__not_in ) {
-				$args['post__not_in'] = $post__not_in;
+				$args['post__not_in'] = $post__not_in; // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude, WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_post__not_in
 			}
 
 			/* LIMIT */
 			$limit                  = ( ( empty( $_REQUEST['ttp_limit'] ) || $_REQUEST['ttp_limit'] === '-1' ) ? 10000000 : absint( $_REQUEST['ttp_limit'] ) );
 			$args['posts_per_page'] = $limit;
 			$pagination             = ! empty( $_REQUEST['ttp_pagination'] );
-			$posts_loading_type     = ! empty( $_REQUEST['ttp_pagination_type'] ) ? sanitize_text_field( $_REQUEST['ttp_pagination_type'] ) : 'pagination';
+			$posts_loading_type     = ! empty( $_REQUEST['ttp_pagination_type'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['ttp_pagination_type'] ) ) : 'pagination';
 
 			if ( $pagination && ! $isCarousel ) {
 				$posts_per_page = isset( $_REQUEST['ttp_posts_per_page'] ) ? absint( $_REQUEST['ttp_posts_per_page'] ) : $limit;
@@ -121,8 +120,8 @@ class Preview {
 
 			// Taxonomy
 			$taxQ           = $taxFilterTerms = [];
-			$department_ids = ! empty( $department_ids ) && is_array( $department_ids ) ? array_map( 'absint', $_REQUEST['ttp_departments'] ) : [];
-
+			//$department_ids = ! empty( $department_ids ) && is_array( $department_ids ) ? array_map( 'absint', wp_unslash( $_REQUEST['ttp_departments'] ) ) : [];
+            $department_ids = isset( $_REQUEST['ttp_departments'] ) && is_array( $_REQUEST['ttp_departments'] ) ? array_map( 'absint', wp_unslash( $_REQUEST['ttp_departments'] ) ) : [];
 			if ( ! empty( $department_ids ) ) {
 				$taxFilterTerms = array_merge( $taxFilterTerms, $department_ids );
 				$taxQ[]         = [
@@ -133,8 +132,8 @@ class Preview {
 				];
 			}
 
-			$designation_ids = ! empty( $designation_ids ) && is_array( $designation_ids ) ? array_map( 'absint', $_REQUEST['ttp_designations'] ) : [];
-
+			//$designation_ids = ! empty( $designation_ids ) && is_array( $designation_ids ) ? array_map( 'absint', wp_unslash( $_REQUEST['ttp_designations'] ) ) : [];
+            $designation_ids = isset( $_REQUEST['ttp_designations'] ) && is_array( $_REQUEST['ttp_designations'] ) ? array_map( 'absint', wp_unslash( $_REQUEST['ttp_designations'] ) ) : [];
 			if ( ! empty( $designation_ids ) ) {
 				$taxFilterTerms = array_merge( $taxFilterTerms, $designation_ids );
 				$taxQ[]         = [
@@ -146,17 +145,17 @@ class Preview {
 			}
 
 			if ( count( $taxQ ) >= 2 ) {
-				$relation         = isset( $_REQUEST['ttp_taxonomy_relation'] ) ? sanitize_text_field( $_REQUEST['ttp_taxonomy_relation'] ) : 'AND';
+				$relation         = isset( $_REQUEST['ttp_taxonomy_relation'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['ttp_taxonomy_relation'] ) ) : 'AND';
 				$taxQ['relation'] = $relation;
 			}
 
 			if ( ! empty( $taxQ ) ) {
-				$args['tax_query'] = $taxQ;
+				$args['tax_query'] = $taxQ; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
 			}
 
 			// Order
-			$order_by = isset( $_REQUEST['order_by'] ) ? sanitize_text_field( $_REQUEST['order_by'] ) : null;
-			$order    = isset( $_REQUEST['order'] ) ? sanitize_text_field( $_REQUEST['order'] ) : null;
+			$order_by = isset( $_REQUEST['order_by'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['order_by'] ) ) : null;
+			$order    = isset( $_REQUEST['order'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['order'] ) ) : null;
 
 			if ( $order ) {
 				$args['order'] = $order;
@@ -177,7 +176,6 @@ class Preview {
 			}
 			$arg         = [];
 			$arg['grid'] = "rt-col-md-{$dCol} rt-col-sm-{$tCol} rt-col-xs-{$mCol}";
-
 			if ( ( $layout == 'layout2' ) || ( $layout == 'layout3' ) ) {
 				$iCol                = ! empty( $_REQUEST['ttl_image_column'] ) ? absint( $_REQUEST['ttl_image_column'] ) : 4;
 				$iCol                = $iCol > 12 ? 4 : $iCol;
@@ -186,7 +184,7 @@ class Preview {
 				$arg['content_area'] = "rt-col-sm-{$cCol} rt-col-xs-12 ";
 			}
 
-			$gridType     = ! empty( $_REQUEST['grid_style'] ) ? sanitize_text_field( $_REQUEST['grid_style'] ) : 'even';
+			$gridType     = ! empty( $_REQUEST['grid_style'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['grid_style'] ) ) : 'even';
 			$arg['class'] = null;
 
 			if ( ! $isCarousel ) {
@@ -214,7 +212,7 @@ class Preview {
 				$arg['class'] .= ' swiper-slide';
 			}
 
-			$margin = ! empty( $_REQUEST['margin_option'] ) ? sanitize_text_field( $_REQUEST['margin_option'] ) : 'default';
+			$margin = ! empty( $_REQUEST['margin_option'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['margin_option'] ) ) : 'default';
 
 			if ( $margin == 'no' ) {
 				$arg['class'] .= ' no-margin';
@@ -222,12 +220,12 @@ class Preview {
 
 			$round_img = null;
 
-			if ( ! empty( $_REQUEST['image_style'] ) && 'round' === sanitize_text_field( $_REQUEST['image_style'] ) ) {
+			if ( ! empty( $_REQUEST['image_style'] ) && 'round' === sanitize_text_field( wp_unslash( $_REQUEST['image_style'] ) ) ) {
 				$arg['class'] .= $round_img = ' round-img';
 			}
 
 			$arg['anchorClass'] = null;
-			$link               = ! empty( $_REQUEST['ttp_detail_page_link'] ) ? sanitize_text_field( $_REQUEST['ttp_detail_page_link'] ) : null;
+			$link               = ! empty( $_REQUEST['ttp_detail_page_link'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['ttp_detail_page_link'] ) ) : null;
 
 			if ( ! $link ) {
 				$arg['link']        = false;
@@ -236,10 +234,10 @@ class Preview {
 				$arg['link'] = true;
 			}
 
-			$linkType = ! empty( $_REQUEST['ttp_detail_page_link_type'] ) ? sanitize_text_field( $_REQUEST['ttp_detail_page_link_type'] ) : 'popup';
+			$linkType = ! empty( $_REQUEST['ttp_detail_page_link_type'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['ttp_detail_page_link_type'] ) ) : 'popup';
 
 			if ( $link && $linkType == 'popup' ) {
-				$popupType = ! empty( $_REQUEST['ttp_popup_type'] ) ? sanitize_text_field( $_REQUEST['ttp_popup_type'] ) : 'single';
+				$popupType = ! empty( $_REQUEST['ttp_popup_type'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['ttp_popup_type'] ) ) : 'single';
 				if ( $popupType == 'single' ) {
 					$arg['anchorClass'] .= ' ttp-single-md-popup';
 				} elseif ( $popupType == 'multiple' ) {
@@ -252,25 +250,25 @@ class Preview {
 			$arg['target'] = null;
 
 			if ( $link && $linkType == 'new_page' ) {
-				$arg['target'] = ! empty( $_REQUEST['ttp_link_target'] ) ? sanitize_text_field( $_REQUEST['ttp_link_target'] ) : '_self';
+				$arg['target'] = ! empty( $_REQUEST['ttp_link_target'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['ttp_link_target'] ) ) : '_self';
 			}
 
-			$parentClass      = ( ! empty( $_REQUEST['ttp_parent_class'] ) ? sanitize_text_field( $_REQUEST['ttp_parent_class'] ) : null );
-			$grayscale        = ( ! empty( $_REQUEST['ttp_grayscale'] ) ? sanitize_text_field( $_REQUEST['ttp_grayscale'] ) : null );
+			$parentClass      = ( ! empty( $_REQUEST['ttp_parent_class'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['ttp_parent_class'] ) ) : null );
+			$grayscale        = ( ! empty( $_REQUEST['ttp_grayscale'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['ttp_grayscale'] ) ) : null );
 			$fImg             = ! empty( $_REQUEST['ttp_image'] );
-			$fImgSize         = ( isset( $_REQUEST['ttp_image_size'] ) ? sanitize_text_field( $_REQUEST['ttp_image_size'] ) : 'medium' );
+			$fImgSize         = ( isset( $_REQUEST['ttp_image_size'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['ttp_image_size'] ) ) : 'medium' );
 			$character_limit  = ( isset( $_REQUEST['character_limit'] ) ? absint( $_REQUEST['character_limit'] ) : 0 );
-			$after_short_desc = isset( $_REQUEST['ttp_after_short_desc_text'] ) ? sanitize_textarea_field( $_REQUEST['ttp_after_short_desc_text'] ) : '';
-			$read_more_btn_text = isset( $_REQUEST['ttp_read_more_btn_text'] ) ? sanitize_textarea_field( $_REQUEST['ttp_read_more_btn_text'] ) : esc_html__('Read More','tlp-team');
+			$after_short_desc = isset( $_REQUEST['ttp_after_short_desc_text'] ) ? sanitize_textarea_field( wp_unslash( $_REQUEST['ttp_after_short_desc_text'] ) ) : '';
+			$read_more_btn_text = isset( $_REQUEST['ttp_read_more_btn_text'] ) ? sanitize_textarea_field( wp_unslash( $_REQUEST['ttp_read_more_btn_text'] ) ) : esc_html__('Read More','tlp-team');
 			$defaultImgId     = ! empty( $_REQUEST['default_preview_image'] ) ? absint( $_REQUEST['default_preview_image'] ) : null;
-			$customImgSize    = ! empty( $_REQUEST['ttp_custom_image_size'] ) && is_array( $_REQUEST['ttp_custom_image_size'] ) ? array_map( 'sanitize_text_field', $_REQUEST['ttp_custom_image_size'] ) : [];
+			$customImgSize    = ! empty( $_REQUEST['ttp_custom_image_size'] ) && is_array( $_REQUEST['ttp_custom_image_size'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_REQUEST['ttp_custom_image_size'] ) ) : [];
 
 			$containerClass  = 'rt-team-container-' . $scID;
 			$containerClass .= $parentClass ? ' ' . $parentClass : null;
 			$containerClass .= $grayscale ? ' rt-grayscale' : null;
-			$arg['items']    = ! empty( $_REQUEST['ttp_selected_field'] ) && is_array( $_REQUEST['ttp_selected_field'] ) ? array_map( 'sanitize_text_field', $_REQUEST['ttp_selected_field'] ) : [];
-			$filters         = ! empty( $_REQUEST['ttp_filter'] ) && is_array( $_REQUEST['ttp_filter'] ) ? array_map( 'sanitize_text_field', $_REQUEST['ttp_filter'] ) : [];
-			$taxFilter       = ! empty( $_REQUEST['ttp_filter_taxonomy'] ) ? sanitize_text_field( $_REQUEST['ttp_filter_taxonomy'] ) : null;
+			$arg['items']    = ! empty( $_REQUEST['ttp_selected_field'] ) && is_array( $_REQUEST['ttp_selected_field'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_REQUEST['ttp_selected_field'] ) ) : [];
+			$filters         = ! empty( $_REQUEST['ttp_filter'] ) && is_array( $_REQUEST['ttp_filter'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_REQUEST['ttp_filter'] ) ) : [];
+			$taxFilter       = ! empty( $_REQUEST['ttp_filter_taxonomy'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['ttp_filter_taxonomy'] ) ) : null;
 			$action_term     = ! empty( $_REQUEST['ttp_default_filter'] ) ? absint( $_REQUEST['ttp_default_filter'] ) : 0;
 
 			$isoFilterTaxonomy = ! empty( $_REQUEST['ttp_isotope_filter_taxonomy'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['ttp_isotope_filter_taxonomy'] ) ) : null;
@@ -279,7 +277,7 @@ class Preview {
 
 			if ( in_array( '_taxonomy_filter', $filters ) && $taxFilter && $action_term ) {
 
-				$args['tax_query'] = [
+				$args['tax_query'] = [ // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
 					[
 						'taxonomy' => $taxFilter,
 						'field'    => 'term_id',
@@ -289,22 +287,22 @@ class Preview {
 			}
 
 			$cssMeta = [
-				'primary_color'      => ( isset( $_REQUEST['primary_color'] ) ? sanitize_hex_color( $_REQUEST['primary_color'] ) : null ),
-				'ttp_button_style'   => ( isset( $_REQUEST['ttp_button_style'] ) ? array_map( 'sanitize_hex_color', $_REQUEST['ttp_button_style'] ) : null ),
-				'ttp_popup_bg_color' => ( isset( $_REQUEST['ttp_popup_bg_color'] ) ? sanitize_hex_color( $_REQUEST['ttp_popup_bg_color'] ) : null ),
-				'name'               => ( isset( $_REQUEST['name'] ) ? array_map( 'sanitize_text_field', $_REQUEST['name'] ) : null ),
-				'designation'        => ( isset( $_REQUEST['designation'] ) ? array_map( 'sanitize_text_field', $_REQUEST['designation'] ) : null ),
-				'short_bio'          => ( isset( $_REQUEST['short_bio'] ) ? array_map( 'sanitize_text_field', $_REQUEST['short_bio'] ) : null ),
-				'email'              => ( isset( $_REQUEST['email'] ) ? array_map( 'sanitize_text_field', $_REQUEST['email'] ) : null ),
-				'web_url'            => ( isset( $_REQUEST['web_url'] ) ? array_map( 'sanitize_text_field', $_REQUEST['web_url'] ) : null ),
-				'telephone'          => ( isset( $_REQUEST['telephone'] ) ? array_map( 'sanitize_text_field', $_REQUEST['telephone'] ) : null ),
-				'mobile'             => ( isset( $_REQUEST['mobile'] ) ? array_map( 'sanitize_text_field', $_REQUEST['mobile'] ) : null ),
-				'fax'                => ( isset( $_REQUEST['fax'] ) ? array_map( 'sanitize_text_field', $_REQUEST['fax'] ) : null ),
-				'location'           => ( isset( $_REQUEST['location'] ) ? array_map( 'sanitize_text_field', $_REQUEST['location'] ) : null ),
-				'skill'              => ( isset( $_REQUEST['skill'] ) ? array_map( 'sanitize_text_field', $_REQUEST['skill'] ) : null ),
-				'social'             => ( isset( $_REQUEST['social'] ) ? array_map( 'sanitize_text_field', $_REQUEST['social'] ) : null ),
-				'social_icon_bg'     => ( isset( $_REQUEST['social_icon_bg'] ) ? sanitize_hex_color( $_REQUEST['social_icon_bg'] ) : null ),
-				'overlay_rgba_bg'    => ( isset( $_REQUEST['overlay_rgba_bg'] ) ? array_map( 'sanitize_text_field', $_REQUEST['overlay_rgba_bg'] ) : null ),
+				'primary_color'      => ( isset( $_REQUEST['primary_color'] ) ? sanitize_hex_color( wp_unslash( $_REQUEST['primary_color'] ) ) : null ),
+				'ttp_button_style'   => ( isset( $_REQUEST['ttp_button_style'] ) ? array_map( 'sanitize_hex_color', wp_unslash( $_REQUEST['ttp_button_style'] ) ) : null ),
+				'ttp_popup_bg_color' => ( isset( $_REQUEST['ttp_popup_bg_color'] ) ? sanitize_hex_color( wp_unslash( $_REQUEST['ttp_popup_bg_color'] ) ) : null ),
+				'name'               => ( isset( $_REQUEST['name'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_REQUEST['name'] ) ) : null ),
+				'designation'        => ( isset( $_REQUEST['designation'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_REQUEST['designation'] ) ) : null ),
+				'short_bio'          => ( isset( $_REQUEST['short_bio'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_REQUEST['short_bio'] ) ) : null ),
+				'email'              => ( isset( $_REQUEST['email'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_REQUEST['email'] ) ) : null ),
+				'web_url'            => ( isset( $_REQUEST['web_url'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_REQUEST['web_url'] ) ) : null ),
+				'telephone'          => ( isset( $_REQUEST['telephone'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_REQUEST['telephone'] ) ) : null ),
+				'mobile'             => ( isset( $_REQUEST['mobile'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_REQUEST['mobile'] ) ) : null ),
+				'fax'                => ( isset( $_REQUEST['fax'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_REQUEST['fax'] ) ) : null ),
+				'location'           => ( isset( $_REQUEST['location'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_REQUEST['location'] ) ) : null ),
+				'skill'              => ( isset( $_REQUEST['skill'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_REQUEST['skill'] ) ) : null ),
+				'social'             => ( isset( $_REQUEST['social'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_REQUEST['social'] ) ) : null ),
+				'social_icon_bg'     => ( isset( $_REQUEST['social_icon_bg'] ) ? sanitize_hex_color( wp_unslash( $_REQUEST['social_icon_bg'] ) ) : null ),
+				'overlay_rgba_bg'    => ( isset( $_REQUEST['overlay_rgba_bg'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_REQUEST['overlay_rgba_bg'] ) ) : null ),
 				'ttp_gutter'         => ( isset( $_REQUEST['ttp_gutter'] ) ? absint( $_REQUEST['ttp_gutter'] ) : null ),
 			];
 			$teamQuery          = new \WP_Query( $args );
@@ -317,7 +315,7 @@ class Preview {
 					$html .= "<div class='rt-layout-filter-container rt-clear'><div class='rt-filter-wrap rt-clear'>";
 
 					if ( in_array( '_taxonomy_filter', $filters ) && $taxFilter ) {
-						$filterType = ( ! empty( $_REQUEST['ttp_filter_type'] ) ? sanitize_text_field( $_REQUEST['ttp_filter_type'] ) : null );
+						$filterType = ( ! empty( $_REQUEST['ttp_filter_type'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['ttp_filter_type'] ) ) : null );
 						$terms      = Fns::rt_get_all_terms_by_taxonomy( $taxFilter );
 
 						$allSelect      = ' selected';
@@ -504,7 +502,7 @@ class Preview {
 				}
 				if ( $isCarousel ) {
 
-					$cOpt            = ! empty( $_REQUEST['ttp_carousel_options'] ) ? array_map( 'sanitize_text_field', $_REQUEST['ttp_carousel_options'] ) : [];
+					$cOpt            = ! empty( $_REQUEST['ttp_carousel_options'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_REQUEST['ttp_carousel_options'] ) ) : [];
 					$autoPlayTimeOut = ! empty( $_REQUEST['ttp_carousel_autoplay_timeout'] ) ? absint( $_REQUEST['ttp_carousel_autoplay_timeout'] ) : 5000;
 					$speed           = ! empty( $_REQUEST['ttp_carousel_speed'] ) ? absint( $_REQUEST['ttp_carousel_speed'] ) : 2000;
 					$autoPlay        = in_array( 'autoplay', $cOpt, true );
@@ -591,7 +589,7 @@ class Preview {
 						$meta_value['ttp_custom_image_size'] = $customImgSize;
 						$meta_value['default_preview_image'] = $defaultImgId;
 						$meta_value['ttp_image_size']        = $fImgSize;
-						$meta_value['image_style']           = ! empty( $_REQUEST['image_style'] ) ? sanitize_text_field( $_REQUEST['image_style'] ) : null;
+						$meta_value['image_style']           = ! empty( $_REQUEST['image_style'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['image_style'] ) ) : null;
 
 						$html .= $this->renderThumbSlider( $scID, $teamQuery, $meta_value, $arg );
 						$html .= "<div class='carousel-wrapper rt-pos-r'>";

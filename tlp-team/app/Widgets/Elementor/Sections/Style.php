@@ -1186,7 +1186,7 @@ class Style {
 			'mode'     => 'group',
 			'type'     => 'typography',
 			'id'       => $obj->elPrefix . 'buttons_typography',
-			'exclude'  => [ 'font_family', 'word_spacing', 'letter_spacing', 'text_transform', 'font_style', 'text_decoration' ],
+			'exclude'  => [ 'font_family', 'word_spacing', 'letter_spacing', 'text_transform', 'font_style', 'text_decoration' ], // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude
 			'selector' => '{{WRAPPER}} .rt-elementor-container .pagination span, {{WRAPPER}} .rt-elementor-container .pagination a, {{WRAPPER}} .rt-elementor-container .rt-pagination-wrap .rt-page-numbers .paginationjs .paginationjs-pages ul li > a, {{WRAPPER}} .rt-elementor-container .rt-pagination-wrap .rt-loadmore-btn',
 		];
 

@@ -82,7 +82,7 @@ class QueryArgs {
 
 		if ( $post_not_in ) {
 			$post_not_in                = explode( ',', $post_not_in );
-			$this->args['post__not_in'] = $post_not_in;
+			$this->args['post__not_in'] = $post_not_in; // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_post__not_in
 		}
 
 		$this->args['posts_per_page'] = $limit;
@@ -185,11 +185,11 @@ class QueryArgs {
 		}
 
 		if ( ! empty( $taxQ ) ) {
-			$this->args['tax_query'] = $taxQ;
+			$this->args['tax_query'] = $taxQ; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
 		}
 
 		if ( in_array( '_taxonomy_filter', $this->meta['filters'], true ) && $this->meta['taxFilter'] && $this->meta['action_term'] ) {
-			$this->args['tax_query'] = [
+			$this->args['tax_query'] = [ // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
 				[
 					'taxonomy' => $this->meta['taxFilter'],
 					'field'    => 'term_id',

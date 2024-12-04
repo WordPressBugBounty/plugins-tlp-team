@@ -60,7 +60,7 @@ class Review {
 	 * @return void
 	 */
 	public static function rtteam_spare_me() {
-		if ( ! isset( $_REQUEST['_wpnonce'] ) || ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'rtteam_notice_nonce' ) ) {
+		if ( ! isset( $_REQUEST['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce'] ) ), 'rtteam_notice_nonce' ) ) {
 			return;
 		}
 
@@ -94,15 +94,18 @@ class Review {
 	 *
 	 * @return string
 	 */
-	protected static function rtteam_current_admin_url() {
-		$uri = isset( $_SERVER['REQUEST_URI'] ) ? esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
-		$uri = preg_replace( '|^.*/wp-admin/|i', '', $uri );
-
-		if ( ! $uri ) {
-			return '';
-		}
-		return remove_query_arg( [ '_wpnonce', '_wc_notice_nonce', 'wc_db_update', 'wc_db_update_nonce', 'wc-hide-notice' ], admin_url( $uri ) );
-	}
+    protected static function rtteam_current_admin_url() {
+        $uri = isset($_SERVER['REQUEST_URI']) ? esc_url_raw(wp_unslash($_SERVER['REQUEST_URI'])) : '';
+        if ($uri) {
+            $uri = preg_replace('|^.*/wp-admin/|i', '', $uri);
+        }
+        if (!$uri) {
+            return '';
+        }
+        return remove_query_arg(
+            ['_wpnonce', '_wc_notice_nonce', 'wc_db_update', 'wc_db_update_nonce', 'wc-hide-notice'], admin_url($uri)
+        );
+    }
 
 	/**
 	 * Display Admin Notice, asking for a review
@@ -116,8 +119,7 @@ class Review {
 			$dont_disturb = add_query_arg( $args + [ 'rtteam_spare_me' => '1' ], self::rtteam_current_admin_url() );
 			$remind_me    = add_query_arg( $args + [ 'rtteam_remind_me' => '1' ], self::rtteam_current_admin_url() );
 			$rated        = add_query_arg( $args + [ 'rtteam_rated' => '1' ], self::rtteam_current_admin_url() );
-			$reviewurl    = 'https://wordpress.org/support/plugin/tlp-team/reviews/?filter=5#new-post';
-			?>
+			$reviewurl    = 'https://wordpress.org/support/plugin/tlp-team/reviews/?filter=5#new-post';	?>
 			<div class="notice rtteam-review-notice rtteam-review-notice--extended">
 				<div class="rtteam-review-notice_content">
 					<h3>Enjoying Team – WordPress Team Members Showcase Plugin ?</h3>
@@ -132,112 +134,112 @@ class Review {
 			</div>
 
 			<style>
-			.rtteam-review-button--cta {
-				--e-button-context-color: #5d3dfd;
-				--e-button-context-color-dark: #5d3dfd;
-				--e-button-context-tint: rgb(75 47 157/4%);
-				--e-focus-color: rgb(75 47 157/40%);
-			}
-			.rtteam-review-notice {
-				position: relative;
-				margin: 5px 20px 5px 2px;
-				border: 1px solid #ccd0d4;
-				background: #fff;
-				box-shadow: 0 1px 4px rgba(0,0,0,0.15);
-				font-family: Roboto, Arial, Helvetica, Verdana, sans-serif;
-				border-inline-start-width: 4px;
-			}
-			.rtteam-review-notice.notice {
-				padding: 0;
-			}
-			.rtteam-review-notice:before {
-				position: absolute;
-				top: -1px;
-				bottom: -1px;
-				left: -4px;
-				display: block;
-				width: 4px;
-				background: -webkit-linear-gradient(bottom, #5d3dfd 0%, #6939c6 100%);
-				background: linear-gradient(0deg, #5d3dfd 0%, #6939c6 100%);
-				content: "";
-			}
-			.rtteam-review-notice_content {
-				padding: 20px;
-			}
-			.rtteam-review-notice_actions > * + * {
-				margin-inline-start: 8px;
-				-webkit-margin-start: 8px;
-				-moz-margin-start: 8px;
-			}
-			.rtteam-review-notice p {
-				margin: 0;
-				padding: 0;
-				line-height: 1.5;
-			}
-			p + .rtteam-review-notice_actions {
-				margin-top: 1rem;
-			}
-			.rtteam-review-notice h3 {
-				margin: 0;
-				font-size: 1.0625rem;
-				line-height: 1.2;
-			}
-			.rtteam-review-notice h3 + p {
-				margin-top: 8px;
-			}
-			.rtteam-review-button {
-				display: inline-block;
-				padding: 0.4375rem 0.75rem;
-				border: 0;
-				border-radius: 3px;;
-				background: var(--e-button-context-color);
-				color: #fff;
-				vertical-align: middle;
-				text-align: center;
-				text-decoration: none;
-				white-space: nowrap;
-			}
-			.rtteam-review-button:active {
-				background: var(--e-button-context-color-dark);
-				color: #fff;
-				text-decoration: none;
-			}
-			.rtteam-review-button:focus {
-				outline: 0;
-				background: var(--e-button-context-color-dark);
-				box-shadow: 0 0 0 2px var(--e-focus-color);
-				color: #fff;
-				text-decoration: none;
-			}
-			.rtteam-review-button:hover {
-				background: var(--e-button-context-color-dark);
-				color: #fff;
-				text-decoration: none;
-			}
-			.rtteam-review-button.focus {
-				outline: 0;
-				box-shadow: 0 0 0 2px var(--e-focus-color);
-			}
-			.rtteam-review-button--error {
-				--e-button-context-color: #d72b3f;
-				--e-button-context-color-dark: #ae2131;
-				--e-button-context-tint: rgba(215,43,63,0.04);
-				--e-focus-color: rgba(215,43,63,0.4);
-			}
-			.rtteam-review-button.rtteam-review-button--outline {
-				border: 1px solid;
-				background: 0 0;
-				color: var(--e-button-context-color);
-			}
-			.rtteam-review-button.rtteam-review-button--outline:focus {
-				background: var(--e-button-context-tint);
-				color: var(--e-button-context-color-dark);
-			}
-			.rtteam-review-button.rtteam-review-button--outline:hover {
-				background: var(--e-button-context-tint);
-				color: var(--e-button-context-color-dark);
-			}
-			</style>
+                .rtteam-review-button--cta {
+                    --e-button-context-color: #5d3dfd;
+                    --e-button-context-color-dark: #5d3dfd;
+                    --e-button-context-tint: rgb(75 47 157/4%);
+                    --e-focus-color: rgb(75 47 157/40%);
+                }
+                .rtteam-review-notice {
+                    position: relative;
+                    margin: 5px 20px 5px 2px;
+                    border: 1px solid #ccd0d4;
+                    background: #fff;
+                    box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+                    font-family: Roboto, Arial, Helvetica, Verdana, sans-serif;
+                    border-inline-start-width: 4px;
+                }
+                .rtteam-review-notice.notice {
+                    padding: 0;
+                }
+                .rtteam-review-notice:before {
+                    position: absolute;
+                    top: -1px;
+                    bottom: -1px;
+                    left: -4px;
+                    display: block;
+                    width: 4px;
+                    background: -webkit-linear-gradient(bottom, #5d3dfd 0%, #6939c6 100%);
+                    background: linear-gradient(0deg, #5d3dfd 0%, #6939c6 100%);
+                    content: "";
+                }
+                .rtteam-review-notice_content {
+                    padding: 20px;
+                }
+                .rtteam-review-notice_actions > * + * {
+                    margin-inline-start: 8px;
+                    -webkit-margin-start: 8px;
+                    -moz-margin-start: 8px;
+                }
+                .rtteam-review-notice p {
+                    margin: 0;
+                    padding: 0;
+                    line-height: 1.5;
+                }
+                p + .rtteam-review-notice_actions {
+                    margin-top: 1rem;
+                }
+                .rtteam-review-notice h3 {
+                    margin: 0;
+                    font-size: 1.0625rem;
+                    line-height: 1.2;
+                }
+                .rtteam-review-notice h3 + p {
+                    margin-top: 8px;
+                }
+                .rtteam-review-button {
+                    display: inline-block;
+                    padding: 0.4375rem 0.75rem;
+                    border: 0;
+                    border-radius: 3px;;
+                    background: var(--e-button-context-color);
+                    color: #fff;
+                    vertical-align: middle;
+                    text-align: center;
+                    text-decoration: none;
+                    white-space: nowrap;
+                }
+                .rtteam-review-button:active {
+                    background: var(--e-button-context-color-dark);
+                    color: #fff;
+                    text-decoration: none;
+                }
+                .rtteam-review-button:focus {
+                    outline: 0;
+                    background: var(--e-button-context-color-dark);
+                    box-shadow: 0 0 0 2px var(--e-focus-color);
+                    color: #fff;
+                    text-decoration: none;
+                }
+                .rtteam-review-button:hover {
+                    background: var(--e-button-context-color-dark);
+                    color: #fff;
+                    text-decoration: none;
+                }
+                .rtteam-review-button.focus {
+                    outline: 0;
+                    box-shadow: 0 0 0 2px var(--e-focus-color);
+                }
+                .rtteam-review-button--error {
+                    --e-button-context-color: #d72b3f;
+                    --e-button-context-color-dark: #ae2131;
+                    --e-button-context-tint: rgba(215,43,63,0.04);
+                    --e-focus-color: rgba(215,43,63,0.4);
+                }
+                .rtteam-review-button.rtteam-review-button--outline {
+                    border: 1px solid;
+                    background: 0 0;
+                    color: var(--e-button-context-color);
+                }
+                .rtteam-review-button.rtteam-review-button--outline:focus {
+                    background: var(--e-button-context-tint);
+                    color: var(--e-button-context-color-dark);
+                }
+                .rtteam-review-button.rtteam-review-button--outline:hover {
+                    background: var(--e-button-context-tint);
+                    color: var(--e-button-context-color-dark);
+                }
+                </style>
 			<?php
 		}
 

@@ -2,7 +2,6 @@
     tinymce.PluginManager.add('tlp_team_scg', function( editor, url ) {
         var tlpsc_tag = 'tlpteam';
 
-
         //add popup
         editor.addCommand('tlp_team_scg_popup', function(ui, v) {
             //setup defaults
@@ -19,7 +18,6 @@
                     }
                 ],
                 onsubmit: function( e ) {
-
                     var shortcode_str,
                         id = jQuery("#scid").val(),
                         title = jQuery( "#scid option:selected" ).text();
@@ -35,7 +33,6 @@
                     }
                 }
             });
-
             putScList();
         });
 
@@ -47,14 +44,12 @@
         });
 
         function putScList(){
-                var dialogBody = jQuery( '#tlpteam-insert-dialog-body' );
-                jQuery.post( ajaxurl, {
-                    action: 'teamShortcodeList'
-                }, function( response ) {
-                    dialogBody.html(response);
-                });
-
+            var dialogBody = jQuery( '#tlpteam-insert-dialog-body' );
+            jQuery.post( ajaxurl, {
+                action: 'teamShortcodeList'
+            }, function( response ) {
+                dialogBody.html(response);
+            });
         }
-
     });
 })();

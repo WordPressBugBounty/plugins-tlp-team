@@ -384,6 +384,7 @@ class ShortcodeMeta
 
         if (is_array($mates) && !empty($mates)) {
             foreach ($mates as $metaKey => $field) {
+                // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
                 $value = !empty($_REQUEST[$metaKey]) ? Fns::sanitize($field, $_REQUEST[$metaKey]) : null;
 
                 if (empty($field['multiple'])) {
@@ -401,7 +402,7 @@ class ShortcodeMeta
 
         Fns::generatorShortcodeCss($post_id);
         // save current tab
-        $sc_tab = isset($_REQUEST['_rttm_sc_tab']) ? sanitize_text_field($_REQUEST['_rttm_sc_tab']) : '';
+        $sc_tab = isset($_REQUEST['_rttm_sc_tab']) ? sanitize_text_field( wp_unslash( $_REQUEST['_rttm_sc_tab'] ) ) : '';
         update_post_meta($post_id, '_rttm_sc_tab', $sc_tab);
     }
 }

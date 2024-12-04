@@ -1,11 +1,12 @@
-=== Team - Team Members Showcase Plugin ===
+=== Team ===
 Contributors: techlabpro1
 Donate link:
 Tags: team, team showcase, team slider, team plugin, team members
-Requires at least: 4.5
-Tested up to: 6.6
-Stable tag: 4.4.4
-License: GPLv3
+Stable tag: 4.4.6
+Requires at least: 5.0
+Tested up to: 6.7
+Requires PHP: 7.0
+License: GPL-2.0-or-later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
 Team Member Plugin allows you to showcase your team members in grid, slider, and filter layouts using shortcode and the Team Members Elementor addon.
@@ -253,8 +254,16 @@ If you like The Post Grid Plugin, then consider checking out our other WordPress
 
 == Changelog ==
 
+= 4.4.6  ( December 03, 2024 ) =
+* Fixed: Escaping Data, Sanitize, Unslash, Layout Style.
+
+= 4.4.5  ( November 21, 2024 ) =
+* Fixed: text spilling.
+
+== Changelog ==
+
 = 4.4.4  ( November 20, 2024 ) =
-* Fixed: PHP Deprecated issue And Layout color issue.
+* Fixed: PHP Deprecated issue And Layout Style issue.
 
 = 4.4.3  (October 29, 2024 ) =
 * Fixed: Elementor grid widget designation color control issue.

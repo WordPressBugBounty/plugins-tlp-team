@@ -125,27 +125,26 @@ class PostMeta {
 					'social',
 					true
 				) ? get_post_meta( $post->ID, 'social', true ) : [] );
-
 				if ( ! empty( $s ) ) {
-
 					foreach ( $s as $count => $val ) {
-						?>
-						<div class="tlp-field-holder socialLink" id="slh-<?php echo esc_attr(absint( $count )); ?>">
-							<div class="tlp-label">
-								<select name="social[<?php echo esc_attr(absint( $count )); ?>][id]">
+                        $counter_value = absint( $count );
+                        ?>
+                        <div class="tlp-field-holder socialLink" id="<?php echo esc_attr( 'slh-' . absint( $count ) ); ?>">
+                            <div class="tlp-label">
+								<select name="<?php echo esc_attr( 'social[' . $counter_value . ']'); ?>][id]">
 									<?php
-									foreach ( Options::socialLink() as $id => $name ) {
-										$select = ( $val['id'] == $id ) ? 'selected' : null;
-										echo '<option value="' . esc_attr( $id ) . '" ' . esc_attr( $select ) . '>' . esc_html( $name ) . '</option>';
-									}
+                                        foreach ( Options::socialLink() as $id => $name ) {
+                                            $select = ( isset($val['id']) && $val['id'] == $id ) ? 'selected' : '';
+                                            echo '<option value="' . esc_attr( $id ) . '" ' . esc_attr( $select ) . '>' . esc_html( $name ) . '</option>';
+                                        }
 									?>
 								</select>
 							</div>
 
 							<div class="tlp-field">
-								<input type="text" name="social[<?php echo esc_attr(absint( $count )); ?>][url]" class="tlpfield" value="<?php echo 'envelope-o' === $val['id'] ? esc_attr(sanitize_email( $val['url'] )) : esc_url( $val['url'] ); ?>">
-								<span data-id="<?php echo esc_attr(absint( $count )); ?>" class="sRemove dashicons dashicons-trash"></span>
-								<span class="dashicons dashicons-admin-settings"></span>
+                                <input type="text" name="<?php echo esc_attr( 'social[' . $counter_value . ']' ); ?>[url]" class="tlpfield" value="<?php echo (isset($val['id']) && 'envelope-o' === $val['id']) ? esc_attr(sanitize_email($val['url'] ?? '')) : esc_url($val['url'] ?? ''); ?>">
+                                <span data-id="<?php echo esc_attr( $counter_value ); ?>" class="sRemove dashicons dashicons-trash"></span>
+                                <span class="dashicons dashicons-admin-settings"></span>
 							</div>
 						</div>
 						<?php
@@ -178,9 +177,9 @@ class PostMeta {
 
 		if ( is_array( $mates ) && ! empty( $mates ) ) {
 			foreach ( $mates as $metaKey => $field ) {
+                // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 				$value = ! empty( $_REQUEST[ $metaKey ] ) ? Fns::sanitize( $field, $_REQUEST[ $metaKey ] ) : null;
-
-				if ( empty( $field['multiple'] ) ) {
+                if ( empty( $field['multiple'] ) ) {
 					update_post_meta( $post_id, $metaKey, $value );
 				} else {
 					delete_post_meta( $post_id, $metaKey );
@@ -194,14 +193,16 @@ class PostMeta {
 		}
 
 		if ( ! empty( $_REQUEST['skill'] ) ) {
-			$sK = sanitize_text_field( serialize( array_filter( $_REQUEST['skill'] ) ) );
+            // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			$sK = sanitize_text_field( serialize( array_filter( wp_unslash( $_REQUEST['skill'] ) ) ) );
 			update_post_meta( $post_id, 'skill', $sK );
 		} else {
 			delete_post_meta( $post_id, 'skill' );
 		}
 
 		if ( isset( $_REQUEST['social'] ) ) {
-			$s = sanitize_text_field( serialize( array_filter( $_REQUEST['social'] ) ) );
+            // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			$s = sanitize_text_field( serialize( array_filter( wp_unslash( $_REQUEST['social'] ) ) ) );
 			update_post_meta( $post_id, 'social', unserialize( $s ) );
 		} else {
 			update_post_meta( $post_id, 'social', '' );

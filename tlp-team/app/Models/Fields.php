@@ -195,8 +195,7 @@ class Fields {
 		$c   = 'hidden';
 
 		if ( $id = absint( $this->value ) ) {
-			$aImg = wp_get_attachment_image_src( $id, 'thumbnail' );
-			$img  = '<img src="' . esc_url( $aImg[0] ) . '" >';
+            $img = wp_get_attachment_image( $id, 'thumbnail', false, array( 'alt' => get_post_meta( $id, '_wp_attachment_image_alt', true ) ) );
 			$c    = null;
 		}
 
@@ -250,12 +249,13 @@ class Fields {
 	}
 
 	private function url() {
-		$h  = null;
+		$h  = '';
+        $id = $this->id ?? '';;
         $value = $this->value ?? '';;
 		$h .= '<input
 				type="url"
 				class="' . esc_attr( $this->class ) . '"
-				id="' . esc_attr( $this->id ) . '"
+				id="' . esc_attr( $id ) . '"
 				value="' . esc_url( $value ) . '"
 				name="' . esc_attr( $this->name ) . '"
 				placeholder="' . esc_attr( $this->placeholder ) . '"
@@ -266,12 +266,13 @@ class Fields {
 	}
 
 	private function email() {
-		$h  = null;
+		$h  = '';
+        $id = $this->id ?? '';;
         $value = $this->value;
 		$h .= '<input
 				type="email"
 				class="' . esc_attr( $this->class ) . '"
-				id="' . esc_attr( $this->id ) . '"
+				id="' . esc_attr( $id ) . '"
 				value="' . esc_attr( $value ) . '"
 				name="' . esc_attr( $this->name ) . '"
 				placeholder="' . esc_attr( $this->placeholder ) . '"
