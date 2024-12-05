@@ -8,7 +8,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language-Team: RadiusTheme\n"
 "Last-Translator: RadiusTheme\n"
-"POT-Creation-Date: 2024-12-04 06:22+0000\n"
+"POT-Creation-Date: 2024-12-05 09:53+0000\n"
 "Report-Msgid-Bugs-To: https://radiustheme.com/tlp-team-for-wordpress/\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
@@ -113,15 +113,15 @@ msgstr ""
 msgid "Default"
 msgstr ""
 
-#: app/Controllers/Admin/Metabox/PostMeta.php:91, need-to-check/app/Controllers/Admin/Metabox/PostMeta.php:90
+#: app/Controllers/Admin/Metabox/PostMeta.php:91
 msgid "Member Info"
 msgstr ""
 
-#: app/Controllers/Admin/Metabox/PostMeta.php:100, need-to-check/app/Controllers/Admin/Metabox/PostMeta.php:99
+#: app/Controllers/Admin/Metabox/PostMeta.php:100
 msgid "Member Social Link"
 msgstr ""
 
-#: app/Controllers/Admin/Metabox/PostMeta.php:156, need-to-check/app/Controllers/Admin/Metabox/PostMeta.php:172
+#: app/Controllers/Admin/Metabox/PostMeta.php:156
 msgid "Add new"
 msgstr ""
 
@@ -173,19 +173,19 @@ msgstr ""
 msgid "Team"
 msgstr ""
 
-#: app/Controllers/Admin/Settings.php:65, need-to-check/app/Controllers/Admin/Settings.php:60
+#: app/Controllers/Admin/Settings.php:65
 msgid "TLP TEAM Settings"
 msgstr ""
 
-#: app/Controllers/Admin/Settings.php:66, need-to-check/app/Controllers/Admin/Settings.php:61
+#: app/Controllers/Admin/Settings.php:66
 msgid "Settings"
 msgstr ""
 
-#: app/Controllers/Admin/Settings.php:77, need-to-check/app/Controllers/Admin/Settings.php:72
+#: app/Controllers/Admin/Settings.php:77
 msgid "TLP TEAM GET HELP"
 msgstr ""
 
-#: app/Controllers/Admin/Settings.php:78, need-to-check/app/Controllers/Admin/Settings.php:73
+#: app/Controllers/Admin/Settings.php:78
 msgid "Get Help"
 msgstr ""
 
@@ -249,47 +249,47 @@ msgstr ""
 msgid "Layout 2"
 msgstr ""
 
-#: app/Controllers/Hooks/FilterHooks.php:92, app/Helpers/Fns.php:1836, app/Helpers/Options.php:40, app/Helpers/Options.php:828
+#: app/Controllers/Hooks/FilterHooks.php:92, app/Helpers/Fns.php:1835, app/Helpers/Options.php:40, app/Helpers/Options.php:828
 msgid "Layout 3"
 msgstr ""
 
-#: app/Controllers/Hooks/FilterHooks.php:96, app/Helpers/Fns.php:1841, app/Helpers/Options.php:41, app/Helpers/Options.php:43
+#: app/Controllers/Hooks/FilterHooks.php:96, app/Helpers/Fns.php:1840, app/Helpers/Options.php:41, app/Helpers/Options.php:43
 msgid "Layout 4"
 msgstr ""
 
-#: app/Controllers/Hooks/FilterHooks.php:100, app/Helpers/Fns.php:1846
+#: app/Controllers/Hooks/FilterHooks.php:100, app/Helpers/Fns.php:1845
 msgid "Layout 5"
 msgstr ""
 
-#: app/Controllers/Hooks/FilterHooks.php:104, app/Helpers/Fns.php:1851
+#: app/Controllers/Hooks/FilterHooks.php:104, app/Helpers/Fns.php:1850
 msgid "Layout 6"
 msgstr ""
 
-#: app/Controllers/Hooks/FilterHooks.php:108, app/Helpers/Fns.php:1856
+#: app/Controllers/Hooks/FilterHooks.php:108, app/Helpers/Fns.php:1855
 msgid "Layout 7"
 msgstr ""
 
-#: app/Controllers/Hooks/FilterHooks.php:112, app/Helpers/Fns.php:1861
+#: app/Controllers/Hooks/FilterHooks.php:112, app/Helpers/Fns.php:1860
 msgid "Layout 8"
 msgstr ""
 
-#: app/Controllers/Hooks/FilterHooks.php:116, app/Helpers/Fns.php:1866
+#: app/Controllers/Hooks/FilterHooks.php:116, app/Helpers/Fns.php:1865
 msgid "Layout 9"
 msgstr ""
 
-#: app/Controllers/Hooks/FilterHooks.php:120, app/Helpers/Fns.php:1871
+#: app/Controllers/Hooks/FilterHooks.php:120, app/Helpers/Fns.php:1870
 msgid "Layout 10"
 msgstr ""
 
-#: app/Controllers/Hooks/FilterHooks.php:124, app/Helpers/Fns.php:1876
+#: app/Controllers/Hooks/FilterHooks.php:124, app/Helpers/Fns.php:1875
 msgid "Layout 11"
 msgstr ""
 
-#: app/Controllers/Hooks/FilterHooks.php:128, app/Helpers/Fns.php:1881
+#: app/Controllers/Hooks/FilterHooks.php:128, app/Helpers/Fns.php:1880
 msgid "Layout 12"
 msgstr ""
 
-#: app/Controllers/Hooks/FilterHooks.php:132, app/Helpers/Fns.php:1886
+#: app/Controllers/Hooks/FilterHooks.php:132, app/Helpers/Fns.php:1885
 msgid "Layout 13"
 msgstr ""
 
@@ -305,7 +305,7 @@ msgstr ""
 msgid "Layout 16"
 msgstr ""
 
-#: app/Controllers/Hooks/FilterHooks.php:148, app/Helpers/Fns.php:1901
+#: app/Controllers/Hooks/FilterHooks.php:148, app/Helpers/Fns.php:1900
 msgid "Special 01"
 msgstr ""
 
@@ -666,23 +666,23 @@ msgstr ""
 msgid "%s file not found"
 msgstr ""
 
-#: app/Helpers/Fns.php:504
+#: app/Helpers/Fns.php:503
 msgid "Latest post(s)"
 msgstr ""
 
-#: app/Helpers/Fns.php:637
+#: app/Helpers/Fns.php:636
 msgid "Custom image size"
 msgstr ""
 
-#: app/Helpers/Fns.php:777
+#: app/Helpers/Fns.php:776
 msgid "Default Image"
 msgstr ""
 
-#: app/Helpers/Fns.php:1891
+#: app/Helpers/Fns.php:1890
 msgid "Layout 17"
 msgstr ""
 
-#: app/Helpers/Fns.php:1896
+#: app/Helpers/Fns.php:1895
 msgid "Layout 18"
 msgstr ""
 
@@ -2028,22 +2028,6 @@ msgstr ""
 
 #: app/Widgets/Vc/VcAddon.php:74
 msgid "Shortcode list"
-msgstr ""
-
-#: need-to-check/app/Controllers/Admin/Notices/Migration.php:51
-msgid "We've major updated in our Team plugin. That's why we need to migrate your data with the latest version"
-msgstr ""
-
-#: need-to-check/app/Controllers/Admin/Notices/Migration.php:53
-msgid "Migrate Data"
-msgstr ""
-
-#: need-to-check/app/Controllers/Admin/Notices/Migration.php:66
-msgid "Migration Successful"
-msgstr ""
-
-#: need-to-check/resources/export-import.php:11
-msgid "TLP Team Export Import"
 msgstr ""
 
 #: resources/get-help.php:19

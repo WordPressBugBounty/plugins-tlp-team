@@ -459,7 +459,6 @@ class Fns {
                 $image_html = wp_get_attachment_image( $id, 'large', false, [
                     'alt' => $alt_tag
                 ]);
-                error_log( print_r( $image_html, true ), 3, __DIR__.'/log.txt');
 				$full_url = wp_get_attachment_image_src( $id, 'large' );
 				if ( isset( $full_url[0] ) ) {
 					$html .= '<div class="swiper-slide">';
@@ -1441,7 +1440,7 @@ class Fns {
         $cssFile        = $upload_basedir . '/tlp-team/team-sc.css';
         // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
         if ( file_exists( $cssFile ) ) {
-            $oldCss = file_get_contents( $cssFile );
+            $oldCss = file_get_contents( $cssFile ); //phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
             if ( $oldCss !== false && strpos( $oldCss, '/*sc-' . $scID . '-start' ) !== false ) {
                 // Ensure $oldCss is a string before passing to preg_replace
                 $css = preg_replace('/\/\*sc-' . $scID . '-start[\s\S]+?sc-' . $scID . '-end\*\//', '', $oldCss);

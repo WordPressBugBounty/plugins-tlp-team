@@ -71,7 +71,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<div class="rtteam-testimonial">
 							<p>I was very please with how easily I was able to custom the plugin to match the theme and that it integrates nicely with the Genesis framework. And the support is quick and very helpful.</p>
 							<div class="client-info">
-								<img src="https://secure.gravatar.com/avatar/cff6168e0a20206eef5a689179dc24f8?s=200&d=retro&r=g">
+								<img src="https://secure.gravatar.com/avatar/cff6168e0a20206eef5a689179dc24f8?s=200&d=retro&r=g"> <?php // phpcs:ignore PluginCheck.CodeAnalysis.ImageFunctions.NonEnqueuedImage ?>
 								<div>
 									<div class="rtteam-star">
 										<i class="dashicons dashicons-star-filled"></i>
@@ -87,7 +87,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<div class="rtteam-testimonial">
 							<p>Great plugin – excellent customer service. The plugin works nicely and if you do run into issues, their support is excellent! Thumbs up!</p>
 							<div class="client-info">
-								<img src="https://secure.gravatar.com/avatar/fa74f1031be978e96d0f1bc4a090736f?s=150&d=retro&r=g">
+								<img src="https://secure.gravatar.com/avatar/fa74f1031be978e96d0f1bc4a090736f?s=150&d=retro&r=g"> <?php // phpcs:ignore PluginCheck.CodeAnalysis.ImageFunctions.NonEnqueuedImage ?>
 								<div>
 									<div class="rtteam-star">
 										<i class="dashicons dashicons-star-filled"></i>

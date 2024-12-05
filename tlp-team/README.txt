@@ -1,8 +1,8 @@
-=== Team ===
+=== Team - Team Members Showcase Plugin ===
 Contributors: techlabpro1
 Donate link:
 Tags: team, team showcase, team slider, team plugin, team members
-Stable tag: 4.4.6
+Stable tag: 4.4.7
 Requires at least: 5.0
 Tested up to: 6.7
 Requires PHP: 7.0
@@ -253,6 +253,9 @@ If you like The Post Grid Plugin, then consider checking out our other WordPress
 09. Elementor Team Grid layout
 
 == Changelog ==
+
+= 4.4.7  ( December 05, 2024 ) =
+* Fixed: Name Spelling
 
 = 4.4.6  ( December 03, 2024 ) =
 * Fixed: Escaping Data, Sanitize, Unslash, Layout Style.
