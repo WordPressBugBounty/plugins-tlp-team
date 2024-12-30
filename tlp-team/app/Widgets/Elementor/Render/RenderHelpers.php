@@ -176,7 +176,10 @@ class RenderHelpers {
 			'customImgSize'      => ! empty( $cImageSize ) && is_array( $cImageSize ) ? $cImageSize : [],
 			'character_limit'    => ! empty( $meta[ $prefix . 'content_limit' ] ) ? absint( $meta[ $prefix . 'content_limit' ] ) : 0,
 			'after_short_desc'   => ! empty( $meta[ $prefix . 'after_content' ] ) ? esc_html( $meta[ $prefix . 'after_content' ] ) : '',
-			'visibility'         => ! empty( self::contentVisibility( $prefix, $meta ) ) ? self::contentVisibility( $prefix, $meta ) : [ 'name', 'designation', 'short_bio', 'social' ],
+			'read_more_btn_text'  => ! empty( $meta[ $prefix . 'read_more_btn_text' ] ) ? esc_html( $meta[ $prefix . 'read_more_btn_text' ] ) : '',
+			'my_resume_text'    => ! empty( $meta[ $prefix . 'my_resume_text' ] ) ? esc_html( $meta[ $prefix . 'my_resume_text' ] ) : '',
+			'hire_me_text'    => ! empty( $meta[ $prefix . 'hire_me_text' ] ) ? esc_html( $meta[ $prefix . 'hire_me_text' ] ) : '',
+			'visibility'         => ! empty( self::contentVisibility( $prefix, $meta ) ) ? self::contentVisibility( $prefix, $meta ) : [ 'name', 'designation', 'short_bio', 'readmore_btn', 'resume_btn', 'hire_me_btn', 'social' ],
 			'social_profiles'    => ! empty( $meta[ $prefix . 'team_social_media' ] ) && is_array( $meta[ $prefix . 'team_social_media' ] ) ? $meta[ $prefix . 'team_social_media' ] : [],
 			'posts_loading_type' => ! empty( self::paginationType( $prefix, $meta ) ) ? self::paginationType( $prefix, $meta ) : 'pagination',
 			'load_more_text'     => ! empty( $meta[ $prefix . 'load_more_text' ] ) ? esc_html( $meta[ $prefix . 'load_more_text' ] ) : esc_html__( 'Load More', 'tlp-team' ),
@@ -314,6 +317,9 @@ class RenderHelpers {
 		$arg['fax']       = get_post_meta( $postID, 'fax', true );
 		$arg['location']  = get_post_meta( $postID, 'location', true );
 		$short_bio        = get_post_meta( $postID, 'short_bio', true );
+        $arg['ttp_my_resume']    = get_post_meta( $postID, 'ttp_my_resume', true );
+        $arg['ttp_hire_me']    = get_post_meta( $postID, 'ttp_hire_me', true );
+
 		$social           = get_post_meta( $postID, 'social', true );
 		$arg['soLink']    = $social ? $social : [];
 		$skill            = get_post_meta( $postID, 'skill', true );
@@ -337,11 +343,16 @@ class RenderHelpers {
 			$lazyLoad
 		) : null;
 
+
 		$arg['short_bio'] = Fns::get_ttp_short_description(
 			$short_bio,
 			$meta['character_limit'],
 			$meta['after_short_desc']
 		);
+
+		$arg['read_more_btn_text'] = esc_html( $meta['read_more_btn_text'] );
+		$arg['my_resume_text'] = esc_html( $meta['my_resume_text'] );
+		$arg['hire_me_text'] = esc_html( $meta['hire_me_text'] );
 
 		$arg['designation'] = wp_strip_all_tags(
 			get_the_term_list(
@@ -638,6 +649,8 @@ class RenderHelpers {
 	 * @return array
 	 */
 	public static function contentVisibility( $prefix, $settings ) {
+
+
 		$visibility = [];
 
 		if ( ! empty( $settings[ $prefix . 'team_name' ] ) ) {
@@ -654,6 +667,18 @@ class RenderHelpers {
 
 		if ( ! empty( $settings[ $prefix . 'team_short_bio' ] ) ) {
 			$visibility[] = 'short_bio';
+		}
+
+		if ( ! empty( $settings[ $prefix . 'team_readmore_button' ] ) ) {
+			$visibility[] = 'readmore_btn';
+		}
+
+		if ( ! empty( $settings[ $prefix . 'team_resume_button' ] ) ) {
+			$visibility[] = 'resume_btn';
+		}
+
+		if ( ! empty( $settings[ $prefix . 'team_hireme_button' ] ) ) {
+			$visibility[] = 'hire_me_btn';
 		}
 
 		if ( ! empty( $settings[ $prefix . 'team_content' ] ) ) {
@@ -693,6 +718,7 @@ class RenderHelpers {
 		}
 
 		return array_map( 'sanitize_text_field', $visibility );
+
 	}
 
 	/**
@@ -801,7 +827,6 @@ class RenderHelpers {
 				$columns = 4;
 				break;
 		}
-
 		return $columns;
 	}
 }

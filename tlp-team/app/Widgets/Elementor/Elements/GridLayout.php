@@ -138,13 +138,18 @@ class GridLayout extends ElementorWidget {
 				'designation',
 				'department',
 				'short_biography',
+                'read_more_btn',
+                'resume_btn',
+                'hire_me_btn',
 				'pagination',
 				'imageStyle',
 				'gutter',
 			]
 		);
 
+
 		foreach ( $sections as $section ) {
+
 			Style::$section( $this );
 		}
 

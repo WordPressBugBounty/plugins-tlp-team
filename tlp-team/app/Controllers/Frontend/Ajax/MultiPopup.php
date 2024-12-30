@@ -52,6 +52,11 @@ class MultiPopup {
 
 			if ( $post && $post->post_type == rttlp_team()->post_type ) {
 				setup_postdata( $post );
+                $settings     = get_option( rttlp_team()->options['settings'] );
+                $resume_btn_text = isset( $settings['resume_btn_text'] ) ? $settings['resume_btn_text'] : "Resume";
+                $hire_btn_text = isset( $settings['hire_me_text'] ) ? $settings['hire_me_text'] : "Hire Me";
+                $resume_url      = get_post_meta( $post->ID, 'ttp_my_resume', true );
+                $hire_me_url     = get_post_meta( $post->ID, 'ttp_hire_me', true );
 				$settings                 = get_option( rttlp_team()->options['settings'] );
 				$fields                   = isset( $settings['detail_page_fields'] ) ? $settings['detail_page_fields'] : [];
 				$sLink                    = get_post_meta(
@@ -136,8 +141,23 @@ class MultiPopup {
 					],
 					$fields
 				);
-				$html .= Fns::get_formatted_skill( $tlp_skill, $fields );
-				$html .= Fns::get_formatted_social_link( $sLink, $fields );
+
+                $html .= Fns::get_formatted_skill( $tlp_skill, $fields );
+                $html .= Fns::get_formatted_social_link( $sLink, $fields );
+                $resume  = $resume_url && in_array( 'resume_btn', $fields );
+                $hire_me = $hire_me_url && in_array( 'hire_me_btn', $fields );
+                if( ( $resume && $resume_btn_text ) || ( $hire_me && $hire_btn_text ) ) {
+                    $html .= '<div class="rt-team-container">';
+                    $html .= '<div class="readmore-btn">';
+                    if( $resume && $resume_btn_text ){
+                        $html .= '<a class="rt-ream-me-btn" data-id="480" target="_self" title="'. esc_attr( $resume_btn_text ) .'" href="'. esc_url( $resume_url ) .'" class="rt-resume-btn">'. esc_html( $resume_btn_text ) .'</a>';
+                    }
+                    if( $hire_me && $hire_btn_text ){
+                        $html .= '<a class="rt-hire-btn" data-id="480" target="_self" title="'. esc_attr( $hire_btn_text ) .'" href="'. esc_url( $hire_me_url ) .'" class="rt-resume-btn">'. esc_html( $hire_btn_text ) .'</a>';
+                    }
+                    $html .= '</div>';
+                    $html .= '</div>';
+                }
 
 				if ( in_array( 'author_post', $fields ) ) {
 					$html .= Fns::memberDetailPosts( $post->ID );

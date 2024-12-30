@@ -120,27 +120,29 @@ class PostMeta {
 		<div class="member-field-holder">
 			<div id="metaSocialHolder">
 				<?php
+
 				$s = ( get_post_meta(
 					$post->ID,
 					'social',
 					true
 				) ? get_post_meta( $post->ID, 'social', true ) : [] );
+
+
 				if ( ! empty( $s ) ) {
 					foreach ( $s as $count => $val ) {
                         $counter_value = absint( $count );
                         ?>
                         <div class="tlp-field-holder socialLink" id="<?php echo esc_attr( 'slh-' . absint( $count ) ); ?>">
                             <div class="tlp-label">
-								<select name="<?php echo esc_attr( 'social[' . $counter_value . ']'); ?>][id]">
-									<?php
-                                        foreach ( Options::socialLink() as $id => $name ) {
-                                            $select = ( isset($val['id']) && $val['id'] == $id ) ? 'selected' : '';
-                                            echo '<option value="' . esc_attr( $id ) . '" ' . esc_attr( $select ) . '>' . esc_html( $name ) . '</option>';
-                                        }
-									?>
-								</select>
+                                <select name="<?php echo esc_attr( 'social[' . $counter_value . '][id]' ); ?>">
+                                    <?php
+                                    foreach ( Options::socialLink() as $id => $name ) {
+                                        $select = ( isset( $val['id'] ) && $val['id'] == $id ) ? 'selected' : '';
+                                        echo '<option value="' . esc_attr( $id ) . '" ' . esc_attr( $select ) . '>' . esc_html( $name ) . '</option>';
+                                    }
+                                    ?>
+                                </select>
 							</div>
-
 							<div class="tlp-field">
                                 <input type="text" name="<?php echo esc_attr( 'social[' . $counter_value . ']' ); ?>[url]" class="tlpfield" value="<?php echo (isset($val['id']) && 'envelope-o' === $val['id']) ? esc_attr(sanitize_email($val['url'] ?? '')) : esc_url($val['url'] ?? ''); ?>">
                                 <span data-id="<?php echo esc_attr( $counter_value ); ?>" class="sRemove dashicons dashicons-trash"></span>

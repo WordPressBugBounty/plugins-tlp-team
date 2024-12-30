@@ -244,11 +244,10 @@ class Shortcode {
 			$containerClass .= $parentClass ? ' ' . $parentClass : null;
 			$containerClass .= $grayscale ? ' rt-grayscale' : null;
 			$arg['items'] = $visibility;
-
+			$arg['my_resume_text'] = $my_resume_text;
+			$arg['hire_me_text'] = $hire_me_text;
 			$arg['read_more_btn_text'] = $read_more_btn_text;
-
 			$args = ( new QueryArgs() )->buildArgs( $buildMetas, $isCarousel );
-
 			$teamQuery          = new WP_Query( $args );
 			$containerDataAttr .= " data-sc-id='{$scID}'";
 			$containerDataAttr .= " data-popup-bg='{$popupBg}'";
@@ -320,9 +319,9 @@ class Shortcode {
 							$htmlButton .= '</span>';
 
 							$showAllhtml = '<span class="term-default rt-filter-dropdown-default" data-term="' . $dataTerm . '">
-                                                    <span class="rt-text">' . $termDefaultText . '</span>
-                                                    <i class="fa fa-angle-down rt-arrow-angle" aria-hidden="true"></i>
-                                                </span>';
+                                                <span class="rt-text">' . $termDefaultText . '</span>
+                                                <i class="fa fa-angle-down rt-arrow-angle" aria-hidden="true"></i>
+                                            </span>';
 
 							$html .= $showAllhtml . $htmlButton;
 							$html .= '</div>';
@@ -581,6 +580,8 @@ class Shortcode {
 					$arg['fax']         = get_post_meta( $mID, 'fax', true );
 					$arg['location']    = get_post_meta( $mID, 'location', true );
 					$short_bio          = get_post_meta( $mID, 'short_bio', true );
+                    $arg['ttp_my_resume']     = get_post_meta( $mID, 'ttp_my_resume', true );
+                    $arg['ttp_hire_me']     = get_post_meta( $mID, 'ttp_hire_me', true );
 					$arg['short_bio']   = Fns::get_ttp_short_description( $short_bio, $character_limit, $after_short_desc );
 					$social             = get_post_meta( $mID, 'social', true );
 					$arg['sLink']       = $social ? $social : [];
@@ -767,10 +768,12 @@ class Shortcode {
 			'fImgSize'           => isset( $meta['ttp_image_size'][0] ) ? $meta['ttp_image_size'][0] : 'medium',
 			'character_limit'    => isset( $meta['character_limit'][0] ) ? absint( $meta['character_limit'][0] ) : 0,
 			'after_short_desc'   => isset( $meta['ttp_after_short_desc_text'][0] ) ? $meta['ttp_after_short_desc_text'][0] : '',
+			'my_resume_text'     => isset( $meta['ttp_my_resume_text'][0] ) ? $meta['ttp_my_resume_text'][0] : esc_html__('My Resume','tlp-team'),
+			'hire_me_text'       => isset( $meta['ttp_hire_me_text'][0] ) ? $meta['ttp_hire_me_text'][0] : esc_html__('Hire Me','tlp-team'),
 			'read_more_btn_text' => isset( $meta['ttp_read_more_btn_text'][0] ) ? $meta['ttp_read_more_btn_text'][0] : esc_html__('Read More','tlp-team'),
 			'defaultImgId'       => ! empty( $meta['default_preview_image'][0] ) ? absint( $meta['default_preview_image'][0] ) : null,
 			'customImgSize'      => ! empty( $meta['ttp_custom_image_size'][0] ) ? unserialize( $meta['ttp_custom_image_size'][0] ) : [],
-			'visibility'         => ! empty( $meta['ttp_selected_field'] ) ? $meta['ttp_selected_field'] : [ 'name', 'designation', 'short_bio', 'social' ],
+			'visibility'         => ! empty( $meta['ttp_selected_field'] ) ? $meta['ttp_selected_field'] : [ 'name', 'designation', 'ttp_my_resume', 'ttp_hire_me', 'short_bio', 'social' ],
 			'filters'            => ! empty( $meta['ttp_filter'] ) ? $meta['ttp_filter'] : [],
 			'taxFilter'          => ! empty( $meta['ttp_filter_taxonomy'][0] ) ? $meta['ttp_filter_taxonomy'][0] : null,
 			'action_term'        => ! empty( $meta['ttp_default_filter'][0] ) ? absint( $meta['ttp_default_filter'][0] ) : 0,

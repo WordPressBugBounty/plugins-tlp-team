@@ -54,7 +54,9 @@ class GridView {
 		$scID          = 'elementor';
 
 		$metas = RenderHelpers::metaBuilder( $prefix, $scMeta );
+
 		$arg   = RenderHelpers::argBuilder( $metas );
+
 		$args  = ( new QueryArgs() )->buildArgs( $metas, false );
 
 		$layout     = $metas['layout'];
@@ -95,7 +97,7 @@ class GridView {
 
 		$containerAttr .= ' data-sc-id="' . $scID . '"';
 
-		$html .= '<div class="rt-elementor-container rt-pos-r ' . $containerClass . '" id="' . $layoutID . '" ' . $containerAttr . RenderHelpers::elPaginationData( $prefix, $scMeta ) . '>';
+		$html .= '<div class="rt-team-container rt-elementor-container rt-pos-r ' . $containerClass . '" id="' . $layoutID . '" ' . $containerAttr . RenderHelpers::elPaginationData( $prefix, $scMeta ) . '>';
 
 		$teamQuery = new WP_Query( $args );
 

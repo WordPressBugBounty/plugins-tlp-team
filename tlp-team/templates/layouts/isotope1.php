@@ -48,6 +48,24 @@ if ( in_array( 'designation', $items, true ) && $designation ) {
 
 $html .= Fns::get_formatted_short_bio( $short_bio, $items );
 $html .= Fns::get_formatted_social_link( $sLink, $items );
+
+$read_more_btn = isset( $read_more_btn_text ) ? Fns::get_formatted_readmore_text($items, $read_more_btn_text, $anchorClass, $mID, $target, $title, $pLink) : null;
+$resume_btn = isset( $ttp_my_resume ) ? Fns::get_formatted_resume( $items, $ttp_my_resume, $my_resume_text ) : null;
+$hire_me_btn = isset( $ttp_hire_me ) ? Fns::get_formatted_hire_me( $items, $ttp_hire_me, $hire_me_text ) : null;
+if ( $read_more_btn || $resume_btn || $hire_me_btn ) {
+    $html .= '<div class="readmore-btn">';
+    if( $read_more_btn ){
+        $html .= wp_kses_post( $read_more_btn );
+    }
+    if( $resume_btn ){
+        $html .= wp_kses_post( $resume_btn );
+    }
+    if( $hire_me_btn ){
+        $html .= wp_kses_post( $hire_me_btn );
+    }
+    $html .= '</div>';
+}
+
 $html .= '</div>';
 $html .= '</div>';
 $html .= '</figure>';

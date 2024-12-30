@@ -92,7 +92,7 @@ class IsotopeView {
 
 		$containerAttr .= ' data-sc-id="' . $scID . '"';
 
-		$html .= '<div class="rt-elementor-container rt-pos-r ' . $containerClass . '" id="' . $layoutID . '" ' . $containerAttr . RenderHelpers::elPaginationData( $prefix, $scMeta ) . '>';
+		$html .= '<div class="rt-team-container rt-elementor-container rt-pos-r ' . $containerClass . '" id="' . $layoutID . '" ' . $containerAttr . RenderHelpers::elPaginationData( $prefix, $scMeta ) . '>';
 
 		$teamQuery = new WP_Query( $args );
 

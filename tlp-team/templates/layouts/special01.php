@@ -20,6 +20,9 @@ if ( 1 === $i ) {
 
 $html .= '<div class="' . esc_attr( $grid ) . ' ' . esc_attr( $class ) . '" data-id="' . absint( $mID ) . '">';
 $html .= '<div class="single-team-item image-wrapper" data-id="' . absint( $mID ) . '">' . Fns::htmlKses( $imgHtml, 'image' ) . '</div>';
+
 $html .= '</div>';
+
+
 
 Fns::print_html( $html );

@@ -259,8 +259,13 @@ class Preview {
 			$fImgSize         = ( isset( $_REQUEST['ttp_image_size'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['ttp_image_size'] ) ) : 'medium' );
 			$character_limit  = ( isset( $_REQUEST['character_limit'] ) ? absint( $_REQUEST['character_limit'] ) : 0 );
 			$after_short_desc = isset( $_REQUEST['ttp_after_short_desc_text'] ) ? sanitize_textarea_field( wp_unslash( $_REQUEST['ttp_after_short_desc_text'] ) ) : '';
-			$read_more_btn_text = isset( $_REQUEST['ttp_read_more_btn_text'] ) ? sanitize_textarea_field( wp_unslash( $_REQUEST['ttp_read_more_btn_text'] ) ) : esc_html__('Read More','tlp-team');
-			$defaultImgId     = ! empty( $_REQUEST['default_preview_image'] ) ? absint( $_REQUEST['default_preview_image'] ) : null;
+
+            $hire_me_text = isset( $_REQUEST['ttp_hire_me_text'] ) ? sanitize_textarea_field( wp_unslash( $_REQUEST['ttp_hire_me_text'] ) ) : esc_html__('Hire Me','tlp-team');
+
+            $my_resume_text = isset( $_REQUEST['ttp_my_resume_text'] ) ? sanitize_textarea_field( wp_unslash( $_REQUEST['ttp_my_resume_text'] ) ) : esc_html__('Read More','tlp-team');
+            $read_more_btn_text = isset( $_REQUEST['ttp_read_more_btn_text'] ) ? sanitize_textarea_field( wp_unslash( $_REQUEST['ttp_read_more_btn_text'] ) ) : esc_html__('Read More','tlp-team');
+
+            $defaultImgId     = ! empty( $_REQUEST['default_preview_image'] ) ? absint( $_REQUEST['default_preview_image'] ) : null;
 			$customImgSize    = ! empty( $_REQUEST['ttp_custom_image_size'] ) && is_array( $_REQUEST['ttp_custom_image_size'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_REQUEST['ttp_custom_image_size'] ) ) : [];
 
 			$containerClass  = 'rt-team-container-' . $scID;
@@ -273,6 +278,8 @@ class Preview {
 
 			$isoFilterTaxonomy = ! empty( $_REQUEST['ttp_isotope_filter_taxonomy'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['ttp_isotope_filter_taxonomy'] ) ) : null;
 
+			$arg['my_resume_text'] = $my_resume_text;
+			$arg['hire_me_text'] = $hire_me_text;
 			$arg['read_more_btn_text'] = $read_more_btn_text;
 
 			if ( in_array( '_taxonomy_filter', $filters ) && $taxFilter && $action_term ) {
@@ -370,9 +377,9 @@ class Preview {
 							$htmlButton .= '</span>';
 
 							$showAllhtml = '<span class="term-default rt-filter-dropdown-default" data-term="' . $dataTerm . '">
-													<span class="rt-text">' . $termDefaultText . '</span>
-													<i class="fa fa-angle-down rt-arrow-angle" aria-hidden="true"></i>
-												</span>';
+                                                <span class="rt-text">' . $termDefaultText . '</span>
+                                                <i class="fa fa-angle-down rt-arrow-angle" aria-hidden="true"></i>
+                                            </span>';
 
 							$html .= $showAllhtml . $htmlButton;
 							$html .= '</div>';
@@ -630,8 +637,13 @@ class Preview {
 					$arg['telephone']   = get_post_meta( $mID, 'telephone', true );
 					$arg['fax']         = get_post_meta( $mID, 'fax', true );
 					$arg['mobile']      = get_post_meta( $mID, 'mobile', true );
+
 					$arg['location']    = get_post_meta( $mID, 'location', true );
+					$arg['ttp_my_resume']    = get_post_meta( $mID, 'ttp_my_resume', true );
+					$arg['ttp_hire_me']    = get_post_meta( $mID, 'ttp_hire_me', true );
+
 					$short_bio          = get_post_meta( $mID, 'short_bio', true );
+
 					$arg['short_bio']   = Fns::get_ttp_short_description( $short_bio, $character_limit, $after_short_desc );
 					$social             = get_post_meta( $mID, 'social', true );
 					$arg['sLink']       = $social ? $social : [];

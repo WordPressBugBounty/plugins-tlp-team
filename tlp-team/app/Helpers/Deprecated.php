@@ -54,15 +54,12 @@ class Deprecated {
 	public function render_view( $view_name, $args = [], $return = false ) {
 		return Fns::render_view( $view_name, $args, $return );
 	}
-
 	public function rt_get_all_taxonomy_by_post_type() {
 		return Fns::rt_get_all_taxonomy_by_post_type();
 	}
-
 	public function verifyNonce() {
 		return Fns::verifyNonce();
 	}
-
 	public function rtFieldGenerator( $fields ) {
 		return Fns::rtFieldGenerator( $fields );
 	}
@@ -70,7 +67,6 @@ class Deprecated {
 	public function rtTeamLicenceField() {
 		return Options::rtTeamLicenceField();
 	}
-
 	public function getTTPShortCodeList() {
 		return Fns::getTTPShortcodeList();
 	}

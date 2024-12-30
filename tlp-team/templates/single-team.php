@@ -24,6 +24,9 @@ $cCol         = 12 - $iCol;
 $image_area   = "rt-col-sm-{$iCol} rt-col-xs-12 ";
 $content_area = "rt-col-sm-{$cCol} rt-col-xs-12 ";
 
+$resume_btn_text = isset( $settings['resume_btn_text'] ) ? $settings['resume_btn_text'] : "Resume";
+$hire_btn_text = isset( $settings['hire_me_text'] ) ? $settings['hire_me_text'] : "Hire Me";
+
 while ( have_posts() ) :
 	the_post();
 
@@ -37,6 +40,10 @@ while ( have_posts() ) :
 	$short_bio       = get_post_meta( $post->ID, 'short_bio', true );
 	$socialLink      = get_post_meta( get_the_ID(), 'social', true );
 	$tlpSkill        = get_post_meta( $post->ID, 'skill', true );
+
+	$resume_url      = get_post_meta( $post->ID, 'ttp_my_resume', true );
+	$hire_me_url     = get_post_meta( $post->ID, 'ttp_hire_me', true );
+
 	$sLink           = $socialLink ? $socialLink : [];
 	$tlp_skill       = $tlpSkill ? unserialize( $tlpSkill ) : [];
 	$exp             = null;
@@ -54,6 +61,7 @@ while ( have_posts() ) :
 	$qualifications           = get_post_meta( $post->ID, 'ttp_qualifications', true );
 	$professional_memberships = get_post_meta( $post->ID, 'ttp_professional_memberships', true );
 	$area_of_expertise        = get_post_meta( $post->ID, 'ttp_area_of_expertise', true );
+
 	?>
 	<div class="rt-team-container tlp-single-container <?php echo esc_attr( $page_wrapper ); ?>" data-layout="carousel1">
 		<div class="rt-row">
@@ -134,14 +142,13 @@ while ( have_posts() ) :
 					if ( is_array( $tlp_skill ) && ! empty( $tlp_skill ) && in_array( 'skill', $fields ) ) {
 						$html .= '<div class="tlp-team-skill">';
 						foreach ( $tlp_skill as $id => $skill ) {
-							$html .= "<div class='skill_name'>" . esc_html( $skill['id'] ) . "</div><div class='skill-prog tlp-tooltip' title='" . esc_attr( $skill['percent'] ) . "%'><div class='fill' data-progress-animation='" . esc_attr( $skill['percent'] ) . "%'></div></div>";
+							$html .= "<div class='skill_name'>" . esc_html( $skill['id'] ) . "</div><div class='skill-prog' title='" . esc_attr( $skill['percent'] ) . "%'><div class='fill' data-progress-animation='" . esc_attr( $skill['percent'] ) . "%'><span class='rt-percent'>". esc_html( $skill['percent'] ) ."%</span>  </div></div>";
 						}
 						$html .= '</div>';
 					}
 
 					if ( ! empty( $sLink ) && is_array( $sLink ) && in_array( 'social', $fields ) ) {
 						$html .= '<div class="social-icons">';
-
 						foreach ( $sLink as $id => $itemLink ) {
 							$lURL = ! empty( $itemLink['url'] ) ? $itemLink['url'] : null;
 							$lID  = ! empty( $itemLink['id'] ) ? esc_html( $itemLink['id'] ) : null;
@@ -157,7 +164,7 @@ while ( have_posts() ) :
 									$icon_class = 'fab fa-facebook-f';
 									break;
 								case 'twitter':
-									$icon_class = 'fab fa-twitter';
+									$icon_class = 'fab fa-x-twitter';
 									break;
 								case 'linkedin':
 									$icon_class = 'fab fa-linkedin';
@@ -214,10 +221,25 @@ while ( have_posts() ) :
 					if ( in_array( 'author_post', $fields ) ) {
 						$html .= Fns::memberDetailPosts( $post->ID );
 					}
-
 					$html .= '</div>';
 
+
+                    $resume  = $resume_url && in_array( 'resume_btn', $fields );
+                    $hire_me = $hire_me_url && in_array( 'hire_me_btn', $fields );
+                    if( ( $resume && $resume_btn_text ) || ( $hire_me && $hire_btn_text ) ) {
+                        $html .= '<div class="readmore-btn">';
+
+                        if( $resume && $resume_btn_text ){
+                            $html .= '<a class="rt-ream-me-btn" data-id="480" target="_self" title="'. esc_attr( $resume_btn_text ) .'" href="'. esc_url( $resume_url ) .'" class="rt-resume-btn">'. esc_html( $resume_btn_text ) .'</a>';
+                        }
+                        if( $hire_me && $hire_btn_text ){
+                            $html .= '<a class="rt-hire-btn" data-id="480" target="_self" title="'. esc_attr( $hire_btn_text ) .'" href="'. esc_url( $hire_me_url ) .'" class="rt-resume-btn">'. esc_html( $hire_btn_text ) .'</a>';
+                        }
+                        $html .= '</div>';
+                    }
+
 					Fns::print_html( $html, true );
+
 					?>
 				</div>
 			</article>
@@ -234,3 +256,4 @@ while ( have_posts() ) :
 endwhile;
 
 get_footer();
+

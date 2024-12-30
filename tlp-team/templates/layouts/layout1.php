@@ -48,10 +48,11 @@ if ( in_array( 'designation', $items, true ) && $designation ) {
 if ( in_array( 'tax_department', $items, true ) && $tax_department ) {
 	$content .= '<div class="tlp-department">' . esc_html( $tax_department ) . '</div>';
 }
-
 $html .= $content ? '<div class="tlp-content">' . $content . '</div>' : null;
 
 $html .= Fns::get_formatted_short_bio( $short_bio, $items );
+
+
 $html .= Fns::get_formatted_contact_info(
 	[
 		'email'     => $email,
@@ -66,10 +67,25 @@ $html .= Fns::get_formatted_contact_info(
 
 $html .= Fns::get_formatted_skill( $tlp_skill, $items );
 $html .= Fns::get_formatted_social_link( $sLink, $items );
-if (in_array('readmore_btn',$items,true) && $link && $read_more_btn_text){
 
-	$html .= '<div class="readmore-btn"><a class="' . esc_attr( $anchorClass ) . '" data-id="' . absint( $mID ) .'"  target="' . esc_attr( $target ) . '"  title="' . esc_attr( $title ) . '" href="' . esc_url( $pLink ) . '">' . esc_html( $read_more_btn_text ) . '</a></div>';
+$read_more_btn = isset( $read_more_btn_text ) ? Fns::get_formatted_readmore_text($items, $read_more_btn_text, $anchorClass, $mID, $target, $title, $pLink) : null;
+$resume_btn = isset( $my_resume_text ) ? Fns::get_formatted_resume( $items, $ttp_my_resume, $my_resume_text ) : null;
+$hire_me_btn = isset( $hire_me_text ) ? Fns::get_formatted_hire_me( $items, $ttp_hire_me, $hire_me_text ) : null;
+
+if ( $read_more_btn || $resume_btn || $hire_me_btn ) {
+    $html .= '<div class="readmore-btn">';
+        if( $read_more_btn ){
+            $html .= $read_more_btn;
+        }
+        if( $resume_btn ){
+            $html .= $resume_btn;
+        }
+        if( $hire_me_btn ){
+            $html .= $hire_me_btn;
+        }
+	$html .= '</div>';
 }
+
 $html .= '</div>';
 $html .= '</div>';
 

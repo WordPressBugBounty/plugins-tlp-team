@@ -437,17 +437,20 @@ class FilterHooks {
 	 * @return array
 	 */
 	public function visibilityControls( $obj ) {
+
+
+
 		$obj->elControls[] = [
 			'type'        => 'switch',
 			'id'          => $obj->elPrefix . 'team_skills_promo',
-			'label'       => __( 'Show Team Member Skills?', 'tlp-team' ),
+			'label'       => __( 'Show Team Member Skills ?', 'tlp-team' ),
 			'description' => __( 'Switch on to show team member skills.', 'tlp-team' ),
 			'label_on'    => __( 'On', 'tlp-team' ),
 			'label_off'   => __( 'Off', 'tlp-team' ),
 			'classes'     => $this->classes,
 		];
-
 		return $obj->elControls;
+
 	}
 
 	/**
@@ -520,7 +523,6 @@ class FilterHooks {
 				'{{WRAPPER}}' => '--rttm-primary-color: {{VALUE}}',
 			],
 		];
-
 		return $obj->elControls;
 	}
 

@@ -584,6 +584,7 @@ class Style {
 	 * @return static
 	 */
 	public static function short_biography( $obj ) {
+
 		$condition = [
 			$obj->elPrefix . 'team_short_bio' => [ 'yes' ],
 			$obj->elPrefix . 'layout!'        => [ 'layout5', 'layout-el-8', 'layout11', 'layout14', 'layout15', 'carousel3', 'carousel6', 'carousel8', 'carousel9', 'carousel11', 'isotope5', 'isotope7', 'isotope8', 'isotope9', 'isotope10' ],
@@ -721,6 +722,359 @@ class Style {
 
 		return new static();
 	}
+
+
+    /**
+     * Read More section
+     *
+     * @param object $obj Reference object.
+     * @return static
+     */
+    public static function read_more_btn( $obj ) {
+
+        $condition = [
+            $obj->elPrefix . 'team_readmore_button' => [ 'yes' ],
+            $obj->elPrefix . 'layout!'        => [ 'layout14', 'layout5', 'layout15', 'carousel3', 'carousel6', 'carousel8', 'carousel9', 'carousel11', 'isotope5', 'isotope9', 'isotope10' ],
+        ];
+
+        $obj->startSection( 'read_more_btn_section', esc_html__( 'Read More Button', 'tlp-team' ), self::$tab, [], $condition );
+        $obj->elHeading( $obj->elPrefix . 'read_more_btn_typography_note', esc_html__( 'Typography', 'tlp-team' ) );
+
+        $obj->elControls[] = [
+            'mode'     => 'group',
+            'type'     => 'typography',
+            'id'       => $obj->elPrefix . 'read_more_btn_typography',
+            'selector' => '{{WRAPPER}} .readmore-btn .rt-ream-me-btn',
+        ];
+
+        $obj->elHeading( $obj->elPrefix . 'read_more_btn_colors_note', esc_html__( 'Colors', 'tlp-team' ), 'before' );
+
+        $obj->startTabGroup( 'read_more_btn_color_tabs' );
+        $obj->startTab( 'read_more_btn_color_tab', esc_html__( 'Normal', 'tlp-team' ) );
+
+        $obj->elControls[] = [
+            'type'      => 'color',
+            'id'        => $obj->elPrefix . 'read_more_btn_color',
+            'label'     => esc_html__( 'Color', 'tlp-team' ),
+            'selectors' => [
+                '{{WRAPPER}} .readmore-btn .rt-ream-me-btn' => 'color: {{VALUE}}',
+            ],
+        ];
+
+        $obj->elControls[] = [
+            'type'      => 'color',
+            'id'        => $obj->elPrefix . 'read_more_btn_bg_color',
+            'label'     => esc_html__( 'Background Color', 'tlp-team' ),
+            'selectors' => [
+                '{{WRAPPER}} .readmore-btn .rt-ream-me-btn' => 'background: {{VALUE}}',
+            ],
+        ];
+
+        $obj->endTab();
+        $obj->startTab( 'read_more_btn_hover_color_tab', esc_html__( 'Hover', 'tlp-team' ) );
+
+        $obj->elControls[] = [
+            'type'      => 'color',
+            'id'        => $obj->elPrefix . 'read_more_btn_hover_color',
+            'label'     => esc_html__( 'Hover Color', 'tlp-team' ),
+            'selectors' => [
+                '{{WRAPPER}} .readmore-btn .rt-ream-me-btn:hover' => 'color: {{VALUE}}',
+            ],
+        ];
+
+        $obj->elControls[] = [
+            'type'      => 'color',
+            'id'        => $obj->elPrefix . 'read_more_btn_hover_bg_color',
+            'label'     => esc_html__( 'Hover Background Color', 'tlp-team' ),
+            'selectors' => [
+                '{{WRAPPER}} .readmore-btn .rt-ream-me-btn:hover' => 'background: {{VALUE}}',
+            ],
+        ];
+
+        $obj->endTab();
+        $obj->endTabGroup();
+
+        $obj->elHeading( $obj->elPrefix . 'read_more_btn_border_note', esc_html__( 'Border', 'tlp-team' ), 'before' );
+
+        $obj->elControls[] = [
+            'mode'     => 'group',
+            'type'     => 'border',
+            'id'       => $obj->elPrefix . 'read_more_btn_border',
+            'selector' => '{{WRAPPER}} .readmore-btn .rt-ream-me-btn',
+        ];
+
+        $obj->elControls[] = [
+            'type'      => 'color',
+            'id'        => $obj->elPrefix . 'read_more_btn_border_hover_color',
+            'label'     => esc_html__( 'Hover Color', 'tlp-team' ),
+            'condition' => [ $obj->elPrefix . 'read_more_btn_border_border!' => [ '' ] ],
+            'selectors' => [
+                '{{WRAPPER}} .readmore-btn .rt-ream-me-btn:hover' => 'border-color: {{VALUE}}',
+            ],
+        ];
+
+        $obj->elHeading( $obj->elPrefix . 'read_more_btn_spacing_note', esc_html__( 'Spacing', 'tlp-team' ), 'before' );
+
+        $obj->elControls[] = [
+            'mode'       => 'responsive',
+            'type'       => 'dimensions',
+            'id'         => $obj->elPrefix . 'read_more_btn_padding',
+            'label'      => esc_html__( 'Padding', 'tlp-team' ),
+            'size_units' => [ 'px', '%', 'em' ],
+            'selectors'  => [
+                '{{WRAPPER}} .readmore-btn .rt-ream-me-btn' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+            ],
+        ];
+
+        $obj->elControls[] = [
+            'mode'       => 'responsive',
+            'type'       => 'dimensions',
+            'id'         => $obj->elPrefix . 'read_more_btn_margin',
+            'label'      => esc_html__( 'Margin', 'tlp-team' ),
+            'size_units' => [ 'px', '%', 'em' ],
+            'selectors'  => [
+                '{{WRAPPER}} .readmore-btn .rt-ream-me-btn' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+            ],
+        ];
+
+        $obj->endSection();
+        return new static();
+    }
+
+    /**
+     * Resume section
+     *
+     * @param object $obj Reference object.
+     * @return static
+     */
+    public static function resume_btn( $obj ) {
+
+        $condition = [
+            $obj->elPrefix . 'team_resume_button' => [ 'yes' ],
+            $obj->elPrefix . 'layout!'        => [ 'layout14', 'layout5', 'layout15', 'carousel3', 'carousel6', 'carousel8', 'carousel9', 'carousel11', 'isotope5', 'isotope7', 'isotope8', 'isotope9', 'isotope10' ],
+        ];
+
+        $obj->startSection( 'resume_btn_section', esc_html__( 'Resume Button', 'tlp-team' ), self::$tab, [], $condition );
+        $obj->elHeading( $obj->elPrefix . 'resume_btn_typography_note', esc_html__( 'Typography', 'tlp-team' ) );
+
+        $obj->elControls[] = [
+            'mode'     => 'group',
+            'type'     => 'typography',
+            'id'       => $obj->elPrefix . 'resume_btn_typography',
+            'selector' => '{{WRAPPER}} .readmore-btn .rt-resume-btn',
+        ];
+
+        $obj->elHeading( $obj->elPrefix . 'resume_btn_colors_note', esc_html__( 'Colors', 'tlp-team' ), 'before' );
+
+        $obj->startTabGroup( 'resume_btn_color_tabs' );
+        $obj->startTab( 'resume_btn_color_tab', esc_html__( 'Normal', 'tlp-team' ) );
+
+        $obj->elControls[] = [
+            'type'      => 'color',
+            'id'        => $obj->elPrefix . 'resume_btn_color',
+            'label'     => esc_html__( 'Color', 'tlp-team' ),
+            'selectors' => [
+                '{{WRAPPER}} .readmore-btn .rt-resume-btn' => 'color: {{VALUE}}',
+            ],
+        ];
+
+        $obj->elControls[] = [
+            'type'      => 'color',
+            'id'        => $obj->elPrefix . 'resume_btn_bg_color',
+            'label'     => esc_html__( 'Background Color', 'tlp-team' ),
+            'selectors' => [
+                '{{WRAPPER}} .readmore-btn .rt-resume-btn' => 'background: {{VALUE}}',
+            ],
+        ];
+
+        $obj->endTab();
+        $obj->startTab( 'resume_btn_hover_color_tab', esc_html__( 'Hover', 'tlp-team' ) );
+
+        $obj->elControls[] = [
+            'type'      => 'color',
+            'id'        => $obj->elPrefix . 'resume_btn_hover_color',
+            'label'     => esc_html__( 'Hover Color', 'tlp-team' ),
+            'selectors' => [
+                '{{WRAPPER}} .readmore-btn .rt-resume-btn:hover' => 'color: {{VALUE}}',
+            ],
+        ];
+
+        $obj->elControls[] = [
+            'type'      => 'color',
+            'id'        => $obj->elPrefix . 'resume_btn_hover_bg_color',
+            'label'     => esc_html__( 'Hover Background Color', 'tlp-team' ),
+            'selectors' => [
+                '{{WRAPPER}} .readmore-btn .rt-resume-btn:hover' => 'background: {{VALUE}}',
+            ],
+        ];
+
+        $obj->endTab();
+        $obj->endTabGroup();
+
+        $obj->elHeading( $obj->elPrefix . 'resume_btn_border_note', esc_html__( 'Border', 'tlp-team' ), 'before' );
+
+        $obj->elControls[] = [
+            'mode'     => 'group',
+            'type'     => 'border',
+            'id'       => $obj->elPrefix . 'resume_btn_border',
+            'selector' => '{{WRAPPER}} .readmore-btn .rt-resume-btn',
+        ];
+
+        $obj->elControls[] = [
+            'type'      => 'color',
+            'id'        => $obj->elPrefix . 'resume_btn_border_hover_color',
+            'label'     => esc_html__( 'Hover Color', 'tlp-team' ),
+            'condition' => [ $obj->elPrefix . 'resume_btn_border_border!' => [ '' ] ],
+            'selectors' => [
+                '{{WRAPPER}} .readmore-btn .rt-resume-btn:hover' => 'border-color: {{VALUE}}',
+            ],
+        ];
+
+        $obj->elHeading( $obj->elPrefix . 'resume_btn_spacing_note', esc_html__( 'Spacing', 'tlp-team' ), 'before' );
+
+        $obj->elControls[] = [
+            'mode'       => 'responsive',
+            'type'       => 'dimensions',
+            'id'         => $obj->elPrefix . 'resume_btn_padding',
+            'label'      => esc_html__( 'Padding', 'tlp-team' ),
+            'size_units' => [ 'px', '%', 'em' ],
+            'selectors'  => [
+                '{{WRAPPER}} .readmore-btn .rt-resume-btn' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+            ],
+        ];
+
+        $obj->elControls[] = [
+            'mode'       => 'responsive',
+            'type'       => 'dimensions',
+            'id'         => $obj->elPrefix . 'resume_btn_margin',
+            'label'      => esc_html__( 'Margin', 'tlp-team' ),
+            'size_units' => [ 'px', '%', 'em' ],
+            'selectors'  => [
+                '{{WRAPPER}} .readmore-btn .rt-resume-btn' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+            ],
+        ];
+
+        $obj->endSection();
+        return new static();
+    }
+
+    /**
+     * Hire Me section
+     *
+     * @param object $obj Reference object.
+     * @return static
+     */
+    public static function hire_me_btn( $obj ) {
+
+        $condition = [
+            $obj->elPrefix . 'team_hireme_button' => [ 'yes' ],
+            $obj->elPrefix . 'layout!'        => [ 'layout14', 'layout5', 'layout15', 'carousel3', 'carousel6', 'carousel8', 'carousel9', 'carousel11', 'isotope5', 'isotope9', 'isotope10' ],
+        ];
+
+        $obj->startSection( 'hire_me_btn_section', esc_html__( 'Hire Me Button', 'tlp-team' ), self::$tab, [], $condition );
+        $obj->elHeading( $obj->elPrefix . 'hire_me_btn_typography_note', esc_html__( 'Typography', 'tlp-team' ) );
+
+        $obj->elControls[] = [
+            'mode'     => 'group',
+            'type'     => 'typography',
+            'id'       => $obj->elPrefix . 'hire_me_btn_typography',
+            'selector' => '{{WRAPPER}} .readmore-btn .rt-hire-btn',
+        ];
+
+        $obj->elHeading( $obj->elPrefix . 'hire_me_btn_colors_note', esc_html__( 'Colors', 'tlp-team' ), 'before' );
+
+        $obj->startTabGroup( 'hire_me_btn_color_tabs' );
+        $obj->startTab( 'hire_me_btn_color_tab', esc_html__( 'Normal', 'tlp-team' ) );
+
+        $obj->elControls[] = [
+            'type'      => 'color',
+            'id'        => $obj->elPrefix . 'hire_me_btn_color',
+            'label'     => esc_html__( 'Color', 'tlp-team' ),
+            'selectors' => [
+                '{{WRAPPER}} .readmore-btn .rt-hire-btn' => 'color: {{VALUE}}',
+            ],
+        ];
+
+        $obj->elControls[] = [
+            'type'      => 'color',
+            'id'        => $obj->elPrefix . 'hire_me_btn_bg_color',
+            'label'     => esc_html__( 'Background Color', 'tlp-team' ),
+            'selectors' => [
+                '{{WRAPPER}} .readmore-btn .rt-hire-btn' => 'background: {{VALUE}}',
+            ],
+        ];
+
+        $obj->endTab();
+        $obj->startTab( 'hire_me_btn_hover_color_tab', esc_html__( 'Hover', 'tlp-team' ) );
+
+        $obj->elControls[] = [
+            'type'      => 'color',
+            'id'        => $obj->elPrefix . 'hire_me_btn_hover_color',
+            'label'     => esc_html__( 'Hover Color', 'tlp-team' ),
+            'selectors' => [
+                '{{WRAPPER}} .readmore-btn .rt-hire-btn:hover' => 'color: {{VALUE}}',
+            ],
+        ];
+
+        $obj->elControls[] = [
+            'type'      => 'color',
+            'id'        => $obj->elPrefix . 'hire_me_btn_hover_bg_color',
+            'label'     => esc_html__( 'Hover Background Color', 'tlp-team' ),
+            'selectors' => [
+                '{{WRAPPER}} .readmore-btn .rt-hire-btn:hover' => 'background: {{VALUE}}',
+            ],
+        ];
+
+        $obj->endTab();
+        $obj->endTabGroup();
+
+        $obj->elHeading( $obj->elPrefix . 'hire_me_btn_border_note', esc_html__( 'Border', 'tlp-team' ), 'before' );
+
+        $obj->elControls[] = [
+            'mode'     => 'group',
+            'type'     => 'border',
+            'id'       => $obj->elPrefix . 'hire_me_btn_border',
+            'selector' => '{{WRAPPER}} .readmore-btn .rt-hire-btn',
+        ];
+
+        $obj->elControls[] = [
+            'type'      => 'color',
+            'id'        => $obj->elPrefix . 'hire_me_btn_border_hover_color',
+            'label'     => esc_html__( 'Hover Color', 'tlp-team' ),
+            'condition' => [ $obj->elPrefix . 'hire_me_btn_border_border!' => [ '' ] ],
+            'selectors' => [
+                '{{WRAPPER}} .readmore-btn .rt-hire-btn:hover' => 'border-color: {{VALUE}}',
+            ],
+        ];
+
+        $obj->elHeading( $obj->elPrefix . 'hire_me_btn_spacing_note', esc_html__( 'Spacing', 'tlp-team' ), 'before' );
+
+        $obj->elControls[] = [
+            'mode'       => 'responsive',
+            'type'       => 'dimensions',
+            'id'         => $obj->elPrefix . 'hire_me_btn_padding',
+            'label'      => esc_html__( 'Padding', 'tlp-team' ),
+            'size_units' => [ 'px', '%', 'em' ],
+            'selectors'  => [
+                '{{WRAPPER}} .readmore-btn .rt-hire-btn' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+            ],
+        ];
+
+        $obj->elControls[] = [
+            'mode'       => 'responsive',
+            'type'       => 'dimensions',
+            'id'         => $obj->elPrefix . 'hire_me_btn_margin',
+            'label'      => esc_html__( 'Margin', 'tlp-team' ),
+            'size_units' => [ 'px', '%', 'em' ],
+            'selectors'  => [
+                '{{WRAPPER}} .readmore-btn .rt-hire-btn' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+            ],
+        ];
+
+        $obj->endSection();
+        return new static();
+    }
+
 
 	/**
 	 * Buttons section

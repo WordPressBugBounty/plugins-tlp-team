@@ -89,8 +89,9 @@ class LoadMore {
 			$defaultImgId    = ( ! empty( $scMeta['default_preview_image'][0] ) ? absint( $scMeta['default_preview_image'][0] ) : null );
 			$customImgSize   = ( ! empty( $scMeta['ttp_custom_image_size'][0] ) ? unserialize( $scMeta['ttp_custom_image_size'][0] ) : [] );
 			$character_limit = ( isset( $scMeta['character_limit'][0] ) ? absint( $scMeta['character_limit'][0] ) : 0 );
+            $my_resume_text = isset( $scMeta['ttp_my_resume_text'][0] ) ? $scMeta['ttp_my_resume_text'][0] : esc_html__('Hire Me','tlp-team');
+			$hire_me_text = isset( $scMeta['ttp_hire_me_text'][0] ) ? $scMeta['ttp_hire_me_text'][0] : esc_html__('Hire Me','tlp-team');
 			$read_more_btn_text = isset( $scMeta['ttp_read_more_btn_text'][0] ) ? $scMeta['ttp_read_more_btn_text'][0] : esc_html__('Read More','tlp-team');
-
 			/* Argument create */
 			$args                = [];
 			$args['post_type']   = [ rttlp_team()->post_type ];
@@ -268,6 +269,8 @@ class LoadMore {
 			$gridType     = ! empty( $scMeta['grid_style'][0] ) ? $scMeta['grid_style'][0] : 'even';
 			$arg['class'] = null;
 
+			$arg['my_resume_text'] = $my_resume_text;
+			$arg['hire_me_text'] = $hire_me_text;
 			$arg['read_more_btn_text'] = $read_more_btn_text;
 
 			if ( ! $isCarousel ) {

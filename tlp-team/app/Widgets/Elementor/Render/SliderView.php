@@ -75,7 +75,7 @@ class SliderView {
 
 		$containerAttr .= ' data-sc-id="' . $scID . '"';
 
-		$html .= '<div class="rt-elementor-container rt-pos-r ' . $containerClass . '" id="' . $layoutID . '" ' . $containerAttr . '>';
+		$html .= '<div class="rt-team-container rt-elementor-container rt-pos-r ' . $containerClass . '" id="' . $layoutID . '" ' . $containerAttr . '>';
 
 		$teamQuery = new WP_Query( $args );
 

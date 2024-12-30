@@ -45,7 +45,7 @@ if ( $primaryColor ) {
 	$css .= 'color:' . $primaryColor . ';';
 	$css .= '}';
 
-	$css .= "$selector .layout16 .single-team-area .social-icons, $selector .layout16 .single-team-area:hover:before, $selector .single-team-area .skill-prog .fill,.tlp-team $selector .tlp-content, .tlp-popup-wrap-{$scID} .tlp-tooltip + .tooltip > .tooltip-inner, .tlp-modal-{$scID} .tlp-tooltip + .tooltip > .tooltip-inner, .rt-modal-{$scID} .tlp-tooltip + .tooltip > .tooltip-inner,$selector .layout1 .tlp-content,$selector .layout11 .single-team-area .tlp-title,$selector .carousel7 .single-team-area .team-name,$selector .layout14 .rt-grid-item .tlp-overlay, $selector .carousel8 .rt-grid-item .tlp-overlay,$selector .isotope6 .single-team-area h3 .team-name,$selector .carousel8 .rt-grid-item .tlp-overlay .social-icons:before,$selector .layout14 .rt-grid-item .tlp-overlay .social-icons:before,$selector .skill-prog .fill,$selector .special-selected-top-wrap .ttp-label,#rt-smart-modal-container.rt-modal-{$scID} .rt-smart-modal-header,$selector .layout6 .tlp-info-block, $selector .isotope-free .tlp-content,$selector .layout17 .single-team-area:hover .tlp-content,$selector .layout17 .single-team-area .social-icons a:hover,$selector .layout18 .single-team-area .tlp-overlay  a.share-icon:hover,$selector .layout18 .single-team-area .tlp-overlay  .social-icons > a:hover, $selector .carousel9 .single-team-area .tlp-overlay{";
+	$css .= "$selector .tlp-team-skill .skill-prog .fill .percent-text, $selector .layout16 .single-team-area .social-icons, $selector .layout16 .single-team-area:hover:before,  $selector .single-team-area .skill-prog .fill,.tlp-team $selector .tlp-content, .tlp-popup-wrap-{$scID} .tlp-tooltip + .tooltip > .tooltip-inner, .tlp-modal-{$scID} .tlp-tooltip + .tooltip > .tooltip-inner, .rt-modal-{$scID} .tlp-tooltip + .tooltip > .tooltip-inner,$selector .layout1 .tlp-content,$selector .layout11 .single-team-area .tlp-title,$selector .carousel7 .single-team-area .team-name,$selector .layout14 .rt-grid-item .tlp-overlay, $selector .carousel8 .rt-grid-item .tlp-overlay,$selector .isotope6 .single-team-area h3 .team-name,$selector .carousel8 .rt-grid-item .tlp-overlay .social-icons:before,$selector .layout14 .rt-grid-item .tlp-overlay .social-icons:before,$selector .skill-prog .fill,$selector .special-selected-top-wrap .ttp-label,#rt-smart-modal-container.rt-modal-{$scID} .rt-smart-modal-header,$selector .layout6 .tlp-info-block, $selector .isotope-free .tlp-content,$selector .layout17 .single-team-area:hover .tlp-content,$selector .layout17 .single-team-area .social-icons a:hover,$selector .layout18 .single-team-area .tlp-overlay  a.share-icon:hover,$selector .layout18 .single-team-area .tlp-overlay  .social-icons > a:hover, $selector .carousel9 .single-team-area .tlp-overlay{";
 	$css .= 'background:' . $primaryColor . ' !important;';
 	$css .= '}';
 
@@ -65,7 +65,7 @@ if ( $primaryColor ) {
 	$css .= 'border-color: transparent ' . $primaryColor . ';';
 	$css .= '}';
 
-	$css .= "$selector .layout6 .tlp-left-arrow:after{";
+	$css .= "$selector .tlp-team-skill .skill-prog .fill .percent-text:before, $selector .layout6 .tlp-left-arrow:after{";
 	$css .= 'border-color:' . $primaryColor . ' transparent transparent;';
 	$css .= '}';
 
@@ -88,6 +88,7 @@ if ( $primaryColor ) {
 	$css .= "#rt-smart-modal-container.rt-modal-{$scID} .rt-smart-modal-header a.rt-smart-modal-close{";
 	$css .= '-webkit-text-stroke: 6px ' . Fns::TLPhex2rgba( $primaryColor ) . ';';
 	$css .= '}';
+
 }
 
 // Buttons.

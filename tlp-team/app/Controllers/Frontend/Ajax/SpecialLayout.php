@@ -50,6 +50,7 @@ class SpecialLayout {
 			] );
 
 		}
+
 		if ( $memberId ) {
 			$name        = get_the_title( $memberId );
 			$designation = wp_strip_all_tags(
@@ -137,7 +138,6 @@ class SpecialLayout {
 			}
 
 			$htmlCInfo = $htmlCInfo ? '<div class="contact-info"><ul>' . $htmlCInfo . '</ul></div>' : null;
-
 			$html .= "<div class='special-selected-top-wrap'><div class='rt-col-xs-6 img'>" . $imgHtml . '</div>';
 			$html .= '<div class="rt-col-xs-6 ttp-label"> <div class="ttp-label-inner">' . $htmlName . $htmlDesignation . '</div></div></div>';
 			$html .= '<div class="rt-col-sm-12">' . $htmlShortBio . $htmlCInfo . '</div>';

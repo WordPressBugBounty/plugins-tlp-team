@@ -52,6 +52,25 @@ if ( $imgHtml ) {
 
 	$content .= Fns::get_formatted_short_bio( $short_bio, $items );
 	$content .= Fns::get_formatted_social_link( $sLink, $items );
+
+    $read_more_btn = isset( $read_more_btn_text ) ? Fns::get_formatted_readmore_text($items, $read_more_btn_text, $anchorClass, $mID, $target, $title, $pLink) : null;
+    $resume_btn = isset( $ttp_my_resume ) ? Fns::get_formatted_resume( $items, $ttp_my_resume, $my_resume_text ) : null;
+    $hire_me_btn = isset( $ttp_hire_me ) ? Fns::get_formatted_hire_me( $items, $ttp_hire_me, $hire_me_text ) : null;
+
+    if ( $read_more_btn || $resume_btn || $hire_me_btn ) {
+        $content .= '<div class="readmore-btn">';
+        if( $read_more_btn ){
+            $content .= $read_more_btn;
+        }
+        if( $resume_btn ){
+            $content .= $resume_btn;
+        }
+        if( $hire_me_btn ){
+            $content .= $hire_me_btn;
+        }
+        $content .= '</div>';
+    }
+
 	$html    .= $content ? '<div class="tlp-content2">' . $content . '</div>' : null;
 
 	$html .= '</div>';
