@@ -72,14 +72,16 @@ $hire_me_btn = isset( $ttp_hire_me ) ? Fns::get_formatted_hire_me( $items, $ttp_
 
 if ( $read_more_btn || $resume_btn || $hire_me_btn ) {
     $html .= '<div class="readmore-btn">';
-    if( $read_more_btn ){
-        $html .= $read_more_btn;
-    }
     if( $resume_btn ){
         $html .= $resume_btn;
     }
     if( $hire_me_btn ){
         $html .= $hire_me_btn;
+    }
+    $html .= '</div>';
+    $html .= '<div class="readmore-btn hirme-resume">';
+    if( $read_more_btn ){
+        $html .= $read_more_btn;
     }
     $html .= '</div>';
 }

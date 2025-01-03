@@ -59,14 +59,14 @@ if ( $imgHtml ) {
 
     if ( $read_more_btn || $resume_btn || $hire_me_btn ) {
         $content .= '<div class="readmore-btn">';
-        if( $read_more_btn ){
-            $content .= $read_more_btn;
-        }
         if( $resume_btn ){
             $content .= $resume_btn;
         }
         if( $hire_me_btn ){
             $content .= $hire_me_btn;
+        }
+        if( $read_more_btn ){
+            $content .= $read_more_btn;
         }
         $content .= '</div>';
     }

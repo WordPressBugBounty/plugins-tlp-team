@@ -295,6 +295,43 @@ class Preview {
 
 			$cssMeta = [
 				'primary_color'      => ( isset( $_REQUEST['primary_color'] ) ? sanitize_hex_color( wp_unslash( $_REQUEST['primary_color'] ) ) : null ),
+                'resume_btn_style' => isset($_REQUEST['ttp_resume_btn_style']) && is_array($_REQUEST['ttp_resume_btn_style'])
+                    ? array(
+                        'bg'                => isset($_REQUEST['ttp_resume_btn_style']['bg']) ? sanitize_hex_color(wp_unslash($_REQUEST['ttp_resume_btn_style']['bg'])) : null,
+                        'hover_bg'          => isset($_REQUEST['ttp_resume_btn_style']['hover_bg']) ? sanitize_hex_color(wp_unslash($_REQUEST['ttp_resume_btn_style']['hover_bg'])) : null,
+                        'border_color'      => isset($_REQUEST['ttp_resume_btn_style']['border_color']) ? sanitize_hex_color(wp_unslash($_REQUEST['ttp_resume_btn_style']['border_color'])) : null,
+                        'text'              => isset($_REQUEST['ttp_resume_btn_style']['text']) ? sanitize_hex_color(wp_unslash($_REQUEST['ttp_resume_btn_style']['text'])) : null,
+                        'hover_text'        => isset($_REQUEST['ttp_resume_btn_style']['hover_text']) ? sanitize_hex_color(wp_unslash($_REQUEST['ttp_resume_btn_style']['hover_text'])) : null,
+                        'border_hover_color'=> isset($_REQUEST['ttp_resume_btn_style']['border_hover_color']) ? sanitize_hex_color(wp_unslash($_REQUEST['ttp_resume_btn_style']['border_hover_color'])) : null,
+                        'border_width'      => isset($_REQUEST['ttp_resume_btn_style']['border_width']) ? absint(wp_unslash($_REQUEST['ttp_resume_btn_style']['border_width'])) : null,
+                        'border_radius'     => array_key_exists('border_radius', $_REQUEST['ttp_resume_btn_style']) ? absint(wp_unslash($_REQUEST['ttp_resume_btn_style']['border_radius'])) : null,
+                    )
+                    : null,
+
+                'hireme_btn_style' => isset($_REQUEST['ttp_hireme_btn_style']) && is_array($_REQUEST['ttp_hireme_btn_style'])
+                    ? array(
+                        'bg'                => isset($_REQUEST['ttp_hireme_btn_style']['bg']) ? sanitize_hex_color(wp_unslash($_REQUEST['ttp_hireme_btn_style']['bg'])) : null,
+                        'hover_bg'          => isset($_REQUEST['ttp_hireme_btn_style']['hover_bg']) ? sanitize_hex_color(wp_unslash($_REQUEST['ttp_hireme_btn_style']['hover_bg'])) : null,
+                        'border_color'      => isset($_REQUEST['ttp_hireme_btn_style']['border_color']) ? sanitize_hex_color(wp_unslash($_REQUEST['ttp_hireme_btn_style']['border_color'])) : null,
+                        'text'              => isset($_REQUEST['ttp_hireme_btn_style']['text']) ? sanitize_hex_color(wp_unslash($_REQUEST['ttp_hireme_btn_style']['text'])) : null,
+                        'hover_text'        => isset($_REQUEST['ttp_hireme_btn_style']['hover_text']) ? sanitize_hex_color(wp_unslash($_REQUEST['ttp_hireme_btn_style']['hover_text'])) : null,
+                        'border_hover_color'=> isset($_REQUEST['ttp_hireme_btn_style']['border_hover_color']) ? sanitize_hex_color(wp_unslash($_REQUEST['ttp_hireme_btn_style']['border_hover_color'])) : null,
+                        'border_width'      => isset($_REQUEST['ttp_hireme_btn_style']['border_width']) ? absint(wp_unslash($_REQUEST['ttp_hireme_btn_style']['border_width'])) : null,
+                        'border_radius'     => isset($_REQUEST['ttp_hireme_btn_style']['border_radius']) ? absint(wp_unslash($_REQUEST['ttp_hireme_btn_style']['border_radius'])) : null,
+                    )
+                    : null,
+                'readmore_btn_style' => isset($_REQUEST['ttp_readmore_btn_style']) && is_array($_REQUEST['ttp_readmore_btn_style'])
+                    ? array(
+                        'bg'                => isset($_REQUEST['ttp_readmore_btn_style']['bg']) ? sanitize_hex_color(wp_unslash($_REQUEST['ttp_readmore_btn_style']['bg'])) : null,
+                        'hover_bg'          => isset($_REQUEST['ttp_readmore_btn_style']['hover_bg']) ? sanitize_hex_color(wp_unslash($_REQUEST['ttp_readmore_btn_style']['hover_bg'])) : null,
+                        'border_color'      => isset($_REQUEST['ttp_readmore_btn_style']['border_color']) ? sanitize_hex_color(wp_unslash($_REQUEST['ttp_readmore_btn_style']['border_color'])) : null,
+                        'text'              => isset($_REQUEST['ttp_readmore_btn_style']['text']) ? sanitize_hex_color(wp_unslash($_REQUEST['ttp_readmore_btn_style']['text'])) : null,
+                        'hover_text'        => isset($_REQUEST['ttp_readmore_btn_style']['hover_text']) ? sanitize_hex_color(wp_unslash($_REQUEST['ttp_readmore_btn_style']['hover_text'])) : null,
+                        'border_hover_color'=> isset($_REQUEST['ttp_readmore_btn_style']['border_hover_color']) ? sanitize_hex_color(wp_unslash($_REQUEST['ttp_readmore_btn_style']['border_hover_color'])) : null,
+                        'border_width'      => isset($_REQUEST['ttp_readmore_btn_style']['border_width']) ? absint(wp_unslash($_REQUEST['ttp_readmore_btn_style']['border_width'])) : null,
+                        'border_radius'     => isset($_REQUEST['ttp_readmore_btn_style']['border_radius']) ? absint(wp_unslash($_REQUEST['ttp_readmore_btn_style']['border_radius'])) : null,
+                    )
+                    : null,
 				'ttp_button_style'   => ( isset( $_REQUEST['ttp_button_style'] ) ? array_map( 'sanitize_hex_color', wp_unslash( $_REQUEST['ttp_button_style'] ) ) : null ),
 				'ttp_popup_bg_color' => ( isset( $_REQUEST['ttp_popup_bg_color'] ) ? sanitize_hex_color( wp_unslash( $_REQUEST['ttp_popup_bg_color'] ) ) : null ),
 				'name'               => ( isset( $_REQUEST['name'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_REQUEST['name'] ) ) : null ),

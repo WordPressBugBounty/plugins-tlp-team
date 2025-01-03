@@ -20,6 +20,9 @@ $selector = '.rt-team-container.rt-team-container-' . $scID;
 // Variables.
 $scMeta         = get_post_meta( $scID );
 $primaryColor   = ( isset( $scMeta['primary_color'][0] ) ? sanitize_text_field( $scMeta['primary_color'][0] ) : null );
+$resume_btn     = ! empty( $scMeta['ttp_resume_btn_style'][0] ) ? unserialize( $scMeta['ttp_resume_btn_style'][0] ) : null;
+$hireme_btn     = ! empty( $scMeta['ttp_hireme_btn_style'][0] ) ? unserialize( $scMeta['ttp_hireme_btn_style'][0] ) : null;
+$readmore_btn   = ! empty( $scMeta['ttp_readmore_btn_style'][0] ) ? unserialize( $scMeta['ttp_readmore_btn_style'][0] ) : null;
 $button         = ! empty( $scMeta['ttp_button_style'][0] ) ? unserialize( $scMeta['ttp_button_style'][0] ) : null;
 $popupBg        = ! empty( $scMeta['ttp_popup_bg_color'][0] ) ? sanitize_text_field( $scMeta['ttp_popup_bg_color'][0] ) : null;
 $popupTextColor = ! empty( $scMeta['ttp_popup_text_color'][0] ) ? sanitize_text_field( $scMeta['ttp_popup_text_color'][0] ) : null;
@@ -91,76 +94,217 @@ if ( $primaryColor ) {
 
 }
 
+
+// ReadMore Button.
+if ( ! empty( $readmore_btn ) ) {
+	if ( ! empty( $readmore_btn['bg'] ) ) {
+		$css .= "$selector .readmore-btn .rt-ream-me-btn{";
+		$css .= "background-color: {$readmore_btn['bg']};";
+		$css .= '}';
+	}
+
+	if ( ! empty( $readmore_btn['hover_bg'] ) ) {
+		$css .= "$selector .readmore-btn .rt-ream-me-btn:hover{";
+		$css .= "background-color: {$readmore_btn['hover_bg']};";
+		$css .= '}';
+	}
+
+    if ( ! empty( $readmore_btn['border_color'] ) ) {
+        $css .= "$selector .readmore-btn .rt-ream-me-btn{";
+        $css .= "border-color: {$readmore_btn['border_color']};";
+        $css .= '}';
+    }
+
+	if ( ! empty( $readmore_btn['text'] ) ) {
+		$css .= "$selector .readmore-btn .rt-ream-me-btn{";
+		$css .= "color: {$readmore_btn['text']};";
+		$css .= '}';
+	}
+
+	if ( ! empty( $readmore_btn['hover_text'] ) ) {
+		$css .= "$selector .readmore-btn .rt-ream-me-btn:hover{";
+		$css .= "color: {$readmore_btn['hover_text']};";
+		$css .= '}';
+	}
+
+	if ( ! empty( $readmore_btn['border_hover_color'] ) ) {
+		$css .= "$selector .readmore-btn .rt-ream-me-btn:hover{";
+		$css .= "border-color: {$readmore_btn['border_hover_color']};";
+		$css .= '}';
+	}
+
+	if ( ! empty( $readmore_btn['border_width'] ) ) {
+		$css .= "$selector .readmore-btn .rt-ream-me-btn{";
+		$css .= "border-width: {$readmore_btn['border_width']}px;";
+		$css .= '}';
+	}
+
+	if ( ! empty( $readmore_btn['border_radius'] ) ) {
+		$css .= "$selector .readmore-btn .rt-ream-me-btn{";
+		$css .= "border-radius: {$readmore_btn['border_radius']}px;";
+		$css .= '}';
+	}
+
+}
+
+// Resume Button.
+if ( ! empty( $resume_btn ) ) {
+	if ( ! empty( $resume_btn['bg'] ) ) {
+		$css .= "$selector .readmore-btn .rt-resume-btn{";
+		$css .= "background-color: {$resume_btn['bg']};";
+		$css .= '}';
+	}
+
+	if ( ! empty( $resume_btn['hover_bg'] ) ) {
+		$css .= "$selector .readmore-btn .rt-resume-btn:hover{";
+		$css .= "background-color: {$resume_btn['hover_bg']};";
+		$css .= '}';
+	}
+
+    if ( ! empty( $resume_btn['border_color'] ) ) {
+        $css .= "$selector .readmore-btn .rt-resume-btn{";
+        $css .= "border-color: {$resume_btn['border_color']};";
+        $css .= '}';
+    }
+
+	if ( ! empty( $resume_btn['text'] ) ) {
+		$css .= "$selector .readmore-btn .rt-resume-btn{";
+		$css .= "color: {$resume_btn['text']};";
+		$css .= '}';
+	}
+
+	if ( ! empty( $resume_btn['hover_text'] ) ) {
+		$css .= "$selector .readmore-btn .rt-resume-btn:hover{";
+		$css .= "color: {$resume_btn['hover_text']};";
+		$css .= '}';
+	}
+
+	if ( ! empty( $resume_btn['border_hover_color'] ) ) {
+		$css .= "$selector .readmore-btn .rt-resume-btn:hover{";
+		$css .= "border-color: {$resume_btn['border_hover_color']};";
+		$css .= '}';
+	}
+
+	if ( ! empty( $resume_btn['border_width'] ) ) {
+		$css .= "$selector .readmore-btn .rt-resume-btn{";
+		$css .= "border-width: {$resume_btn['border_width']}px;";
+		$css .= '}';
+	}
+
+	if ( ! empty( $resume_btn['border_radius'] ) ) {
+		$css .= "$selector .readmore-btn .rt-resume-btn{";
+		$css .= "border-radius: {$resume_btn['border_radius']}px;";
+		$css .= '}';
+	}
+
+}
+
+// Hire Me Button.
+if ( ! empty( $hireme_btn ) ) {
+	if ( ! empty( $hireme_btn['bg'] ) ) {
+		$css .= "$selector .readmore-btn .rt-hire-btn{";
+		$css .= "background-color: {$hireme_btn['bg']};";
+		$css .= '}';
+	}
+
+	if ( ! empty( $hireme_btn['hover_bg'] ) ) {
+		$css .= "$selector .readmore-btn .rt-hire-btn:hover{";
+		$css .= "background-color: {$hireme_btn['hover_bg']};";
+		$css .= '}';
+	}
+
+    if ( ! empty( $hireme_btn['border_color'] ) ) {
+        $css .= "$selector .readmore-btn .rt-hire-btn{";
+        $css .= "border-color: {$hireme_btn['border_color']};";
+        $css .= '}';
+    }
+
+	if ( ! empty( $hireme_btn['text'] ) ) {
+		$css .= "$selector .readmore-btn .rt-hire-btn{";
+		$css .= "color: {$hireme_btn['text']};";
+		$css .= '}';
+	}
+
+	if ( ! empty( $hireme_btn['hover_text'] ) ) {
+		$css .= "$selector .readmore-btn .rt-hire-btn:hover{";
+		$css .= "color: {$hireme_btn['hover_text']};";
+		$css .= '}';
+	}
+
+	if ( ! empty( $hireme_btn['border_hover_color'] ) ) {
+		$css .= "$selector .readmore-btn .rt-hire-btn:hover{";
+		$css .= "border-color: {$hireme_btn['border_hover_color']};";
+		$css .= '}';
+	}
+
+	if ( ! empty( $hireme_btn['border_width'] ) ) {
+		$css .= "$selector .readmore-btn .rt-hire-btn{";
+		$css .= "border-width: {$hireme_btn['border_width']}px;";
+		$css .= '}';
+	}
+
+	if ( ! empty( $hireme_btn['border_radius'] ) ) {
+		$css .= "$selector .readmore-btn .rt-hire-btn{";
+		$css .= "border-radius: {$hireme_btn['border_radius']}px;";
+		$css .= '}';
+	}
+
+}
+
 // Buttons.
 if ( ! empty( $button ) ) {
-	if ( ! empty( $button['bg'] ) ) {
-		$css .= "$selector .rt-pagination-wrap .rt-loadmore-btn,$selector .rt-pagination-wrap .pagination > li > a, $selector .rt-pagination-wrap .pagination > li > span,$selector .ttp-isotope-buttons.button-group button,$selector .rt-pagination-wrap .rt-loadmore-btn,$selector .rt-carousel-holder .swiper-arrow,$selector .rt-carousel-holder.swiper .swiper-pagination-bullet,$selector .rt-layout-filter-container .rt-filter-wrap .rt-filter-item-wrap.rt-filter-dropdown-wrap .rt-filter-dropdown .rt-filter-dropdown-item,$selector .rt-pagination-wrap .paginationjs .paginationjs-pages li>a{";
-		$css .= "background-color: {$button['bg']};";
-		$css .= '}';
+    if ( ! empty( $button['bg'] ) ) {
+        $css .= "$selector .rt-pagination-wrap .rt-loadmore-btn,$selector .rt-pagination-wrap .pagination > li > a, $selector .rt-pagination-wrap .pagination > li > span,$selector .ttp-isotope-buttons.button-group button,$selector .rt-pagination-wrap .rt-loadmore-btn,$selector .rt-carousel-holder .swiper-arrow,$selector .rt-carousel-holder.swiper .swiper-pagination-bullet,$selector .rt-layout-filter-container .rt-filter-wrap .rt-filter-item-wrap.rt-filter-dropdown-wrap .rt-filter-dropdown .rt-filter-dropdown-item,$selector .rt-pagination-wrap .paginationjs .paginationjs-pages li>a{";
+        $css .= "background-color: {$button['bg']};";
+        $css .= '}';
 
-		$css .= "$selector .rt-carousel-holder .swiper-arrow{";
-		$css .= "border-color: {$button['bg']};";
-		$css .= '}';
+        $css .= "$selector .rt-carousel-holder .swiper-arrow{";
+        $css .= "border-color: {$button['bg']};";
+        $css .= '}';
 
-		$css .= "$selector .rt-pagination-wrap .rt-infinite-action .rt-infinite-loading{";
-		$css .= 'color: ' . Fns::TLPhex2rgba( $button['bg'], 0.5 );
-		$css .= '}';
+        $css .= "$selector .rt-pagination-wrap .rt-infinite-action .rt-infinite-loading{";
+        $css .= 'color: ' . Fns::TLPhex2rgba( $button['bg'], 0.5 );
+        $css .= '}';
 
-		$css .= "$selector .readmore-btn a{";
-		$css .= "background-color: {$button['bg']};";
-		$css .= '}';
-	}
+    }
 
-	if ( ! empty( $button['hover_bg'] ) ) {
-		$css .= "$selector .rt-pagination-wrap .rt-loadmore-btn:hover,$selector .rt-pagination-wrap .pagination > li > a:hover, $selector .rt-pagination-wrap .pagination > li > span:hover,$selector .rt-carousel-holder .swiper-arrow:hover,$selector .rt-filter-item-wrap.rt-filter-button-wrap span.rt-filter-button-item:hover,$selector .rt-layout-filter-container .rt-filter-wrap .rt-filter-item-wrap.rt-filter-dropdown-wrap .rt-filter-dropdown .rt-filter-dropdown-item:hover,$selector .rt-carousel-holder.swiper .swiper-pagination-bullet:hover,$selector .ttp-isotope-buttons.button-group button:hover,$selector .rt-pagination-wrap .rt-page-numbers .paginationjs .paginationjs-pages li>a:hover{";
-		$css .= "background-color: {$button['hover_bg']};";
-		$css .= '}';
+    if ( ! empty( $button['hover_bg'] ) ) {
+        $css .= "$selector .rt-pagination-wrap .rt-loadmore-btn:hover,$selector .rt-pagination-wrap .pagination > li > a:hover, $selector .rt-pagination-wrap .pagination > li > span:hover,$selector .rt-carousel-holder .swiper-arrow:hover,$selector .rt-filter-item-wrap.rt-filter-button-wrap span.rt-filter-button-item:hover,$selector .rt-layout-filter-container .rt-filter-wrap .rt-filter-item-wrap.rt-filter-dropdown-wrap .rt-filter-dropdown .rt-filter-dropdown-item:hover,$selector .rt-carousel-holder.swiper .swiper-pagination-bullet:hover,$selector .ttp-isotope-buttons.button-group button:hover,$selector .rt-pagination-wrap .rt-page-numbers .paginationjs .paginationjs-pages li>a:hover{";
+        $css .= "background-color: {$button['hover_bg']};";
+        $css .= '}';
 
-		$css .= "$selector .rt-carousel-holder .swiper-arrow:hover{";
-		$css .= "border-color: {$button['hover_bg']};";
-		$css .= '}';
+        $css .= "$selector .rt-carousel-holder .swiper-arrow:hover{";
+        $css .= "border-color: {$button['hover_bg']};";
+        $css .= '}';
 
-		$css .= "$selector .readmore-btn a:hover{";
-		$css .= "background-color: {$button['hover_bg']};";
-		$css .= '}';
-	}
+    }
 
-	if ( ! empty( $button['active_bg'] ) ) {
-		$css .= "$selector .rt-pagination-wrap .rt-page-numbers .paginationjs .paginationjs-pages ul li.active > a,$selector .rt-filter-item-wrap.rt-filter-button-wrap span.rt-filter-button-item.selected,$selector .ttp-isotope-buttons.button-group .selected,$selector .rt-carousel-holder .swiper-pagination-bullet.swiper-pagination-bullet-active,$selector .rt-pagination-wrap .pagination > .active > span{";
-		$css .= "background-color: {$button['active_bg']};";
-		$css .= '}';
-	}
+    if ( ! empty( $button['active_bg'] ) ) {
+        $css .= "$selector .rt-pagination-wrap .rt-page-numbers .paginationjs .paginationjs-pages ul li.active > a,$selector .rt-filter-item-wrap.rt-filter-button-wrap span.rt-filter-button-item.selected,$selector .ttp-isotope-buttons.button-group .selected,$selector .rt-carousel-holder .swiper-pagination-bullet.swiper-pagination-bullet-active,$selector .rt-pagination-wrap .pagination > .active > span{";
+        $css .= "background-color: {$button['active_bg']};";
+        $css .= '}';
+    }
 
-	if ( ! empty( $button['text'] ) ) {
-		$css .= "$selector .rt-pagination-wrap .rt-loadmore-btn,$selector .rt-pagination-wrap .pagination > li > a, $selector .rt-pagination-wrap .pagination > li > span,$selector .ttp-isotope-buttons.button-group button,$selector .rt-carousel-holder .swiper-arrow i,$selector .rt-filter-item-wrap.rt-filter-button-wrap span.rt-filter-button-item,$selector .rt-layout-filter-container .rt-filter-wrap .rt-filter-item-wrap.rt-filter-dropdown-wrap .rt-filter-dropdown .rt-filter-dropdown-item,$selector .rt-pagination-wrap .paginationjs .paginationjs-pages li>a{";
-		$css .= "color: {$button['text']};";
-		$css .= '}';
+    if ( ! empty( $button['text'] ) ) {
+        $css .= "$selector .rt-pagination-wrap .rt-loadmore-btn,$selector .rt-pagination-wrap .pagination > li > a, $selector .rt-pagination-wrap .pagination > li > span,$selector .ttp-isotope-buttons.button-group button,$selector .rt-carousel-holder .swiper-arrow i,$selector .rt-filter-item-wrap.rt-filter-button-wrap span.rt-filter-button-item,$selector .rt-layout-filter-container .rt-filter-wrap .rt-filter-item-wrap.rt-filter-dropdown-wrap .rt-filter-dropdown .rt-filter-dropdown-item,$selector .rt-pagination-wrap .paginationjs .paginationjs-pages li>a{";
+        $css .= "color: {$button['text']};";
+        $css .= '}';
 
-		$css .= "$selector .readmore-btn a{";
-		$css .= "color: {$button['text']};";
-		$css .= '}';
-	}
+    }
 
-	if ( ! empty( $button['hover_text'] ) ) {
-		$css .= "$selector .rt-pagination-wrap .rt-loadmore-btn:hover,$selector .rt-pagination-wrap .pagination > li > a:hover, $selector .rt-pagination-wrap .pagination > li > span:hover,$selector .ttp-isotope-buttons.button-group button:hover,$selector .rt-carousel-holder .swiper-arrow:hover i,$selector .rt-filter-item-wrap.rt-filter-button-wrap span.rt-filter-button-item:hover,$selector .rt-layout-filter-container .rt-filter-wrap .rt-filter-item-wrap.rt-filter-dropdown-wrap .rt-filter-dropdown .rt-filter-dropdown-item:hover,$selector .rt-pagination-wrap .rt-page-numbers .paginationjs .paginationjs-pages li>a:hover{";
-		$css .= "color: {$button['hover_text']};";
-		$css .= '}';
+    if ( ! empty( $button['hover_text'] ) ) {
+        $css .= "$selector .rt-pagination-wrap .rt-loadmore-btn:hover,$selector .rt-pagination-wrap .pagination > li > a:hover, $selector .rt-pagination-wrap .pagination > li > span:hover,$selector .ttp-isotope-buttons.button-group button:hover,$selector .rt-carousel-holder .swiper-arrow:hover i,$selector .rt-filter-item-wrap.rt-filter-button-wrap span.rt-filter-button-item:hover,$selector .rt-layout-filter-container .rt-filter-wrap .rt-filter-item-wrap.rt-filter-dropdown-wrap .rt-filter-dropdown .rt-filter-dropdown-item:hover,$selector .rt-pagination-wrap .rt-page-numbers .paginationjs .paginationjs-pages li>a:hover{";
+        $css .= "color: {$button['hover_text']};";
+        $css .= '}';
+    }
 
-		$css .= "$selector .readmore-btn a:hover{";
-		$css .= "color: {$button['hover_text']};";
-		$css .= '}';
-	}
-
-	if ( ! empty( $button['border'] ) ) {
-		$css .= "$selector .rt-filter-item-wrap.rt-filter-button-wrap span.rt-filter-button-item,$selector .rt-layout-filter-container .rt-filter-wrap .rt-filter-item-wrap.rt-sort-order-action,$selector .rt-layout-filter-container .rt-filter-wrap .rt-filter-item-wrap.rt-filter-dropdown-wrap{";
-		$css .= "border-color: {$button['border']};";
-		$css .= '}';
-
-		$css .= "$selector .readmore-btn a{";
-		$css .= "color: {$button['border']};";
-		$css .= '}';
-	}
+    if ( ! empty( $button['border'] ) ) {
+        $css .= "$selector .rt-filter-item-wrap.rt-filter-button-wrap span.rt-filter-button-item,$selector .rt-layout-filter-container .rt-filter-wrap .rt-filter-item-wrap.rt-sort-order-action,$selector .rt-layout-filter-container .rt-filter-wrap .rt-filter-item-wrap.rt-filter-dropdown-wrap{";
+        $css .= "border-color: {$button['border']};";
+        $css .= '}';
+    }
 }
+
 
 // Gutter.
 if ( $gutter ) {

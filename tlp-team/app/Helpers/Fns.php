@@ -1009,6 +1009,7 @@ class Fns {
 
 	public static function layoutStyleGenerator( $layoutID, $scMeta, $scID = null ) {
 
+
 		$css  = null;
 		$css .= '<style>';
 
@@ -1016,6 +1017,9 @@ class Fns {
 		if ( $scID ) {
 
 			$primaryColor   = ( isset( $scMeta['primary_color'][0] ) ? $scMeta['primary_color'][0] : null );
+            $hireme_btn     = ! empty( $scMeta['hireme_btn_style'][0] ) ? unserialize( $scMeta['hireme_btn_style'][0] ) : null;
+            $resume_btn     = ! empty( $scMeta['resume_btn_style'][0] ) ? unserialize( $scMeta['resume_btn_style'][0] ) : null;
+            $readmore_btn   = ! empty( $scMeta['readmore_btn_style'][0] ) ? unserialize( $scMeta['readmore_btn_style'][0] ) : null;
 			$button         = ! empty( $scMeta['ttp_button_style'][0] ) ? unserialize( $scMeta['ttp_button_style'][0] ) : null;
 			$popupBg        = ! empty( $scMeta['ttp_popup_bg_color'][0] ) ? $scMeta['ttp_popup_bg_color'][0] : null;
 			$name           = ! empty( $scMeta['name'][0] ) ? unserialize( $scMeta['name'][0] ) : null;
@@ -1037,6 +1041,9 @@ class Fns {
 		} else {
 
 			$primaryColor   = ! empty( $scMeta['primary_color'] ) ? $scMeta['primary_color'] : null;
+            $hireme_btn     = ! empty( $scMeta['hireme_btn_style'] ) ? $scMeta['hireme_btn_style'] : null;
+            $resume_btn     = ! empty( $scMeta['resume_btn_style'] ) ? $scMeta['resume_btn_style'] : null;
+            $readmore_btn   = ! empty( $scMeta['readmore_btn_style'] ) ? $scMeta['readmore_btn_style'] : null;
 			$button         = ! empty( $scMeta['ttp_button_style'] ) ? $scMeta['ttp_button_style'] : null;
 			$popupBg        = ! empty( $scMeta['ttp_popup_bg_color'] ) ? $scMeta['ttp_popup_bg_color'] : null;
 			$name           = ! empty( $scMeta['name'] ) ? $scMeta['name'] : null;
@@ -1057,7 +1064,6 @@ class Fns {
 
 		}
 		if ( $primaryColor ) {
-
 			$css .= "#{$layoutID} .single-team-area .overlay a.detail-popup,
 					#{$layoutID} .contact-info ul li i{";
 			$css .= 'color:' . $primaryColor . ';';
@@ -1118,7 +1124,6 @@ class Fns {
 			$css .= '}';
 
 		}
-
 		/* button */
 		if ( ! empty( $button ) ) {
 			if ( ! empty( $button['bg'] ) ) {
@@ -1127,7 +1132,6 @@ class Fns {
 						#{$layoutID} .rt-pagination-wrap .pagination > li > span,
 						#{$layoutID} .ttp-isotope-buttons.button-group button,
 						#{$layoutID} .rt-pagination-wrap .rt-loadmore-btn,
-						#{$layoutID} .readmore-btn a,
 						#{$layoutID} .rt-carousel-holder .swiper-arrow,
 						#{$layoutID} .rt-team-container .rt-carousel-holder.swiper .swiper-pagination-bullet,
 						#{$layoutID} .rt-layout-filter-container .rt-filter-wrap .rt-filter-item-wrap.rt-filter-dropdown-wrap .rt-filter-dropdown .rt-filter-dropdown-item,
@@ -1143,7 +1147,6 @@ class Fns {
 						#{$layoutID} .rt-pagination-wrap .pagination > li > a:hover,
 						#{$layoutID} .rt-pagination-wrap .pagination > li > span:hover,
 						#{$layoutID} .rt-carousel-holder .swiper-arrow:hover,
-						#{$layoutID} .readmore-btn a:hover,
 						#{$layoutID} .rt-team-container .rt-carousel-holder.swiper .swiper-pagination-bullet:hover,
 						#{$layoutID} .rt-filter-item-wrap.rt-filter-button-wrap span.rt-filter-button-item:hover,
 						#{$layoutID} .rt-layout-filter-container .rt-filter-wrap .rt-filter-item-wrap.rt-filter-dropdown-wrap .rt-filter-dropdown .rt-filter-dropdown-item:hover,
@@ -1167,7 +1170,6 @@ class Fns {
 						#{$layoutID} .rt-pagination-wrap .pagination > li > span,
 						#{$layoutID} .ttp-isotope-buttons.button-group button,
 						#{$layoutID} .rt-carousel-holder .swiper-arrow i,
-						#{$layoutID} .readmore-btn a,
 						#{$layoutID} .rt-filter-item-wrap.rt-filter-button-wrap span.rt-filter-button-item,
 						#{$layoutID} .rt-layout-filter-container .rt-filter-wrap .rt-filter-item-wrap.rt-filter-dropdown-wrap .rt-filter-dropdown .rt-filter-dropdown-item,
 						#{$layoutID} .rt-pagination-wrap .paginationjs .paginationjs-pages li>a{";
@@ -1180,7 +1182,6 @@ class Fns {
 						#{$layoutID} .rt-pagination-wrap .pagination > li > span:hover,
 						#{$layoutID} .ttp-isotope-buttons.button-group button:hover,
 						#{$layoutID} .rt-carousel-holder .swiper-arrow:hover i,
-						#{$layoutID} .readmore-btn a:hover,
 						#{$layoutID} .rt-filter-item-wrap.rt-filter-button-wrap span.rt-filter-button-item:hover,
 						#{$layoutID} .rt-layout-filter-container .rt-filter-wrap .rt-filter-item-wrap.rt-filter-dropdown-wrap .rt-filter-dropdown .rt-filter-dropdown-item:hover,
 						#{$layoutID} .rt-pagination-wrap .rt-page-numbers .paginationjs .paginationjs-pages li>a:hover{";
@@ -1190,12 +1191,169 @@ class Fns {
 			if ( ! empty( $button['border'] ) ) {
 				$css .= "#{$layoutID} .rt-filter-item-wrap.rt-filter-button-wrap span.rt-filter-button-item,
 						#{$layoutID} .rt-layout-filter-container .rt-filter-wrap .rt-filter-item-wrap.rt-sort-order-action,
-						#{$layoutID} .readmore-btn a,
 						#{$layoutID} .rt-layout-filter-container .rt-filter-wrap .rt-filter-item-wrap.rt-filter-dropdown-wrap{";
 				$css .= "border-color: {$button['border']};";
 				$css .= '}';
 			}
 		}
+
+
+        // ReadMore Button.
+        if ( ! empty( $readmore_btn ) ) {
+            if ( ! empty( $readmore_btn['bg'] ) ) {
+                $css .= "#{$layoutID} .readmore-btn .rt-ream-me-btn{";
+                $css .= "background-color: {$readmore_btn['bg']};";
+                $css .= '}';
+            }
+
+            if ( ! empty( $readmore_btn['hover_bg'] ) ) {
+                $css .= "#{$layoutID} .readmore-btn .rt-ream-me-btn:hover{";
+                $css .= "background-color: {$readmore_btn['hover_bg']};";
+                $css .= '}';
+            }
+
+            if ( ! empty( $readmore_btn['border_color'] ) ) {
+                $css .= "#{$layoutID} .readmore-btn .rt-ream-me-btn{";
+                $css .= "border-color: {$readmore_btn['border_color']};";
+                $css .= '}';
+            }
+
+            if ( ! empty( $readmore_btn['text'] ) ) {
+                $css .= "#{$layoutID} .readmore-btn .rt-ream-me-btn{";
+                $css .= "color: {$readmore_btn['text']};";
+                $css .= '}';
+            }
+
+            if ( ! empty( $readmore_btn['hover_text'] ) ) {
+                $css .= "#{$layoutID} .readmore-btn .rt-ream-me-btn:hover{";
+                $css .= "color: {$readmore_btn['hover_text']};";
+                $css .= '}';
+            }
+
+            if ( ! empty( $readmore_btn['border_hover_color'] ) ) {
+                $css .= "#{$layoutID} .readmore-btn .rt-ream-me-btn:hover{";
+                $css .= "border-color: {$readmore_btn['border_hover_color']};";
+                $css .= '}';
+            }
+
+            if ( ! empty( $readmore_btn['border_width'] ) ) {
+                $css .= "#{$layoutID} .readmore-btn .rt-ream-me-btn{";
+                $css .= "border-width: {$readmore_btn['border_width']}px;";
+                $css .= '}';
+            }
+
+            if ( ! empty( $readmore_btn['border_radius'] ) ) {
+                $css .= "#{$layoutID} .readmore-btn .rt-ream-me-btn{";
+                $css .= "border-radius: {$readmore_btn['border_radius']}px;";
+                $css .= '}';
+            }
+
+        }
+
+        /*  Resume Button */
+
+        if ( ! empty( $hireme_btn ) ) {
+            if ( ! empty( $hireme_btn['bg'] ) ) {
+                $css .= "#{$layoutID} .readmore-btn .rt-hire-btn{";
+                $css .= "background-color: {$hireme_btn['bg']};";
+                $css .= '}';
+            }
+
+            if ( ! empty( $hireme_btn['hover_bg'] ) ) {
+                $css .= "#{$layoutID} .readmore-btn .rt-hire-btn:hover{";
+                $css .= "background-color: {$hireme_btn['hover_bg']};";
+                $css .= '}';
+            }
+
+            if ( ! empty( $hireme_btn['border_color'] ) ) {
+                $css .= "#{$layoutID} .readmore-btn .rt-hire-btn{";
+                $css .= "border-color: {$hireme_btn['border_color']};";
+                $css .= '}';
+            }
+
+            if ( ! empty( $hireme_btn['text'] ) ) {
+                $css .= "#{$layoutID} .readmore-btn .rt-hire-btn{";
+                $css .= "color: {$hireme_btn['text']};";
+                $css .= '}';
+            }
+
+            if ( ! empty( $hireme_btn['hover_text'] ) ) {
+                $css .= "#{$layoutID} .readmore-btn .rt-hire-btn:hover{";
+                $css .= "color: {$hireme_btn['hover_text']};";
+                $css .= '}';
+            }
+
+            if ( ! empty( $hireme_btn['border_hover_color'] ) ) {
+                $css .= "#{$layoutID} .readmore-btn .rt-hire-btn:hover{";
+                $css .= "border-color: {$hireme_btn['border_hover_color']};";
+                $css .= '}';
+            }
+
+            if ( ! empty( $hireme_btn['border_width'] ) ) {
+                $css .= "#{$layoutID} .readmore-btn .rt-hire-btn{";
+                $css .= "border-width: {$hireme_btn['border_width']}px;";
+                $css .= '}';
+            }
+
+            if ( ! empty( $hireme_btn['border_radius'] ) ) {
+                $css .= "#{$layoutID} .readmore-btn .rt-hire-btn{";
+                $css .= "border-radius: {$hireme_btn['border_radius']}px;";
+                $css .= '}';
+            }
+        }
+
+        /*  Hireme Button */
+
+        if ( ! empty( $resume_btn ) ) {
+            if ( ! empty( $resume_btn['bg'] ) ) {
+                $css .= "#{$layoutID} .readmore-btn .rt-resume-btn{";
+                $css .= "background-color: {$resume_btn['bg']};";
+                $css .= '}';
+            }
+
+            if ( ! empty( $resume_btn['hover_bg'] ) ) {
+                $css .= "#{$layoutID} .readmore-btn .rt-resume-btn:hover{";
+                $css .= "background-color: {$resume_btn['hover_bg']};";
+                $css .= '}';
+            }
+
+            if ( ! empty( $resume_btn['border_color'] ) ) {
+                $css .= "#{$layoutID} .readmore-btn .rt-resume-btn{";
+                $css .= "border-color: {$resume_btn['border_color']};";
+                $css .= '}';
+            }
+
+            if ( ! empty( $resume_btn['text'] ) ) {
+                $css .= "#{$layoutID} .readmore-btn .rt-resume-btn{";
+                $css .= "color: {$resume_btn['text']};";
+                $css .= '}';
+            }
+
+            if ( ! empty( $resume_btn['hover_text'] ) ) {
+                $css .= "#{$layoutID} .readmore-btn .rt-resume-btn:hover{";
+                $css .= "color: {$resume_btn['hover_text']};";
+                $css .= '}';
+            }
+
+            if ( ! empty( $resume_btn['border_hover_color'] ) ) {
+                $css .= "#{$layoutID} .readmore-btn .rt-resume-btn:hover{";
+                $css .= "border-color: {$resume_btn['border_hover_color']};";
+                $css .= '}';
+            }
+
+            if ( ! empty( $resume_btn['border_width'] ) ) {
+                $css .= "#{$layoutID} .readmore-btn .rt-resume-btn{";
+                $css .= "border-width: {$resume_btn['border_width']}px;";
+                $css .= '}';
+            }
+
+            if ( ! empty( $resume_btn['border_radius'] ) ) {
+                $css .= "#{$layoutID} .readmore-btn .rt-resume-btn{";
+                $css .= "border-radius: {$resume_btn['border_radius']}px;";
+                $css .= '}';
+            }
+        }
+
 
 		/* gutter */
 		if ( $gutter ) {

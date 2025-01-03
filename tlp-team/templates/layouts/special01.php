@@ -23,6 +23,4 @@ $html .= '<div class="single-team-item image-wrapper" data-id="' . absint( $mID 
 
 $html .= '</div>';
 
-
-
 Fns::print_html( $html );

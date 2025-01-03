@@ -50,6 +50,29 @@ if ( $imgHtml ) {
 	$html    .= $content ? '<div class="tlp-content2">' . $content . '</div>' : null;
 
 	$html .= Fns::get_formatted_social_link( $sLink, $items );
+
+    $read_more_btn = isset( $read_more_btn_text ) ? Fns::get_formatted_readmore_text($items, $read_more_btn_text, $anchorClass, $mID, $target, $title, $pLink) : null;
+    $resume_btn = isset( $ttp_my_resume ) ? Fns::get_formatted_resume( $items, $ttp_my_resume, $my_resume_text ) : null;
+    $hire_me_btn = isset( $ttp_hire_me ) ? Fns::get_formatted_hire_me( $items, $ttp_hire_me, $hire_me_text ) : null;
+
+    if ( $read_more_btn || $resume_btn || $hire_me_btn ) {
+        $html .= '<div class="tlp-btn-wrapper">';
+            $html .= '<div class="readmore-btn">';
+            if( $resume_btn ){
+                $html .= $resume_btn;
+            }
+            if( $hire_me_btn ){
+                $html .= $hire_me_btn;
+            }
+            $html .= '</div>';
+            $html .= '<div class="readmore-btn hirme-resume">';
+            if( $read_more_btn ){
+                $html .= $read_more_btn;
+            }
+            $html .= '</div>';
+        $html .= '</div>';
+    }
+
 	$html .= '</div>';
 	$html .= '</div>';
 	$html .= '</div>'; // END single-team.

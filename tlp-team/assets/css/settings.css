@@ -1464,6 +1464,10 @@ div#support iframe {
   border: 0;
 }
 
+#detail-field-selection label[for="detail_page_fields-readmore_btn"]{
+  display: none;
+}
+
 @media (max-width: 1450px) {
   div#tlp-team-get-help-wrapper .tlp-team-setting-container {
     width: 80%;

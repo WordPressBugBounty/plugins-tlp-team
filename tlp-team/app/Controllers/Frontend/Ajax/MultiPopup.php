@@ -150,7 +150,7 @@ class MultiPopup {
                     $html .= '<div class="rt-team-container">';
                     $html .= '<div class="readmore-btn">';
                     if( $resume && $resume_btn_text ){
-                        $html .= '<a class="rt-ream-me-btn" data-id="480" target="_self" title="'. esc_attr( $resume_btn_text ) .'" href="'. esc_url( $resume_url ) .'" class="rt-resume-btn">'. esc_html( $resume_btn_text ) .'</a>';
+                        $html .= '<a class="rt-resume-btn" data-id="480" target="_self" title="'. esc_attr( $resume_btn_text ) .'" href="'. esc_url( $resume_url ) .'" class="rt-resume-btn">'. esc_html( $resume_btn_text ) .'</a>';
                     }
                     if( $hire_me && $hire_btn_text ){
                         $html .= '<a class="rt-hire-btn" data-id="480" target="_self" title="'. esc_attr( $hire_btn_text ) .'" href="'. esc_url( $hire_me_url ) .'" class="rt-resume-btn">'. esc_html( $hire_btn_text ) .'</a>';

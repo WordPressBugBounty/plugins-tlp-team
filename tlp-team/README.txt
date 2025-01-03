@@ -2,7 +2,7 @@
 Contributors: techlabpro1
 Donate link:
 Tags: team, team showcase, team slider, team plugin, team members
-Stable tag: 4.4.8
+Stable tag: 4.4.9
 Requires at least: 5.0
 Tested up to: 6.7
 Requires PHP: 7.0
@@ -253,6 +253,9 @@ If you like The Post Grid Plugin, then consider checking out our other WordPress
 09. Elementor Team Grid layout
 
 == Changelog ==
+
+= 4.4.9  ( January 01, 2025 ) =
+* Added Style: Read More Button, Resume Button, Hire Me Button.
 
 = 4.4.8  ( December 24, 2024 ) =
 * Fixed: Color Issue Fixed, Update Fontawesome icon 6
