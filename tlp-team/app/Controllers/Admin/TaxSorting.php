@@ -52,6 +52,12 @@ class TaxSorting {
 
 		$html  = $msg = null;
 		$error = true;
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_send_json( [
+                'error' => $error,
+                'msg'   => esc_html__( 'Permission denied', 'tlp-team' ),
+            ] );
+        }
 		if ( wp_verify_nonce( Fns::getNonce(), Fns::nonceText()) ) {
 			$tax = ! empty( $_REQUEST['tax'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['tax'] ) ) : null;
 			if ( $tax ) {
@@ -124,6 +130,12 @@ class TaxSorting {
 	}
 
 	function tlp_team_update_menu_order() {
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_send_json( [
+                'error' => true,
+                'msg'   => esc_html__( 'Permission denied', 'tlp-team' ),
+            ] );
+        }
 		if ( ! wp_verify_nonce( Fns::getNonce(), Fns::nonceText() ) ) {
 			wp_send_json_error(
 				[
@@ -203,6 +215,14 @@ class TaxSorting {
 	 * @return bool
 	 */
 	function ttp_term_update_order() {
+
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_send_json( [
+                'error' => true,
+                'msg'   => esc_html__( 'Permission denied', 'tlp-team' ),
+            ] );
+        }
+
 		if (wp_verify_nonce( Fns::getNonce(), Fns::nonceText() )){
 			$data = ( ! empty( $_POST['terms'] ) ? explode( ',', sanitize_text_field( wp_unslash( $_POST['terms'] ) ) ) : [] );
 

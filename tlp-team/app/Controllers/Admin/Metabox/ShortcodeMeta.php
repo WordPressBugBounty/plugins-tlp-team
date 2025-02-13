@@ -368,6 +368,10 @@ class ShortcodeMeta
     public function save_team_sc_meta_data($post_id, $post, $update)
     {
 
+        if ( ! current_user_can( 'manage_options' ) ) {
+            return $post_id;
+        }
+
         if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
             return $post_id;
         }

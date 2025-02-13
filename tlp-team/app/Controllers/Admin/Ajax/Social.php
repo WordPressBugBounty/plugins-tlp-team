@@ -37,6 +37,12 @@ class Social {
 	 */
 	
 	public function response() {
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_send_json( [
+                'error' => true,
+                'msg'   => esc_html__( 'Permission denied', 'tlp-team' ),
+            ] );
+        }
 		if (wp_verify_nonce( Fns::getNonce(), Fns::nonceText())){
 			$count = isset( $_REQUEST['id'] ) ? absint( sanitize_text_field( wp_unslash( $_REQUEST['id'] ) ) ): '';
 			$html  = null;

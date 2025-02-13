@@ -35,6 +35,12 @@ class Skill {
 	 * @return void
 	 */
 	public function response() {
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_send_json( [
+                'error' => true,
+                'msg'   => esc_html__( 'Permission denied', 'tlp-team' ),
+            ] );
+        }
 		if ( wp_verify_nonce( Fns::getNonce(), Fns::nonceText()) ) {
 			$count  = isset( $_REQUEST['id'] ) ? absint( sanitize_text_field( wp_unslash( $_REQUEST['id'] ) ) ) : '';
 			$html   = null;
@@ -46,7 +52,7 @@ class Skill {
 				'orderby'    => 'name',
 				'hide_empty' => false,
 			) );
-//		    $skills = get_terms( rttlp_team()->taxonomies['skill'], 'orderby=name&hide_empty=0' );
+            // $skills = get_terms( rttlp_team()->taxonomies['skill'], 'orderby=name&hide_empty=0' );
 			if ( ! empty( $skills ) ) {
 				foreach ( $skills as $skill ) {
 					$html .= "<option value='{$skill->name}'>{$skill->name}</option>";

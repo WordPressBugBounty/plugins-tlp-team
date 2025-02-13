@@ -8,7 +8,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language-Team: RadiusTheme\n"
 "Last-Translator: RadiusTheme\n"
-"POT-Creation-Date: 2025-01-03 03:53+0000\n"
+"POT-Creation-Date: 2025-02-13 08:53+0000\n"
 "Report-Msgid-Bugs-To: https://radiustheme.com/tlp-team-for-wordpress/\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
@@ -41,67 +41,71 @@ msgstr ""
 msgid "TLP Team Shortcode"
 msgstr ""
 
-#: app/Controllers/Admin/Ajax/DefaultFilter.php:55
+#: app/Controllers/Admin/Ajax/DefaultFilter.php:44, app/Controllers/Admin/Ajax/Preview.php:47, app/Controllers/Admin/Ajax/Settings.php:44, app/Controllers/Admin/Ajax/Skill.php:41, app/Controllers/Admin/Ajax/Social.php:43, app/Controllers/Admin/TaxSorting.php:58, app/Controllers/Admin/TaxSorting.php:136, app/Controllers/Admin/TaxSorting.php:222, app/Controllers/Frontend/Ajax/LoadMore.php:49, app/Controllers/Frontend/Ajax/MultiPopup.php:46, app/Controllers/Frontend/Ajax/SinglePopup.php:45, app/Controllers/Frontend/Ajax/SmartPopup.php:45, app/Controllers/Frontend/Ajax/SpecialLayout.php:49
+msgid "Permission denied"
+msgstr ""
+
+#: app/Controllers/Admin/Ajax/DefaultFilter.php:62
 msgid "Your session is expired !!"
 msgstr ""
 
-#: app/Controllers/Admin/Ajax/DefaultFilter.php:45
+#: app/Controllers/Admin/Ajax/DefaultFilter.php:52
 msgid "Success"
 msgstr ""
 
-#: app/Controllers/Admin/Ajax/DefaultFilter.php:46
+#: app/Controllers/Admin/Ajax/DefaultFilter.php:53
 msgid "Show All"
 msgstr ""
 
-#: app/Controllers/Admin/Ajax/Preview.php:791
+#: app/Controllers/Admin/Ajax/Preview.php:798
 msgid "No Shortcode found"
 msgstr ""
 
-#: app/Controllers/Admin/Ajax/Preview.php:263, app/Controllers/Frontend/Ajax/LoadMore.php:92, app/Controllers/Frontend/Ajax/LoadMore.php:93, app/Controllers/Frontend/Shortcode.php:772
+#: app/Controllers/Admin/Ajax/Preview.php:270, app/Controllers/Frontend/Ajax/LoadMore.php:98, app/Controllers/Frontend/Ajax/LoadMore.php:99, app/Controllers/Frontend/Shortcode.php:772
 msgid "Hire Me"
 msgstr ""
 
-#: app/Controllers/Admin/Ajax/Preview.php:265, app/Controllers/Admin/Ajax/Preview.php:266, app/Controllers/Frontend/Ajax/LoadMore.php:94, app/Controllers/Frontend/Shortcode.php:773
+#: app/Controllers/Admin/Ajax/Preview.php:272, app/Controllers/Admin/Ajax/Preview.php:273, app/Controllers/Frontend/Ajax/LoadMore.php:100, app/Controllers/Frontend/Shortcode.php:773
 msgid "Read More"
 msgstr ""
 
-#: app/Controllers/Admin/Ajax/Preview.php:780, app/Controllers/Frontend/Shortcode.php:720, app/Widgets/TeamCarousel.php:118, app/Widgets/TeamWidget.php:122
+#: app/Controllers/Admin/Ajax/Preview.php:787, app/Controllers/Frontend/Shortcode.php:720, app/Widgets/TeamCarousel.php:118, app/Widgets/TeamWidget.php:122
 msgid "No member found"
 msgstr ""
 
-#: app/Controllers/Admin/Ajax/Preview.php:427, app/Controllers/Admin/Ajax/Preview.php:376, app/Controllers/Admin/Ajax/Preview.php:408, app/Controllers/Frontend/Shortcode.php:332, app/Controllers/Frontend/Shortcode.php:282, app/Controllers/Frontend/Shortcode.php:314
+#: app/Controllers/Admin/Ajax/Preview.php:434, app/Controllers/Admin/Ajax/Preview.php:383, app/Controllers/Admin/Ajax/Preview.php:415, app/Controllers/Frontend/Shortcode.php:332, app/Controllers/Frontend/Shortcode.php:282, app/Controllers/Frontend/Shortcode.php:314
 msgid "All"
 msgstr ""
 
-#: app/Controllers/Admin/Ajax/Preview.php:463, app/Controllers/Admin/Ajax/Preview.php:469, app/Controllers/Frontend/Shortcode.php:368, app/Controllers/Frontend/Shortcode.php:374, app/Helpers/Options.php:713
+#: app/Controllers/Admin/Ajax/Preview.php:470, app/Controllers/Admin/Ajax/Preview.php:476, app/Controllers/Frontend/Shortcode.php:368, app/Controllers/Frontend/Shortcode.php:374, app/Helpers/Options.php:713
 msgid "Sort By None"
 msgstr ""
 
-#: app/Controllers/Admin/Ajax/Preview.php:497, app/Controllers/Frontend/Shortcode.php:403, app/Widgets/Elementor/Render/GridView.php:109, app/Widgets/Elementor/Render/IsotopeView.php:100, app/Widgets/Elementor/Render/SliderView.php:83
+#: app/Controllers/Admin/Ajax/Preview.php:504, app/Controllers/Frontend/Shortcode.php:403, app/Widgets/Elementor/Render/GridView.php:109, app/Widgets/Elementor/Render/IsotopeView.php:100, app/Widgets/Elementor/Render/SliderView.php:83
 msgid "Loading ..."
 msgstr ""
 
-#: app/Controllers/Admin/Ajax/Preview.php:537, app/Controllers/Frontend/Shortcode.php:443, app/Widgets/Elementor/Render/RenderHelpers.php:448
+#: app/Controllers/Admin/Ajax/Preview.php:544, app/Controllers/Frontend/Shortcode.php:443, app/Widgets/Elementor/Render/RenderHelpers.php:448
 msgid "Show all"
 msgstr ""
 
-#: app/Controllers/Admin/Ajax/Preview.php:757, app/Controllers/Frontend/Shortcode.php:700, app/Widgets/Elementor/Render/RenderHelpers.php:185
+#: app/Controllers/Admin/Ajax/Preview.php:764, app/Controllers/Frontend/Shortcode.php:700, app/Widgets/Elementor/Render/RenderHelpers.php:185
 msgid "Load More"
 msgstr ""
 
-#: app/Controllers/Admin/Ajax/ProfileImage.php:47
+#: app/Controllers/Admin/Ajax/ProfileImage.php:55
 msgid "Error!!"
 msgstr ""
 
-#: app/Controllers/Admin/Ajax/ProfileImage.php:45
+#: app/Controllers/Admin/Ajax/ProfileImage.php:53
 msgid "Successfully deleted"
 msgstr ""
 
-#: app/Controllers/Admin/Ajax/Settings.php:58
+#: app/Controllers/Admin/Ajax/Settings.php:63
 msgid "Security Error !!"
 msgstr ""
 
-#: app/Controllers/Admin/Ajax/Settings.php:56
+#: app/Controllers/Admin/Ajax/Settings.php:61
 msgid "Settings successfully updated"
 msgstr ""
 
@@ -193,51 +197,51 @@ msgstr ""
 msgid "Get Help"
 msgstr ""
 
-#: app/Controllers/Admin/TaxSorting.php:89
+#: app/Controllers/Admin/TaxSorting.php:95
 msgid "Security error"
 msgstr ""
 
-#: app/Controllers/Admin/TaxSorting.php:86
+#: app/Controllers/Admin/TaxSorting.php:92
 msgid "Select a taxonomy"
 msgstr ""
 
-#: app/Controllers/Admin/TaxSorting.php:83
+#: app/Controllers/Admin/TaxSorting.php:89
 msgid "No term found"
 msgstr ""
 
-#: app/Controllers/Admin/TaxSorting.php:103, app/Helpers/Options.php:507, app/Widgets/Elementor/Sections/Layout.php:283
+#: app/Controllers/Admin/TaxSorting.php:109, app/Helpers/Options.php:507, app/Widgets/Elementor/Sections/Layout.php:283
 msgid "Order"
 msgstr ""
 
-#: app/Controllers/Admin/TaxSorting.php:130, app/Controllers/Admin/TaxSorting.php:220, app/Controllers/Frontend/Ajax/MultiPopup.php:44, app/Controllers/Frontend/Ajax/SinglePopup.php:43, app/Controllers/Frontend/Ajax/SmartPopup.php:44, app/Controllers/Frontend/Ajax/SpecialLayout.php:48
+#: app/Controllers/Admin/TaxSorting.php:142, app/Controllers/Admin/TaxSorting.php:240, app/Controllers/Frontend/Ajax/MultiPopup.php:52, app/Controllers/Frontend/Ajax/SinglePopup.php:51, app/Controllers/Frontend/Ajax/SmartPopup.php:50, app/Controllers/Frontend/Ajax/SpecialLayout.php:55
 msgid "Security Issue"
 msgstr ""
 
-#: app/Controllers/Frontend/Ajax/LoadMore.php:416
+#: app/Controllers/Frontend/Ajax/LoadMore.php:422
 msgid "Shortcode id missing"
 msgstr ""
 
-#: app/Controllers/Frontend/Ajax/LoadMore.php:408, app/Controllers/Frontend/Ajax/LoadMore.php:409
+#: app/Controllers/Frontend/Ajax/LoadMore.php:414, app/Controllers/Frontend/Ajax/LoadMore.php:415
 msgid "No more member to load"
 msgstr ""
 
-#: app/Controllers/Frontend/Ajax/MultiPopup.php:179, app/Controllers/Frontend/Ajax/SinglePopup.php:175, app/Controllers/Frontend/Ajax/SmartPopup.php:170
+#: app/Controllers/Frontend/Ajax/MultiPopup.php:187, app/Controllers/Frontend/Ajax/SinglePopup.php:183, app/Controllers/Frontend/Ajax/SmartPopup.php:176
 msgid "No item id found"
 msgstr ""
 
-#: app/Controllers/Frontend/Ajax/MultiPopup.php:175, app/Controllers/Frontend/Ajax/SinglePopup.php:172
+#: app/Controllers/Frontend/Ajax/MultiPopup.php:183, app/Controllers/Frontend/Ajax/SinglePopup.php:180
 msgid "Selected is is not for team member"
 msgstr ""
 
-#: app/Controllers/Frontend/Ajax/MultiPopup.php:112, app/Controllers/Frontend/Ajax/SinglePopup.php:133, app/Controllers/Frontend/Ajax/SmartPopup.php:103, templates/single-team.php:108
+#: app/Controllers/Frontend/Ajax/MultiPopup.php:120, app/Controllers/Frontend/Ajax/SinglePopup.php:141, app/Controllers/Frontend/Ajax/SmartPopup.php:109, templates/single-team.php:108
 msgid "Qualifications : "
 msgstr ""
 
-#: app/Controllers/Frontend/Ajax/MultiPopup.php:119, app/Controllers/Frontend/Ajax/SinglePopup.php:139, app/Controllers/Frontend/Ajax/SmartPopup.php:110, templates/single-team.php:112
+#: app/Controllers/Frontend/Ajax/MultiPopup.php:127, app/Controllers/Frontend/Ajax/SinglePopup.php:147, app/Controllers/Frontend/Ajax/SmartPopup.php:116, templates/single-team.php:112
 msgid "Professional Memberships : "
 msgstr ""
 
-#: app/Controllers/Frontend/Ajax/MultiPopup.php:126, app/Controllers/Frontend/Ajax/SinglePopup.php:145, app/Controllers/Frontend/Ajax/SmartPopup.php:117, templates/single-team.php:116
+#: app/Controllers/Frontend/Ajax/MultiPopup.php:134, app/Controllers/Frontend/Ajax/SinglePopup.php:153, app/Controllers/Frontend/Ajax/SmartPopup.php:123, templates/single-team.php:116
 msgid "Area of Expertise : "
 msgstr ""
 

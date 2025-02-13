@@ -38,7 +38,12 @@ class Settings {
 	public function response() {
 		$error    = true;
 		$settings = [];
-
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_send_json( [
+                'error' => $error,
+                'msg'   => esc_html__( 'Permission denied', 'tlp-team' ),
+            ] );
+        }
 		if ( wp_verify_nonce( Fns::getNonce(), Fns::nonceText()) ) {
 			$_REQUEST['team-slug'] = isset( $_REQUEST['team-slug'] ) ? sanitize_title_with_dashes( wp_unslash( $_REQUEST['team-slug'] ) ) : 'team';
 			$options               = Options::getAllSettingOptions();
@@ -64,4 +69,5 @@ class Settings {
 			]
 		);
 	}
+
 }

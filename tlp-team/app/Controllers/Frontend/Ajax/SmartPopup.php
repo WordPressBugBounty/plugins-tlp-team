@@ -39,6 +39,12 @@ class SmartPopup {
 		$html    = $htmlCInfo = null;
 		$success = false;
 		$error   = true;
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_send_json( [
+                'error' => $error,
+                'msg'   => esc_html__( 'Permission denied', 'tlp-team' ),
+            ] );
+        }
 		if ( ! wp_verify_nonce( Fns::getNonce(), Fns::nonceText() ) ) {
 			wp_send_json_error( [
 				'data'  => __('Security Issue','tlp-team'),

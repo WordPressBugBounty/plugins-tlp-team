@@ -41,6 +41,13 @@ class Preview {
 		$msg   = $html = $scID = null;
 		$error = true;
 
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_send_json( [
+                'error' => $error,
+                'msg'   => esc_html__( 'Permission denied', 'tlp-team' ),
+            ] );
+        }
+
 		if ( wp_verify_nonce( Fns::getNonce(), Fns::nonceText()) ) {
 			$error    = false;
 			$rand     = wp_rand();

@@ -38,6 +38,13 @@ class DefaultFilter {
 		$error = true;
 		$data  = $msg = null;
 
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_send_json( [
+                'error' => $error,
+                $msg => esc_html__( 'Permission denied', 'tlp-team' ),
+            ] );
+        }
+
 		if ( wp_verify_nonce( Fns::getNonce(), Fns::nonceText()) ) {
 			$filter = isset( $_REQUEST['filter'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['filter'] ) ) : null;
 			if ( ! empty( $filter ) ) {

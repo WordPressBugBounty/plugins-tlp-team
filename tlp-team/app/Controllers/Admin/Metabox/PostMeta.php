@@ -167,6 +167,10 @@ class PostMeta {
 			return;
 		}
 
+        if ( ! current_user_can( 'manage_options' ) ) {
+            return $post_id;
+        }
+
 		if ( ! wp_verify_nonce( Fns::getNonce(), Fns::nonceText()) ) {
 			return $post_id;
 		}
