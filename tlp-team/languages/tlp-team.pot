@@ -8,7 +8,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language-Team: RadiusTheme\n"
 "Last-Translator: RadiusTheme\n"
-"POT-Creation-Date: 2025-02-13 08:53+0000\n"
+"POT-Creation-Date: 2025-03-11 08:21+0000\n"
 "Report-Msgid-Bugs-To: https://radiustheme.com/tlp-team-for-wordpress/\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
@@ -41,7 +41,7 @@ msgstr ""
 msgid "TLP Team Shortcode"
 msgstr ""
 
-#: app/Controllers/Admin/Ajax/DefaultFilter.php:44, app/Controllers/Admin/Ajax/Preview.php:47, app/Controllers/Admin/Ajax/Settings.php:44, app/Controllers/Admin/Ajax/Skill.php:41, app/Controllers/Admin/Ajax/Social.php:43, app/Controllers/Admin/TaxSorting.php:58, app/Controllers/Admin/TaxSorting.php:136, app/Controllers/Admin/TaxSorting.php:222, app/Controllers/Frontend/Ajax/LoadMore.php:49, app/Controllers/Frontend/Ajax/MultiPopup.php:46, app/Controllers/Frontend/Ajax/SinglePopup.php:45, app/Controllers/Frontend/Ajax/SmartPopup.php:45, app/Controllers/Frontend/Ajax/SpecialLayout.php:49
+#: app/Controllers/Admin/Ajax/DefaultFilter.php:44, app/Controllers/Admin/Ajax/Preview.php:47, app/Controllers/Admin/Ajax/Settings.php:44, app/Controllers/Admin/Ajax/Skill.php:41, app/Controllers/Admin/Ajax/Social.php:43, app/Controllers/Admin/TaxSorting.php:58, app/Controllers/Admin/TaxSorting.php:136, app/Controllers/Admin/TaxSorting.php:222
 msgid "Permission denied"
 msgstr ""
 
@@ -61,11 +61,11 @@ msgstr ""
 msgid "No Shortcode found"
 msgstr ""
 
-#: app/Controllers/Admin/Ajax/Preview.php:270, app/Controllers/Frontend/Ajax/LoadMore.php:98, app/Controllers/Frontend/Ajax/LoadMore.php:99, app/Controllers/Frontend/Shortcode.php:772
+#: app/Controllers/Admin/Ajax/Preview.php:270, app/Controllers/Frontend/Ajax/LoadMore.php:92, app/Controllers/Frontend/Ajax/LoadMore.php:93, app/Controllers/Frontend/Shortcode.php:772
 msgid "Hire Me"
 msgstr ""
 
-#: app/Controllers/Admin/Ajax/Preview.php:272, app/Controllers/Admin/Ajax/Preview.php:273, app/Controllers/Frontend/Ajax/LoadMore.php:100, app/Controllers/Frontend/Shortcode.php:773
+#: app/Controllers/Admin/Ajax/Preview.php:272, app/Controllers/Admin/Ajax/Preview.php:273, app/Controllers/Frontend/Ajax/LoadMore.php:94, app/Controllers/Frontend/Shortcode.php:773
 msgid "Read More"
 msgstr ""
 
@@ -213,35 +213,35 @@ msgstr ""
 msgid "Order"
 msgstr ""
 
-#: app/Controllers/Admin/TaxSorting.php:142, app/Controllers/Admin/TaxSorting.php:240, app/Controllers/Frontend/Ajax/MultiPopup.php:52, app/Controllers/Frontend/Ajax/SinglePopup.php:51, app/Controllers/Frontend/Ajax/SmartPopup.php:50, app/Controllers/Frontend/Ajax/SpecialLayout.php:55
+#: app/Controllers/Admin/TaxSorting.php:142, app/Controllers/Admin/TaxSorting.php:240, app/Controllers/Frontend/Ajax/MultiPopup.php:45, app/Controllers/Frontend/Ajax/SinglePopup.php:44, app/Controllers/Frontend/Ajax/SmartPopup.php:44, app/Controllers/Frontend/Ajax/SpecialLayout.php:48
 msgid "Security Issue"
 msgstr ""
 
-#: app/Controllers/Frontend/Ajax/LoadMore.php:422
+#: app/Controllers/Frontend/Ajax/LoadMore.php:416
 msgid "Shortcode id missing"
 msgstr ""
 
-#: app/Controllers/Frontend/Ajax/LoadMore.php:414, app/Controllers/Frontend/Ajax/LoadMore.php:415
+#: app/Controllers/Frontend/Ajax/LoadMore.php:408, app/Controllers/Frontend/Ajax/LoadMore.php:409
 msgid "No more member to load"
 msgstr ""
 
-#: app/Controllers/Frontend/Ajax/MultiPopup.php:187, app/Controllers/Frontend/Ajax/SinglePopup.php:183, app/Controllers/Frontend/Ajax/SmartPopup.php:176
+#: app/Controllers/Frontend/Ajax/MultiPopup.php:180, app/Controllers/Frontend/Ajax/SinglePopup.php:176, app/Controllers/Frontend/Ajax/SmartPopup.php:170
 msgid "No item id found"
 msgstr ""
 
-#: app/Controllers/Frontend/Ajax/MultiPopup.php:183, app/Controllers/Frontend/Ajax/SinglePopup.php:180
+#: app/Controllers/Frontend/Ajax/MultiPopup.php:176, app/Controllers/Frontend/Ajax/SinglePopup.php:173
 msgid "Selected is is not for team member"
 msgstr ""
 
-#: app/Controllers/Frontend/Ajax/MultiPopup.php:120, app/Controllers/Frontend/Ajax/SinglePopup.php:141, app/Controllers/Frontend/Ajax/SmartPopup.php:109, templates/single-team.php:108
+#: app/Controllers/Frontend/Ajax/MultiPopup.php:113, app/Controllers/Frontend/Ajax/SinglePopup.php:134, app/Controllers/Frontend/Ajax/SmartPopup.php:103, templates/single-team.php:108
 msgid "Qualifications : "
 msgstr ""
 
-#: app/Controllers/Frontend/Ajax/MultiPopup.php:127, app/Controllers/Frontend/Ajax/SinglePopup.php:147, app/Controllers/Frontend/Ajax/SmartPopup.php:116, templates/single-team.php:112
+#: app/Controllers/Frontend/Ajax/MultiPopup.php:120, app/Controllers/Frontend/Ajax/SinglePopup.php:140, app/Controllers/Frontend/Ajax/SmartPopup.php:110, templates/single-team.php:112
 msgid "Professional Memberships : "
 msgstr ""
 
-#: app/Controllers/Frontend/Ajax/MultiPopup.php:134, app/Controllers/Frontend/Ajax/SinglePopup.php:153, app/Controllers/Frontend/Ajax/SmartPopup.php:123, templates/single-team.php:116
+#: app/Controllers/Frontend/Ajax/MultiPopup.php:127, app/Controllers/Frontend/Ajax/SinglePopup.php:146, app/Controllers/Frontend/Ajax/SmartPopup.php:117, templates/single-team.php:116
 msgid "Area of Expertise : "
 msgstr ""
 

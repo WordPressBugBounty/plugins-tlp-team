@@ -741,7 +741,7 @@ class Shortcode {
 	private function metas( array $meta ) {
 		return [
 			'layout'             => ! empty( $meta['layout'][0] ) ? esc_attr( $meta['layout'][0] ) : 'layout1',
-			'allCol'             => ! empty( $meta['ttp_column'][0] ) ? unserialize( $meta['ttp_column'][0] ) : [],
+            'allCol'             => (!empty($meta['ttp_column'][0]) && is_string($meta['ttp_column'][0])) ? unserialize($meta['ttp_column'][0]) : [],
 			'popupBg'            => ! empty( $meta['ttp_popup_bg_color'][0] ) ? esc_attr( $meta['ttp_popup_bg_color'][0] ) : '',
 			'postIn'             => ! empty( $meta['ttp_post__in'] ) && is_array( $meta['ttp_post__in'] ) ? $meta['ttp_post__in'] : [],
 			'postNotIn'          => ! empty( $meta['ttp_post__not_in'] ) && is_array( $meta['ttp_post__not_in'] ) ? $meta['ttp_post__not_in'] : [],
@@ -772,8 +772,8 @@ class Shortcode {
 			'hire_me_text'       => isset( $meta['ttp_hire_me_text'][0] ) ? $meta['ttp_hire_me_text'][0] : esc_html__('Hire Me','tlp-team'),
 			'read_more_btn_text' => isset( $meta['ttp_read_more_btn_text'][0] ) ? $meta['ttp_read_more_btn_text'][0] : esc_html__('Read More','tlp-team'),
 			'defaultImgId'       => ! empty( $meta['default_preview_image'][0] ) ? absint( $meta['default_preview_image'][0] ) : null,
-			'customImgSize'      => ! empty( $meta['ttp_custom_image_size'][0] ) ? unserialize( $meta['ttp_custom_image_size'][0] ) : [],
-			'visibility'         => ! empty( $meta['ttp_selected_field'] ) ? $meta['ttp_selected_field'] : [ 'name', 'designation', 'ttp_my_resume', 'ttp_hire_me', 'short_bio', 'social' ],
+            'customImgSize'      => (!empty($meta['ttp_custom_image_size'][0]) && is_string($meta['ttp_custom_image_size'][0])) ? unserialize($meta['ttp_custom_image_size'][0]) : [],
+            'visibility'         => ! empty( $meta['ttp_selected_field'] ) ? $meta['ttp_selected_field'] : [ 'name', 'designation', 'ttp_my_resume', 'ttp_hire_me', 'short_bio', 'social' ],
 			'filters'            => ! empty( $meta['ttp_filter'] ) ? $meta['ttp_filter'] : [],
 			'taxFilter'          => ! empty( $meta['ttp_filter_taxonomy'][0] ) ? $meta['ttp_filter_taxonomy'][0] : null,
 			'action_term'        => ! empty( $meta['ttp_default_filter'][0] ) ? absint( $meta['ttp_default_filter'][0] ) : 0,

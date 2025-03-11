@@ -43,12 +43,6 @@ class LoadMore {
 		$error = true;
 		$msg   = $data = null;
 		$paged = $total_pares = 1;
-        if ( ! current_user_can( 'manage_options' ) ) {
-            wp_send_json( [
-                'error' => true,
-                'msg'   => esc_html__( 'Permission denied', 'tlp-team' ),
-            ] );
-        }
 		if ( ! wp_verify_nonce( Fns::getNonce(), Fns::nonceText() ) ) {
 			wp_send_json_error( [
 				'error'       => $error,

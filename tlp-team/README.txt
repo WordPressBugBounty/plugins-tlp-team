@@ -2,10 +2,10 @@
 Contributors: techlabpro1
 Donate link:
 Tags: team, team showcase, team slider, team plugin, team members
-Stable tag: 5.0.0
+Stable tag: 5.0.1
 Requires at least: 5.0
 Tested up to: 6.7
-Requires PHP: 7.0
+Requires PHP: 7.4
 License: GPL-2.0-or-later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -64,7 +64,7 @@ With this team showcase WordPress plugin, you can add your team members easily f
 
 👉 **Shortcode Generator with Layout Preview:** The Team plugin comes with a shortcode generator that allows you to create or generate shortcodes easily. You can then use the shortcodes to create team showcase layouts and place them on any page or post. Here is how you go about it:
 
-[Documentation](https://www.radiustheme.com/docs/team/shortcode-generate/layout/)
+[Documentation](https://www.radiustheme.com/docs/team/docs/layout/)
 
 1.	Fill your customers’ data in the right fields before generating shortcodes using the styling, layout selection, fields’ selection, and styling tabs. Save the shortcode.
 
@@ -76,7 +76,7 @@ With this team showcase WordPress plugin, you can add your team members easily f
 
 👉 **Style Control:** With this team showcase WordPress plugin, you get to control the style in which you display your team members. You can choose the styles and colors you want for your team showcase. This meet the team plugin even lets you showcase the profile images of your team members in square or round borders.
 
-[Shortcode Documentation](https://www.radiustheme.com/docs/team/shortcode-generate/styling/)
+[Shortcode Documentation](https://www.radiustheme.com/docs/team/docs/styling/)
 
 👉 **Member Filter Option:** This team showcase plugin supports the display of team member sections by department or individual member. Your team members can be showcased with different filter options for your members.
 
@@ -98,7 +98,7 @@ When you have this team builder plugin and are ready to showcase your team showc
 
 Start by choosing a layout type from the available options. Choose the layout style. Then choose the number of columns you want to display based on different devices. With the PRO plugin, you can choose the Filters you want, with options including taxonomy filter, order (allows you to sort the retrieved posts by given parameter), sort order (designates the descending or ascending order of the ‘order by’ parameter), and search filter and others settings.
 
-[Shortcode Documentation](https://www.radiustheme.com/docs/team/shortcode-generate/layout/)
+[Shortcode Documentation](https://www.radiustheme.com/docs/team/docs/layout/)
 
 
 👉 **Step 2: Filtering**
@@ -106,20 +106,20 @@ Start by choosing a layout type from the available options. Choose the layout st
 Choose the members you want to display in the ‘include only’ section. Select the members you want to hide in the ‘exclude’ part. Set limit on the number of member posts to display. Leaving it empty will display all found posts. Select the departments you want to filter. With the PRO plugin, choose the designations you want to filter.
 
 
-[Shortcode Documentation](https://www.radiustheme.com/docs/team/shortcode-generate/filtering/)
+[Shortcode Documentation](https://www.radiustheme.com/docs/team/docs/filtering/)
 
 👉 **Step 3: Field Selection**
 
 When checking the fields on your field selection, check the fields you want to display. The options you have include name, designation, short biography, email, web URL, telephone, mobile, fax, location, and social link.
 
-[Shortcode Documentation](https://www.radiustheme.com/docs/team/shortcode-generate/fields-selection/)
+[Shortcode Documentation](https://www.radiustheme.com/docs/team/docs/fields-selection/)
 
 👉 **Step 4: Styling**
 
 Select the parent class you want for adding custom CSS coding. Choose the primary color you want for your team members. Select the colors of the button background, text, hover text, hover background, active background, and border. Choose the name color, hover color, font size, font weight, and alignment.
 
 
-[Shortcode Documentation](https://www.radiustheme.com/docs/team/shortcode-generate/styling/)
+[Shortcode Documentation](https://www.radiustheme.com/docs/team/docs/styling/)
 
 == 🏆 Available Team Fields==
 
@@ -253,6 +253,9 @@ If you like The Post Grid Plugin, then consider checking out our other WordPress
 09. Elementor Team Grid layout
 
 == Changelog ==
+
+= 5.0.1  ( March 11, 2025 ) =
+* Fixed: Single, Multiple, Smart.
 
 = 5.0.0  ( January 13, 2025 ) =
 * Fixed: User Security Issue.
