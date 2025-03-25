@@ -136,6 +136,7 @@ class Options {
 			'whatsapp'   => esc_html__( 'Whatsapp', 'tlp-team' ),
 			'telegram'   => esc_html__( 'Telegram', 'tlp-team' ),
 			'github'     => esc_html__( 'Github', 'tlp-team' ),
+			'bluesky'     => esc_html__( 'Bluesky', 'tlp-team' ),
 		];
 
 		return apply_filters( 'tlp_team_social_links', $socialLinks );

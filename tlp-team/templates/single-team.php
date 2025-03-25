@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'This script cannot be accessed directly.' );
 }
 
-get_header();
+Fns::get_header( $wp_version );
 
 global $post;
 $settings     = get_option( rttlp_team()->options['settings'] );
@@ -213,6 +213,10 @@ while ( have_posts() ) :
 								case 'telegram':
 									$icon_class = 'fab fa-telegram';
 									break;
+
+								case 'bluesky':
+									$icon_class = 'fa-brands fa-bluesky';
+									break;
 							}
 
 							if ( $lID != 'google-plus' && $icon_class ) {
@@ -259,6 +263,5 @@ while ( have_posts() ) :
 	</div>
 	<?php
 endwhile;
-
-get_footer();
+Fns::get_footer( $wp_version );
 

@@ -103,6 +103,7 @@ class PostTypesController {
 			'menu_icon'           => rttlp_team()->assets_url() . 'images/team.png',
 			'show_in_admin_bar'   => true,
 			'show_in_nav_menus'   => true,
+			'show_in_rest'         => true,
 			'can_export'          => true,
 			'has_archive'         => false,
 			'exclude_from_search' => false,

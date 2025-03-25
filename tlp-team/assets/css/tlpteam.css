@@ -1956,7 +1956,17 @@ div#rt-smart-modal-container .tlp-team-skill{
 	background: #0080b1;
 	color: #fff;
 	width: 30px;
-	height: 30px; }
+	height: 30px;
+}
+
+.rt-team-container .social-icons a .fa-bluesky{
+	width: 30px;
+	height: 30px;
+}
+.rt-team-container .social-icons a:hover .fa-bluesky{
+	background: #0085FF;
+	color: #fff;
+}
 
 .rt-team-container .social-icons a:hover .fa-xing,
 .rt-team-container .social-icons a:focus .fa-xing {

@@ -8,7 +8,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language-Team: RadiusTheme\n"
 "Last-Translator: RadiusTheme\n"
-"POT-Creation-Date: 2025-03-11 08:21+0000\n"
+"POT-Creation-Date: 2025-03-25 05:18+0000\n"
 "Report-Msgid-Bugs-To: https://radiustheme.com/tlp-team-for-wordpress/\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
@@ -29,11 +29,11 @@ msgstr ""
 msgid "Image"
 msgstr ""
 
-#: app/Controllers/Admin/AdminColumns.php:36, app/Helpers/Options.php:78, app/Helpers/Options.php:132, app/Helpers/Options.php:165
+#: app/Controllers/Admin/AdminColumns.php:36, app/Helpers/Options.php:78, app/Helpers/Options.php:132, app/Helpers/Options.php:166
 msgid "Email"
 msgstr ""
 
-#: app/Controllers/Admin/AdminColumns.php:37, app/Helpers/Options.php:98, app/Helpers/Options.php:170
+#: app/Controllers/Admin/AdminColumns.php:37, app/Helpers/Options.php:98, app/Helpers/Options.php:171
 msgid "Location"
 msgstr ""
 
@@ -77,7 +77,7 @@ msgstr ""
 msgid "All"
 msgstr ""
 
-#: app/Controllers/Admin/Ajax/Preview.php:470, app/Controllers/Admin/Ajax/Preview.php:476, app/Controllers/Frontend/Shortcode.php:368, app/Controllers/Frontend/Shortcode.php:374, app/Helpers/Options.php:713
+#: app/Controllers/Admin/Ajax/Preview.php:470, app/Controllers/Admin/Ajax/Preview.php:476, app/Controllers/Frontend/Shortcode.php:368, app/Controllers/Frontend/Shortcode.php:374, app/Helpers/Options.php:714
 msgid "Sort By None"
 msgstr ""
 
@@ -117,7 +117,7 @@ msgstr ""
 msgid "Select Shortcode"
 msgstr ""
 
-#: app/Controllers/Admin/Ajax/Shortcode.php:53, app/Helpers/Options.php:895, app/Helpers/Options.php:905, app/Helpers/Options.php:914, app/Helpers/Options.php:1044
+#: app/Controllers/Admin/Ajax/Shortcode.php:53, app/Helpers/Options.php:896, app/Helpers/Options.php:906, app/Helpers/Options.php:915, app/Helpers/Options.php:1045
 msgid "Default"
 msgstr ""
 
@@ -145,7 +145,7 @@ msgstr ""
 msgid "Upgrade to pro"
 msgstr ""
 
-#: app/Controllers/Admin/Metabox/ShortcodeMeta.php:255, app/Controllers/PostTypesController.php:158
+#: app/Controllers/Admin/Metabox/ShortcodeMeta.php:255, app/Controllers/PostTypesController.php:159
 msgid "Shortcode Generator"
 msgstr ""
 
@@ -165,7 +165,7 @@ msgstr ""
 msgid "Filtering"
 msgstr ""
 
-#: app/Controllers/Admin/Metabox/ShortcodeMeta.php:332, app/Helpers/Options.php:760
+#: app/Controllers/Admin/Metabox/ShortcodeMeta.php:332, app/Helpers/Options.php:761
 msgid "Field Selection"
 msgstr ""
 
@@ -177,7 +177,7 @@ msgstr ""
 msgid "🚀 Exciting News: <b>Team Pro </b> Black Friday sale is now live!"
 msgstr ""
 
-#: app/Controllers/Admin/Notices/Update.php:50, app/Controllers/PostTypesController.php:93, app/Controllers/PostTypesController.php:114, app/Controllers/PostTypesController.php:116
+#: app/Controllers/Admin/Notices/Update.php:50, app/Controllers/PostTypesController.php:93, app/Controllers/PostTypesController.php:115, app/Controllers/PostTypesController.php:117
 msgid "Team"
 msgstr ""
 
@@ -209,7 +209,7 @@ msgstr ""
 msgid "No term found"
 msgstr ""
 
-#: app/Controllers/Admin/TaxSorting.php:109, app/Helpers/Options.php:507, app/Widgets/Elementor/Sections/Layout.php:283
+#: app/Controllers/Admin/TaxSorting.php:109, app/Helpers/Options.php:508, app/Widgets/Elementor/Sections/Layout.php:283
 msgid "Order"
 msgstr ""
 
@@ -253,55 +253,55 @@ msgstr ""
 msgid "My Resume"
 msgstr ""
 
-#: app/Controllers/Hooks/FilterHooks.php:84, app/Helpers/Options.php:38, app/Helpers/Options.php:990
+#: app/Controllers/Hooks/FilterHooks.php:84, app/Helpers/Options.php:38, app/Helpers/Options.php:991
 msgid "Layout 1"
 msgstr ""
 
-#: app/Controllers/Hooks/FilterHooks.php:88, app/Helpers/Options.php:39, app/Helpers/Options.php:42, app/Helpers/Options.php:994
+#: app/Controllers/Hooks/FilterHooks.php:88, app/Helpers/Options.php:39, app/Helpers/Options.php:42, app/Helpers/Options.php:995
 msgid "Layout 2"
 msgstr ""
 
-#: app/Controllers/Hooks/FilterHooks.php:92, app/Helpers/Fns.php:2012, app/Helpers/Options.php:40, app/Helpers/Options.php:998
+#: app/Controllers/Hooks/FilterHooks.php:92, app/Helpers/Fns.php:2048, app/Helpers/Options.php:40, app/Helpers/Options.php:999
 msgid "Layout 3"
 msgstr ""
 
-#: app/Controllers/Hooks/FilterHooks.php:96, app/Helpers/Fns.php:2017, app/Helpers/Options.php:41, app/Helpers/Options.php:43
+#: app/Controllers/Hooks/FilterHooks.php:96, app/Helpers/Fns.php:2053, app/Helpers/Options.php:41, app/Helpers/Options.php:43
 msgid "Layout 4"
 msgstr ""
 
-#: app/Controllers/Hooks/FilterHooks.php:100, app/Helpers/Fns.php:2022
+#: app/Controllers/Hooks/FilterHooks.php:100, app/Helpers/Fns.php:2058
 msgid "Layout 5"
 msgstr ""
 
-#: app/Controllers/Hooks/FilterHooks.php:104, app/Helpers/Fns.php:2027
+#: app/Controllers/Hooks/FilterHooks.php:104, app/Helpers/Fns.php:2063
 msgid "Layout 6"
 msgstr ""
 
-#: app/Controllers/Hooks/FilterHooks.php:108, app/Helpers/Fns.php:2032
+#: app/Controllers/Hooks/FilterHooks.php:108, app/Helpers/Fns.php:2068
 msgid "Layout 7"
 msgstr ""
 
-#: app/Controllers/Hooks/FilterHooks.php:112, app/Helpers/Fns.php:2037
+#: app/Controllers/Hooks/FilterHooks.php:112, app/Helpers/Fns.php:2073
 msgid "Layout 8"
 msgstr ""
 
-#: app/Controllers/Hooks/FilterHooks.php:116, app/Helpers/Fns.php:2042
+#: app/Controllers/Hooks/FilterHooks.php:116, app/Helpers/Fns.php:2078
 msgid "Layout 9"
 msgstr ""
 
-#: app/Controllers/Hooks/FilterHooks.php:120, app/Helpers/Fns.php:2047
+#: app/Controllers/Hooks/FilterHooks.php:120, app/Helpers/Fns.php:2083
 msgid "Layout 10"
 msgstr ""
 
-#: app/Controllers/Hooks/FilterHooks.php:124, app/Helpers/Fns.php:2052
+#: app/Controllers/Hooks/FilterHooks.php:124, app/Helpers/Fns.php:2088
 msgid "Layout 11"
 msgstr ""
 
-#: app/Controllers/Hooks/FilterHooks.php:128, app/Helpers/Fns.php:2057
+#: app/Controllers/Hooks/FilterHooks.php:128, app/Helpers/Fns.php:2093
 msgid "Layout 12"
 msgstr ""
 
-#: app/Controllers/Hooks/FilterHooks.php:132, app/Helpers/Fns.php:2062
+#: app/Controllers/Hooks/FilterHooks.php:132, app/Helpers/Fns.php:2098
 msgid "Layout 13"
 msgstr ""
 
@@ -317,7 +317,7 @@ msgstr ""
 msgid "Layout 16"
 msgstr ""
 
-#: app/Controllers/Hooks/FilterHooks.php:148, app/Helpers/Fns.php:2077
+#: app/Controllers/Hooks/FilterHooks.php:148, app/Helpers/Fns.php:2113
 msgid "Special 01"
 msgstr ""
 
@@ -465,7 +465,7 @@ msgstr ""
 msgid "Please select the filter taxonomy source."
 msgstr ""
 
-#: app/Controllers/Hooks/FilterHooks.php:521, app/Helpers/Options.php:526
+#: app/Controllers/Hooks/FilterHooks.php:521, app/Helpers/Options.php:527
 msgid "Primary Color"
 msgstr ""
 
@@ -477,199 +477,199 @@ msgstr ""
 msgid "Margin"
 msgstr ""
 
-#: app/Controllers/PostTypesController.php:94, app/Controllers/PostTypesController.php:115, app/Controllers/PostTypesController.php:117
+#: app/Controllers/PostTypesController.php:94, app/Controllers/PostTypesController.php:116, app/Controllers/PostTypesController.php:118
 msgid "Member"
 msgstr ""
 
-#: app/Controllers/PostTypesController.php:118
+#: app/Controllers/PostTypesController.php:119
 msgid "Parent Member:"
 msgstr ""
 
-#: app/Controllers/PostTypesController.php:119
+#: app/Controllers/PostTypesController.php:120
 msgid "All Members"
 msgstr ""
 
-#: app/Controllers/PostTypesController.php:120
+#: app/Controllers/PostTypesController.php:121
 msgid "Add New Member"
 msgstr ""
 
-#: app/Controllers/PostTypesController.php:121
+#: app/Controllers/PostTypesController.php:122
 msgid "Add Member"
 msgstr ""
 
-#: app/Controllers/PostTypesController.php:122
+#: app/Controllers/PostTypesController.php:123
 msgid "New Member"
 msgstr ""
 
-#: app/Controllers/PostTypesController.php:123
+#: app/Controllers/PostTypesController.php:124
 msgid "Edit Member"
 msgstr ""
 
-#: app/Controllers/PostTypesController.php:124
+#: app/Controllers/PostTypesController.php:125
 msgid "Update Member"
 msgstr ""
 
-#: app/Controllers/PostTypesController.php:125
+#: app/Controllers/PostTypesController.php:126
 msgid "View Member"
 msgstr ""
 
-#: app/Controllers/PostTypesController.php:126
+#: app/Controllers/PostTypesController.php:127
 msgid "Search Member"
 msgstr ""
 
-#: app/Controllers/PostTypesController.php:127
+#: app/Controllers/PostTypesController.php:128
 msgid "Not found"
 msgstr ""
 
-#: app/Controllers/PostTypesController.php:128
+#: app/Controllers/PostTypesController.php:129
 msgid "Not found in Trash"
 msgstr ""
 
-#: app/Controllers/PostTypesController.php:141, app/Controllers/PostTypesController.php:159, app/Controllers/PostTypesController.php:160, app/Widgets/Vc/VcAddon.php:70
+#: app/Controllers/PostTypesController.php:142, app/Controllers/PostTypesController.php:160, app/Controllers/PostTypesController.php:161, app/Widgets/Vc/VcAddon.php:70
 msgid "Shortcode"
 msgstr ""
 
-#: app/Controllers/PostTypesController.php:142
+#: app/Controllers/PostTypesController.php:143
 msgid "Team Shortcode generator"
 msgstr ""
 
-#: app/Controllers/PostTypesController.php:161
+#: app/Controllers/PostTypesController.php:162
 msgid "Edit Shortcode"
 msgstr ""
 
-#: app/Controllers/PostTypesController.php:162
+#: app/Controllers/PostTypesController.php:163
 msgid "New Shortcode"
 msgstr ""
 
-#: app/Controllers/PostTypesController.php:163
+#: app/Controllers/PostTypesController.php:164
 msgid "View Shortcode"
 msgstr ""
 
-#: app/Controllers/PostTypesController.php:164
+#: app/Controllers/PostTypesController.php:165
 msgid "Shortcode Locations"
 msgstr ""
 
-#: app/Controllers/PostTypesController.php:165
+#: app/Controllers/PostTypesController.php:166
 msgid "No Shortcode found."
 msgstr ""
 
-#: app/Controllers/PostTypesController.php:166
+#: app/Controllers/PostTypesController.php:167
 msgid "No Shortcode found in trash."
 msgstr ""
 
-#: app/Controllers/PostTypesController.php:193, app/Controllers/PostTypesController.php:195, app/Helpers/Options.php:483
+#: app/Controllers/PostTypesController.php:194, app/Controllers/PostTypesController.php:196, app/Helpers/Options.php:484
 msgid "Designations"
 msgstr ""
 
-#: app/Controllers/PostTypesController.php:194, app/Helpers/Options.php:162, app/Helpers/Options.php:536, app/Widgets/Elementor/Sections/Style.php:263
+#: app/Controllers/PostTypesController.php:195, app/Helpers/Options.php:163, app/Helpers/Options.php:537, app/Widgets/Elementor/Sections/Style.php:263
 msgid "Designation"
 msgstr ""
 
-#: app/Controllers/PostTypesController.php:196
+#: app/Controllers/PostTypesController.php:197
 msgid "All Designation"
 msgstr ""
 
-#: app/Controllers/PostTypesController.php:197
+#: app/Controllers/PostTypesController.php:198
 msgid "Parent Designation"
 msgstr ""
 
-#: app/Controllers/PostTypesController.php:198
+#: app/Controllers/PostTypesController.php:199
 msgid "Parent Designation:"
 msgstr ""
 
-#: app/Controllers/PostTypesController.php:199
+#: app/Controllers/PostTypesController.php:200
 msgid "New Designation Name"
 msgstr ""
 
-#: app/Controllers/PostTypesController.php:200
+#: app/Controllers/PostTypesController.php:201
 msgid "Add New Designation"
 msgstr ""
 
-#: app/Controllers/PostTypesController.php:201
+#: app/Controllers/PostTypesController.php:202
 msgid "Edit Designation"
 msgstr ""
 
-#: app/Controllers/PostTypesController.php:202
+#: app/Controllers/PostTypesController.php:203
 msgid "Update Designation"
 msgstr ""
 
-#: app/Controllers/PostTypesController.php:203
+#: app/Controllers/PostTypesController.php:204
 msgid "View Designation"
 msgstr ""
 
-#: app/Controllers/PostTypesController.php:204
+#: app/Controllers/PostTypesController.php:205
 msgid "Separate Designations with commas"
 msgstr ""
 
-#: app/Controllers/PostTypesController.php:205
+#: app/Controllers/PostTypesController.php:206
 msgid "Add or remove Designations"
 msgstr ""
 
-#: app/Controllers/PostTypesController.php:206, app/Controllers/PostTypesController.php:238
+#: app/Controllers/PostTypesController.php:207, app/Controllers/PostTypesController.php:239
 msgid "Choose from the most used"
 msgstr ""
 
-#: app/Controllers/PostTypesController.php:207
+#: app/Controllers/PostTypesController.php:208
 msgid "Popular Designations"
 msgstr ""
 
-#: app/Controllers/PostTypesController.php:208
+#: app/Controllers/PostTypesController.php:209
 msgid "Search Designations"
 msgstr ""
 
-#: app/Controllers/PostTypesController.php:209, app/Controllers/PostTypesController.php:241
+#: app/Controllers/PostTypesController.php:210, app/Controllers/PostTypesController.php:242
 msgid "Not Found"
 msgstr ""
 
-#: app/Controllers/PostTypesController.php:225, app/Controllers/PostTypesController.php:226, app/Widgets/Elementor/Sections/Style.php:415
+#: app/Controllers/PostTypesController.php:226, app/Controllers/PostTypesController.php:227, app/Widgets/Elementor/Sections/Style.php:415
 msgid "Department"
 msgstr ""
 
-#: app/Controllers/PostTypesController.php:227, app/Helpers/Options.php:475
+#: app/Controllers/PostTypesController.php:228, app/Helpers/Options.php:476
 msgid "Departments"
 msgstr ""
 
-#: app/Controllers/PostTypesController.php:228
+#: app/Controllers/PostTypesController.php:229
 msgid "All Department"
 msgstr ""
 
-#: app/Controllers/PostTypesController.php:229, app/Controllers/PostTypesController.php:230
+#: app/Controllers/PostTypesController.php:230, app/Controllers/PostTypesController.php:231
 msgid "Parent Department"
 msgstr ""
 
-#: app/Controllers/PostTypesController.php:231
+#: app/Controllers/PostTypesController.php:232
 msgid "New Department Name"
 msgstr ""
 
-#: app/Controllers/PostTypesController.php:232
+#: app/Controllers/PostTypesController.php:233
 msgid "Add New Department"
 msgstr ""
 
-#: app/Controllers/PostTypesController.php:233
+#: app/Controllers/PostTypesController.php:234
 msgid "Edit Department"
 msgstr ""
 
-#: app/Controllers/PostTypesController.php:234
+#: app/Controllers/PostTypesController.php:235
 msgid "Update Department"
 msgstr ""
 
-#: app/Controllers/PostTypesController.php:235
+#: app/Controllers/PostTypesController.php:236
 msgid "View Department"
 msgstr ""
 
-#: app/Controllers/PostTypesController.php:236
+#: app/Controllers/PostTypesController.php:237
 msgid "Separate Skills with commas"
 msgstr ""
 
-#: app/Controllers/PostTypesController.php:237
+#: app/Controllers/PostTypesController.php:238
 msgid "Add or remove Skills"
 msgstr ""
 
-#: app/Controllers/PostTypesController.php:239
+#: app/Controllers/PostTypesController.php:240
 msgid "Popular Departments"
 msgstr ""
 
-#: app/Controllers/PostTypesController.php:240
+#: app/Controllers/PostTypesController.php:241
 msgid "Search Departments"
 msgstr ""
 
@@ -690,11 +690,11 @@ msgstr ""
 msgid "Default Image"
 msgstr ""
 
-#: app/Helpers/Fns.php:2067
+#: app/Helpers/Fns.php:2103
 msgid "Layout 17"
 msgstr ""
 
-#: app/Helpers/Fns.php:2072
+#: app/Helpers/Fns.php:2108
 msgid "Layout 18"
 msgstr ""
 
@@ -702,7 +702,7 @@ msgstr ""
 msgid "of"
 msgstr ""
 
-#: app/Helpers/Options.php:27, app/Helpers/Options.php:1045
+#: app/Helpers/Options.php:27, app/Helpers/Options.php:1046
 msgid "1 Column"
 msgstr ""
 
@@ -726,7 +726,7 @@ msgstr ""
 msgid "6 Column"
 msgstr ""
 
-#: app/Helpers/Options.php:44, app/Helpers/Options.php:218
+#: app/Helpers/Options.php:44, app/Helpers/Options.php:219
 msgid "Isotope Layout"
 msgstr ""
 
@@ -734,7 +734,7 @@ msgstr ""
 msgid "Carousel (Slider Layout)"
 msgstr ""
 
-#: app/Helpers/Options.php:54, app/Helpers/Options.php:309, app/Helpers/Options.php:410, app/Helpers/Options.php:425, app/Widgets/Elementor/Sections/Layout.php:314, app/Widgets/Elementor/Sections/Layout.php:365
+#: app/Helpers/Options.php:54, app/Helpers/Options.php:310, app/Helpers/Options.php:411, app/Helpers/Options.php:426, app/Widgets/Elementor/Sections/Layout.php:314, app/Widgets/Elementor/Sections/Layout.php:365
 msgid "Pagination"
 msgstr ""
 
@@ -766,15 +766,15 @@ msgstr ""
 msgid "ex: 4 Years"
 msgstr ""
 
-#: app/Helpers/Options.php:82, app/Helpers/Options.php:167
+#: app/Helpers/Options.php:82, app/Helpers/Options.php:168
 msgid "Telephone"
 msgstr ""
 
-#: app/Helpers/Options.php:86, app/Helpers/Options.php:168, app/Helpers/Options.php:252
+#: app/Helpers/Options.php:86, app/Helpers/Options.php:169, app/Helpers/Options.php:253
 msgid "Mobile"
 msgstr ""
 
-#: app/Helpers/Options.php:90, app/Helpers/Options.php:169
+#: app/Helpers/Options.php:90, app/Helpers/Options.php:170
 msgid "Fax"
 msgstr ""
 
@@ -854,611 +854,615 @@ msgstr ""
 msgid "Github"
 msgstr ""
 
-#: app/Helpers/Options.php:146
-msgid "10 %"
+#: app/Helpers/Options.php:139
+msgid "Bluesky"
 msgstr ""
 
 #: app/Helpers/Options.php:147
-msgid "20 %"
+msgid "10 %"
 msgstr ""
 
 #: app/Helpers/Options.php:148
-msgid "30 %"
+msgid "20 %"
 msgstr ""
 
 #: app/Helpers/Options.php:149
-msgid "40 %"
+msgid "30 %"
 msgstr ""
 
 #: app/Helpers/Options.php:150
-msgid "50 %"
+msgid "40 %"
 msgstr ""
 
 #: app/Helpers/Options.php:151
-msgid "60 %"
+msgid "50 %"
 msgstr ""
 
 #: app/Helpers/Options.php:152
-msgid "70 %"
+msgid "60 %"
 msgstr ""
 
 #: app/Helpers/Options.php:153
-msgid "80 %"
+msgid "70 %"
 msgstr ""
 
 #: app/Helpers/Options.php:154
+msgid "80 %"
+msgstr ""
+
+#: app/Helpers/Options.php:155
 msgid "90 %"
 msgstr ""
 
-#: app/Helpers/Options.php:161, app/Helpers/Options.php:531, app/Helpers/Options.php:700, app/Widgets/Elementor/Sections/Style.php:59
+#: app/Helpers/Options.php:162, app/Helpers/Options.php:532, app/Helpers/Options.php:701, app/Widgets/Elementor/Sections/Style.php:59
 msgid "Name"
 msgstr ""
 
-#: app/Helpers/Options.php:163, app/Helpers/Options.php:541
+#: app/Helpers/Options.php:164, app/Helpers/Options.php:542
 msgid "Short biography"
 msgstr ""
 
-#: app/Helpers/Options.php:164
+#: app/Helpers/Options.php:165
 msgid "Content Details"
 msgstr ""
 
-#: app/Helpers/Options.php:166
+#: app/Helpers/Options.php:167
 msgid "Web Url"
 msgstr ""
 
-#: app/Helpers/Options.php:171
+#: app/Helpers/Options.php:172
 msgid "Social Link"
 msgstr ""
 
-#: app/Helpers/Options.php:172, app/Helpers/Options.php:626, app/Widgets/Elementor/Sections/Style.php:740
+#: app/Helpers/Options.php:173, app/Helpers/Options.php:627, app/Widgets/Elementor/Sections/Style.php:740
 msgid "Read More Button"
 msgstr ""
 
-#: app/Helpers/Options.php:173, app/Helpers/Options.php:546, app/Widgets/Elementor/Sections/Style.php:857
+#: app/Helpers/Options.php:174, app/Helpers/Options.php:547, app/Widgets/Elementor/Sections/Style.php:857
 msgid "Resume Button"
 msgstr ""
 
-#: app/Helpers/Options.php:174, app/Widgets/Elementor/Sections/Style.php:974
+#: app/Helpers/Options.php:175, app/Widgets/Elementor/Sections/Style.php:974
 msgid "Hire Me Button"
 msgstr ""
 
-#: app/Helpers/Options.php:183
+#: app/Helpers/Options.php:184
 msgid "Select the field"
 msgstr ""
 
-#: app/Helpers/Options.php:190
+#: app/Helpers/Options.php:191
 msgid "Check the field which you want to display. Note: Some field are not available for some layout"
 msgstr ""
 
-#: app/Helpers/Options.php:199
+#: app/Helpers/Options.php:200
 msgid "Layout type"
 msgstr ""
 
-#: app/Helpers/Options.php:203
+#: app/Helpers/Options.php:204
 msgid "Grid Layout"
 msgstr ""
 
-#: app/Helpers/Options.php:208
+#: app/Helpers/Options.php:209
 msgid "List Layout"
 msgstr ""
 
-#: app/Helpers/Options.php:213
+#: app/Helpers/Options.php:214
 msgid "Slider Layout"
 msgstr ""
 
-#: app/Helpers/Options.php:226
+#: app/Helpers/Options.php:227
 msgid "Layout style"
 msgstr ""
 
-#: app/Helpers/Options.php:227
+#: app/Helpers/Options.php:228
 msgid "Click to the Layout name to see live demo"
 msgstr ""
 
-#: app/Helpers/Options.php:233
+#: app/Helpers/Options.php:234
 msgid "Column"
 msgstr ""
 
-#: app/Helpers/Options.php:238
+#: app/Helpers/Options.php:239
 msgid "Desktop"
 msgstr ""
 
-#: app/Helpers/Options.php:245
+#: app/Helpers/Options.php:246
 msgid "Tab"
 msgstr ""
 
-#: app/Helpers/Options.php:260, app/Helpers/Options.php:751
+#: app/Helpers/Options.php:261, app/Helpers/Options.php:752
 msgid "Image column"
 msgstr ""
 
-#: app/Helpers/Options.php:265, app/Helpers/Options.php:756
+#: app/Helpers/Options.php:266, app/Helpers/Options.php:757
 msgid "Content column will calculate automatically"
 msgstr ""
 
-#: app/Helpers/Options.php:268
+#: app/Helpers/Options.php:269
 msgid "Speed"
 msgstr ""
 
-#: app/Helpers/Options.php:272
+#: app/Helpers/Options.php:273
 msgid "Auto play Speed in milliseconds"
 msgstr ""
 
-#: app/Helpers/Options.php:275
+#: app/Helpers/Options.php:276
 msgid "Carousel Options"
 msgstr ""
 
-#: app/Helpers/Options.php:284
+#: app/Helpers/Options.php:285
 msgid "Autoplay timeout"
 msgstr ""
 
-#: app/Helpers/Options.php:288
+#: app/Helpers/Options.php:289
 msgid "Autoplay interval timeout"
 msgstr ""
 
-#: app/Helpers/Options.php:292
+#: app/Helpers/Options.php:293
 msgid "Filter"
 msgstr ""
 
-#: app/Helpers/Options.php:301
+#: app/Helpers/Options.php:302
 msgid "Taxonomy Filter"
 msgstr ""
 
-#: app/Helpers/Options.php:311, app/Helpers/Options.php:395, app/Helpers/Options.php:784
+#: app/Helpers/Options.php:312, app/Helpers/Options.php:396, app/Helpers/Options.php:785
 msgid "Enable"
 msgstr ""
 
-#: app/Helpers/Options.php:316
+#: app/Helpers/Options.php:317
 msgid "Pagination type"
 msgstr ""
 
-#: app/Helpers/Options.php:325
+#: app/Helpers/Options.php:326
 msgid "Display per page"
 msgstr ""
 
-#: app/Helpers/Options.php:328
+#: app/Helpers/Options.php:329
 msgid "If value of Limit setting is not blank (empty), this value should be smaller than Limit value."
 msgstr ""
 
-#: app/Helpers/Options.php:332
+#: app/Helpers/Options.php:333
 msgid "Feature Image Disable"
 msgstr ""
 
-#: app/Helpers/Options.php:333
+#: app/Helpers/Options.php:334
 msgid "Disable"
 msgstr ""
 
-#: app/Helpers/Options.php:338
+#: app/Helpers/Options.php:339
 msgid "Image style"
 msgstr ""
 
-#: app/Helpers/Options.php:342
+#: app/Helpers/Options.php:343
 msgid "Select image style for layout."
 msgstr ""
 
-#: app/Helpers/Options.php:343, app/Helpers/Options.php:367
+#: app/Helpers/Options.php:344, app/Helpers/Options.php:368
 msgid "Note:"
 msgstr ""
 
-#: app/Helpers/Options.php:344
+#: app/Helpers/Options.php:345
 msgid "Some layouts don't support rounded style."
 msgstr ""
 
-#: app/Helpers/Options.php:351
+#: app/Helpers/Options.php:352
 msgid "Image Size"
 msgstr ""
 
-#: app/Helpers/Options.php:358
+#: app/Helpers/Options.php:359
 msgid "Custom Image Size"
 msgstr ""
 
-#: app/Helpers/Options.php:363
+#: app/Helpers/Options.php:364
 msgid "Short description limit"
 msgstr ""
 
-#: app/Helpers/Options.php:366
+#: app/Helpers/Options.php:367
 msgid "Short description limit only integer number is allowed, Leave it blank for full text."
 msgstr ""
 
-#: app/Helpers/Options.php:368
+#: app/Helpers/Options.php:369
 msgid "HTML TAGS will not work if you use limit."
 msgstr ""
 
-#: app/Helpers/Options.php:373
+#: app/Helpers/Options.php:374
 msgid "After Short Description"
 msgstr ""
 
-#: app/Helpers/Options.php:374
+#: app/Helpers/Options.php:375
 msgid "Add something after short description."
 msgstr ""
 
-#: app/Helpers/Options.php:379
+#: app/Helpers/Options.php:380
 msgid "My Resume Button Text"
 msgstr ""
 
-#: app/Helpers/Options.php:384, app/Helpers/Options.php:844
+#: app/Helpers/Options.php:385, app/Helpers/Options.php:845
 msgid "Hire Me Button Text"
 msgstr ""
 
-#: app/Helpers/Options.php:389
+#: app/Helpers/Options.php:390
 msgid "Read More Button Text"
 msgstr ""
 
-#: app/Helpers/Options.php:394
+#: app/Helpers/Options.php:395
 msgid "Detail page link"
 msgstr ""
 
-#: app/Helpers/Options.php:406, app/Helpers/Options.php:421
+#: app/Helpers/Options.php:407, app/Helpers/Options.php:422
 msgid "Loop"
 msgstr ""
 
-#: app/Helpers/Options.php:407, app/Helpers/Options.php:422
+#: app/Helpers/Options.php:408, app/Helpers/Options.php:423
 msgid "Auto Play"
 msgstr ""
 
-#: app/Helpers/Options.php:408, app/Helpers/Options.php:423
+#: app/Helpers/Options.php:409, app/Helpers/Options.php:424
 msgid "Pause on mouse hover"
 msgstr ""
 
-#: app/Helpers/Options.php:409, app/Helpers/Options.php:424
+#: app/Helpers/Options.php:410, app/Helpers/Options.php:425
 msgid "Nav Button"
 msgstr ""
 
-#: app/Helpers/Options.php:411, app/Helpers/Options.php:426, app/Widgets/Elementor/Sections/Settings.php:99
+#: app/Helpers/Options.php:412, app/Helpers/Options.php:427, app/Widgets/Elementor/Sections/Settings.php:99
 msgid "Auto Height"
 msgstr ""
 
-#: app/Helpers/Options.php:412, app/Helpers/Options.php:427
+#: app/Helpers/Options.php:413, app/Helpers/Options.php:428
 msgid "Lazy Load"
 msgstr ""
 
-#: app/Helpers/Options.php:413, app/Helpers/Options.php:428
+#: app/Helpers/Options.php:414, app/Helpers/Options.php:429
 msgid "Right to left (RTL)"
 msgstr ""
 
-#: app/Helpers/Options.php:436
+#: app/Helpers/Options.php:437
 msgid "Taxonomy filter"
 msgstr ""
 
-#: app/Helpers/Options.php:437
+#: app/Helpers/Options.php:438
 msgid "Order - Sort retrieved posts by parameter"
 msgstr ""
 
-#: app/Helpers/Options.php:438
+#: app/Helpers/Options.php:439
 msgid "Sort Order - Designates the ascending or descending order of the \"orderby\" parameter"
 msgstr ""
 
-#: app/Helpers/Options.php:439
+#: app/Helpers/Options.php:440
 msgid "Search filter"
 msgstr ""
 
-#: app/Helpers/Options.php:445, app/Helpers/Options.php:957, app/Widgets/Elementor/Sections/Style.php:96, app/Widgets/Elementor/Sections/Style.php:300, app/Widgets/Elementor/Sections/Style.php:452, app/Widgets/Elementor/Sections/Style.php:634, app/Widgets/Elementor/Sections/Style.php:753, app/Widgets/Elementor/Sections/Style.php:870, app/Widgets/Elementor/Sections/Style.php:987, app/Widgets/Elementor/Sections/Style.php:1244, app/Widgets/Elementor/Sections/Style.php:1574, app/Widgets/Elementor/Sections/Style.php:1790
+#: app/Helpers/Options.php:446, app/Helpers/Options.php:958, app/Widgets/Elementor/Sections/Style.php:96, app/Widgets/Elementor/Sections/Style.php:300, app/Widgets/Elementor/Sections/Style.php:452, app/Widgets/Elementor/Sections/Style.php:634, app/Widgets/Elementor/Sections/Style.php:753, app/Widgets/Elementor/Sections/Style.php:870, app/Widgets/Elementor/Sections/Style.php:987, app/Widgets/Elementor/Sections/Style.php:1244, app/Widgets/Elementor/Sections/Style.php:1574, app/Widgets/Elementor/Sections/Style.php:1790
 msgid "Normal"
 msgstr ""
 
-#: app/Helpers/Options.php:446
+#: app/Helpers/Options.php:447
 msgid "Round"
 msgstr ""
 
-#: app/Helpers/Options.php:454
+#: app/Helpers/Options.php:455
 msgid "Include only"
 msgstr ""
 
-#: app/Helpers/Options.php:457
+#: app/Helpers/Options.php:458
 msgid "Select the member you want to display"
 msgstr ""
 
-#: app/Helpers/Options.php:462, app/Widgets/Elementor/Sections/Layout.php:242
+#: app/Helpers/Options.php:463, app/Widgets/Elementor/Sections/Layout.php:242
 msgid "Exclude"
 msgstr ""
 
-#: app/Helpers/Options.php:465
+#: app/Helpers/Options.php:466
 msgid "Select the member you want to hide"
 msgstr ""
 
-#: app/Helpers/Options.php:470
+#: app/Helpers/Options.php:471
 msgid "Limit"
 msgstr ""
 
-#: app/Helpers/Options.php:472
+#: app/Helpers/Options.php:473
 msgid "The number of posts to show. Set empty to show all found posts."
 msgstr ""
 
-#: app/Helpers/Options.php:479
+#: app/Helpers/Options.php:480
 msgid "Select the department you want to filter, Leave it blank for all department"
 msgstr ""
 
-#: app/Helpers/Options.php:488
+#: app/Helpers/Options.php:489
 msgid "Select the designation you want to filter, Leave it blank for all designation"
 msgstr ""
 
-#: app/Helpers/Options.php:492
+#: app/Helpers/Options.php:493
 msgid "Taxonomy relation"
 msgstr ""
 
-#: app/Helpers/Options.php:496
+#: app/Helpers/Options.php:497
 msgid "Select this option if you select more than one taxonomy like department , designation and skill"
 msgstr ""
 
-#: app/Helpers/Options.php:500, app/Widgets/Elementor/Sections/Layout.php:274
+#: app/Helpers/Options.php:501, app/Widgets/Elementor/Sections/Layout.php:274
 msgid "Order By"
 msgstr ""
 
-#: app/Helpers/Options.php:522
+#: app/Helpers/Options.php:523
 msgid "Parent class for adding custom css"
 msgstr ""
 
-#: app/Helpers/Options.php:550, app/Helpers/Options.php:590, app/Helpers/Options.php:630, app/Helpers/Options.php:670
+#: app/Helpers/Options.php:551, app/Helpers/Options.php:591, app/Helpers/Options.php:631, app/Helpers/Options.php:671
 msgid "Background"
 msgstr ""
 
-#: app/Helpers/Options.php:554, app/Helpers/Options.php:594, app/Helpers/Options.php:634, app/Helpers/Options.php:674
+#: app/Helpers/Options.php:555, app/Helpers/Options.php:595, app/Helpers/Options.php:635, app/Helpers/Options.php:675
 msgid "Hover background"
 msgstr ""
 
-#: app/Helpers/Options.php:558, app/Helpers/Options.php:598, app/Helpers/Options.php:638
+#: app/Helpers/Options.php:559, app/Helpers/Options.php:599, app/Helpers/Options.php:639
 msgid "Border Color"
 msgstr ""
 
-#: app/Helpers/Options.php:562, app/Helpers/Options.php:602, app/Helpers/Options.php:642, app/Helpers/Options.php:678
+#: app/Helpers/Options.php:563, app/Helpers/Options.php:603, app/Helpers/Options.php:643, app/Helpers/Options.php:679
 msgid "Text"
 msgstr ""
 
-#: app/Helpers/Options.php:566, app/Helpers/Options.php:606, app/Helpers/Options.php:646, app/Helpers/Options.php:682
+#: app/Helpers/Options.php:567, app/Helpers/Options.php:607, app/Helpers/Options.php:647, app/Helpers/Options.php:683
 msgid "Hover text"
 msgstr ""
 
-#: app/Helpers/Options.php:570, app/Helpers/Options.php:610, app/Helpers/Options.php:650
+#: app/Helpers/Options.php:571, app/Helpers/Options.php:611, app/Helpers/Options.php:651
 msgid "Border Hover Color"
 msgstr ""
 
-#: app/Helpers/Options.php:574, app/Helpers/Options.php:614, app/Helpers/Options.php:654
+#: app/Helpers/Options.php:575, app/Helpers/Options.php:615, app/Helpers/Options.php:655
 msgid "Border width"
 msgstr ""
 
-#: app/Helpers/Options.php:579, app/Helpers/Options.php:619, app/Helpers/Options.php:659, app/Widgets/Elementor/Sections/Style.php:1483, app/Widgets/Elementor/Sections/Style.php:1676, app/Widgets/Elementor/Sections/Style.php:1888
+#: app/Helpers/Options.php:580, app/Helpers/Options.php:620, app/Helpers/Options.php:660, app/Widgets/Elementor/Sections/Style.php:1483, app/Widgets/Elementor/Sections/Style.php:1676, app/Widgets/Elementor/Sections/Style.php:1888
 msgid "Border Radius"
 msgstr ""
 
-#: app/Helpers/Options.php:586
+#: app/Helpers/Options.php:587
 msgid "HireMe Button"
 msgstr ""
 
-#: app/Helpers/Options.php:666
+#: app/Helpers/Options.php:667
 msgid "Load More Button"
 msgstr ""
 
-#: app/Helpers/Options.php:692
+#: app/Helpers/Options.php:693
 msgid "OR Relation"
 msgstr ""
 
-#: app/Helpers/Options.php:693
+#: app/Helpers/Options.php:694
 msgid "AND Relation"
 msgstr ""
 
-#: app/Helpers/Options.php:699
+#: app/Helpers/Options.php:700
 msgid "Menu Order"
 msgstr ""
 
-#: app/Helpers/Options.php:701, app/Helpers/Options.php:710
+#: app/Helpers/Options.php:702, app/Helpers/Options.php:711
 msgid "ID"
 msgstr ""
 
-#: app/Helpers/Options.php:702, app/Helpers/Options.php:711
+#: app/Helpers/Options.php:703, app/Helpers/Options.php:712
 msgid "Date"
 msgstr ""
 
-#: app/Helpers/Options.php:703, app/Helpers/Options.php:712
+#: app/Helpers/Options.php:704, app/Helpers/Options.php:713
 msgid "Random"
 msgstr ""
 
-#: app/Helpers/Options.php:709
+#: app/Helpers/Options.php:710
 msgid "Default Order"
 msgstr ""
 
-#: app/Helpers/Options.php:719
+#: app/Helpers/Options.php:720
 msgid "Ascending"
 msgstr ""
 
-#: app/Helpers/Options.php:720
+#: app/Helpers/Options.php:721
 msgid "Descending"
 msgstr ""
 
-#: app/Helpers/Options.php:727, app/Widgets/Elementor/Sections/Layout.php:423
+#: app/Helpers/Options.php:728, app/Widgets/Elementor/Sections/Layout.php:423
 msgid "Soft Crop"
 msgstr ""
 
-#: app/Helpers/Options.php:728, app/Widgets/Elementor/Sections/Layout.php:424
+#: app/Helpers/Options.php:729, app/Widgets/Elementor/Sections/Layout.php:424
 msgid "Hard Crop"
 msgstr ""
 
-#: app/Helpers/Options.php:743
+#: app/Helpers/Options.php:744
 msgid "Content type"
 msgstr ""
 
-#: app/Helpers/Options.php:761
+#: app/Helpers/Options.php:762
 msgid "This will apply only single team page"
 msgstr ""
 
-#: app/Helpers/Options.php:781
+#: app/Helpers/Options.php:782
 msgid "Comments"
 msgstr ""
 
-#: app/Helpers/Options.php:783
+#: app/Helpers/Options.php:784
 msgid "Allow comments to team member details page"
 msgstr ""
 
-#: app/Helpers/Options.php:826
+#: app/Helpers/Options.php:827
 msgid "Slug"
 msgstr ""
 
-#: app/Helpers/Options.php:828
+#: app/Helpers/Options.php:829
 msgid "Slug configuration"
 msgstr ""
 
-#: app/Helpers/Options.php:835
+#: app/Helpers/Options.php:836
 msgid "Resume Button Text"
 msgstr ""
 
-#: app/Helpers/Options.php:837
+#: app/Helpers/Options.php:838
 msgid "Resume button text change here"
 msgstr ""
 
-#: app/Helpers/Options.php:846
+#: app/Helpers/Options.php:847
 msgid "Hire me button text change here"
 msgstr ""
 
-#: app/Helpers/Options.php:854
+#: app/Helpers/Options.php:855
 msgid "Conditional Scripts Loading"
 msgstr ""
 
-#: app/Helpers/Options.php:857
+#: app/Helpers/Options.php:858
 msgid "Load All Scripts (Both Elementor and Shortcode)"
 msgstr ""
 
-#: app/Helpers/Options.php:858
+#: app/Helpers/Options.php:859
 msgid "Load Only Elementor Scripts"
 msgstr ""
 
-#: app/Helpers/Options.php:859
+#: app/Helpers/Options.php:860
 msgid "Load Only Shortcodes Scripts"
 msgstr ""
 
-#: app/Helpers/Options.php:861
+#: app/Helpers/Options.php:862
 msgid "Please choose the script loading condition. Our recommendation is to choose any one of Elementor or Shorcodes for faster page loads."
 msgstr ""
 
-#: app/Helpers/Options.php:879, app/Widgets/Elementor/Sections/Style.php:101, app/Widgets/Elementor/Sections/Style.php:305, app/Widgets/Elementor/Sections/Style.php:457, app/Widgets/Elementor/Sections/Style.php:478, app/Widgets/Elementor/Sections/Style.php:639, app/Widgets/Elementor/Sections/Style.php:758, app/Widgets/Elementor/Sections/Style.php:875, app/Widgets/Elementor/Sections/Style.php:992, app/Widgets/Elementor/Sections/Style.php:1249, app/Widgets/Elementor/Sections/Style.php:1579
+#: app/Helpers/Options.php:880, app/Widgets/Elementor/Sections/Style.php:101, app/Widgets/Elementor/Sections/Style.php:305, app/Widgets/Elementor/Sections/Style.php:457, app/Widgets/Elementor/Sections/Style.php:478, app/Widgets/Elementor/Sections/Style.php:639, app/Widgets/Elementor/Sections/Style.php:758, app/Widgets/Elementor/Sections/Style.php:875, app/Widgets/Elementor/Sections/Style.php:992, app/Widgets/Elementor/Sections/Style.php:1249, app/Widgets/Elementor/Sections/Style.php:1579
 msgid "Color"
 msgstr ""
 
-#: app/Helpers/Options.php:886
+#: app/Helpers/Options.php:887
 msgid "Hover color"
 msgstr ""
 
-#: app/Helpers/Options.php:892
+#: app/Helpers/Options.php:893
 msgid "Font size"
 msgstr ""
 
-#: app/Helpers/Options.php:902
+#: app/Helpers/Options.php:903
 msgid "Weight"
 msgstr ""
 
-#: app/Helpers/Options.php:912, app/Widgets/Elementor/Sections/Style.php:73, app/Widgets/Elementor/Sections/Style.php:277, app/Widgets/Elementor/Sections/Style.php:429, app/Widgets/Elementor/Sections/Style.php:607, app/Widgets/Elementor/Sections/Style.php:1551, app/Widgets/Elementor/Sections/Style.php:1767
+#: app/Helpers/Options.php:913, app/Widgets/Elementor/Sections/Style.php:73, app/Widgets/Elementor/Sections/Style.php:277, app/Widgets/Elementor/Sections/Style.php:429, app/Widgets/Elementor/Sections/Style.php:607, app/Widgets/Elementor/Sections/Style.php:1551, app/Widgets/Elementor/Sections/Style.php:1767
 msgid "Alignment"
 msgstr ""
 
-#: app/Helpers/Options.php:925
+#: app/Helpers/Options.php:926
 msgid "Container"
 msgstr ""
 
-#: app/Helpers/Options.php:926
+#: app/Helpers/Options.php:927
 msgid "Container fluid"
 msgstr ""
 
-#: app/Helpers/Options.php:958
+#: app/Helpers/Options.php:959
 msgid "Bold"
 msgstr ""
 
-#: app/Helpers/Options.php:959
+#: app/Helpers/Options.php:960
 msgid "Bolder"
 msgstr ""
 
-#: app/Helpers/Options.php:960
+#: app/Helpers/Options.php:961
 msgid "Lighter"
 msgstr ""
 
-#: app/Helpers/Options.php:961
+#: app/Helpers/Options.php:962
 msgid "Inherit"
 msgstr ""
 
-#: app/Helpers/Options.php:962
+#: app/Helpers/Options.php:963
 msgid "Initial"
 msgstr ""
 
-#: app/Helpers/Options.php:963
+#: app/Helpers/Options.php:964
 msgid "Unset"
 msgstr ""
 
-#: app/Helpers/Options.php:964
+#: app/Helpers/Options.php:965
 msgid "100"
 msgstr ""
 
-#: app/Helpers/Options.php:965
+#: app/Helpers/Options.php:966
 msgid "200"
 msgstr ""
 
-#: app/Helpers/Options.php:966
+#: app/Helpers/Options.php:967
 msgid "300"
 msgstr ""
 
-#: app/Helpers/Options.php:967
+#: app/Helpers/Options.php:968
 msgid "400"
 msgstr ""
 
-#: app/Helpers/Options.php:968
+#: app/Helpers/Options.php:969
 msgid "500"
 msgstr ""
 
-#: app/Helpers/Options.php:969
+#: app/Helpers/Options.php:970
 msgid "600"
 msgstr ""
 
-#: app/Helpers/Options.php:970
+#: app/Helpers/Options.php:971
 msgid "700"
 msgstr ""
 
-#: app/Helpers/Options.php:971
+#: app/Helpers/Options.php:972
 msgid "800"
 msgstr ""
 
-#: app/Helpers/Options.php:972
+#: app/Helpers/Options.php:973
 msgid "900"
 msgstr ""
 
-#: app/Helpers/Options.php:978, app/Widgets/Elementor/Sections/Style.php:76, app/Widgets/Elementor/Sections/Style.php:280, app/Widgets/Elementor/Sections/Style.php:432, app/Widgets/Elementor/Sections/Style.php:610, app/Widgets/Elementor/Sections/Style.php:1554, app/Widgets/Elementor/Sections/Style.php:1770
+#: app/Helpers/Options.php:979, app/Widgets/Elementor/Sections/Style.php:76, app/Widgets/Elementor/Sections/Style.php:280, app/Widgets/Elementor/Sections/Style.php:432, app/Widgets/Elementor/Sections/Style.php:610, app/Widgets/Elementor/Sections/Style.php:1554, app/Widgets/Elementor/Sections/Style.php:1770
 msgid "Left"
 msgstr ""
 
-#: app/Helpers/Options.php:979, app/Widgets/Elementor/Sections/Style.php:84, app/Widgets/Elementor/Sections/Style.php:288, app/Widgets/Elementor/Sections/Style.php:440, app/Widgets/Elementor/Sections/Style.php:618, app/Widgets/Elementor/Sections/Style.php:1562, app/Widgets/Elementor/Sections/Style.php:1778
+#: app/Helpers/Options.php:980, app/Widgets/Elementor/Sections/Style.php:84, app/Widgets/Elementor/Sections/Style.php:288, app/Widgets/Elementor/Sections/Style.php:440, app/Widgets/Elementor/Sections/Style.php:618, app/Widgets/Elementor/Sections/Style.php:1562, app/Widgets/Elementor/Sections/Style.php:1778
 msgid "Right"
 msgstr ""
 
-#: app/Helpers/Options.php:980, app/Widgets/Elementor/Sections/Style.php:80, app/Widgets/Elementor/Sections/Style.php:284, app/Widgets/Elementor/Sections/Style.php:436, app/Widgets/Elementor/Sections/Style.php:614, app/Widgets/Elementor/Sections/Style.php:1558, app/Widgets/Elementor/Sections/Style.php:1774
+#: app/Helpers/Options.php:981, app/Widgets/Elementor/Sections/Style.php:80, app/Widgets/Elementor/Sections/Style.php:284, app/Widgets/Elementor/Sections/Style.php:436, app/Widgets/Elementor/Sections/Style.php:614, app/Widgets/Elementor/Sections/Style.php:1558, app/Widgets/Elementor/Sections/Style.php:1774
 msgid "Center"
 msgstr ""
 
-#: app/Helpers/Options.php:981, app/Widgets/Elementor/Sections/Style.php:622
+#: app/Helpers/Options.php:982, app/Widgets/Elementor/Sections/Style.php:622
 msgid "Justify"
 msgstr ""
 
-#: app/Helpers/Options.php:1011
+#: app/Helpers/Options.php:1012
 msgid "List Layout 1"
 msgstr ""
 
-#: app/Helpers/Options.php:1023
+#: app/Helpers/Options.php:1024
 msgid "Slider 1"
 msgstr ""
 
-#: app/Helpers/Options.php:1035
+#: app/Helpers/Options.php:1036
 msgid "Isotope 1"
 msgstr ""
 
-#: app/Helpers/Options.php:1046
+#: app/Helpers/Options.php:1047
 msgid "2 Columns"
 msgstr ""
 
-#: app/Helpers/Options.php:1047
+#: app/Helpers/Options.php:1048
 msgid "3 Columns"
 msgstr ""
 
-#: app/Helpers/Options.php:1048
+#: app/Helpers/Options.php:1049
 msgid "4 Columns"
 msgstr ""
 
-#: app/Helpers/Options.php:1049
+#: app/Helpers/Options.php:1050
 msgid "5 Columns"
 msgstr ""
 
-#: app/Helpers/Options.php:1050
+#: app/Helpers/Options.php:1051
 msgid "6 Columns"
 msgstr ""
 

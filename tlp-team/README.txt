@@ -2,7 +2,7 @@
 Contributors: techlabpro1
 Donate link:
 Tags: team, team showcase, team slider, team plugin, team members
-Stable tag: 5.0.1
+Stable tag: 5.0.2
 Requires at least: 5.0
 Tested up to: 6.7
 Requires PHP: 7.4
@@ -253,6 +253,9 @@ If you like The Post Grid Plugin, then consider checking out our other WordPress
 09. Elementor Team Grid layout
 
 == Changelog ==
+
+= 5.0.2  ( March 25, 2025 ) =
+* Added: Meta icon bluesky, blog theme header & footer supported.
 
 = 5.0.1  ( March 11, 2025 ) =
 * Fixed: Single, Multiple, Smart.
