@@ -172,6 +172,8 @@ abstract class ElementorWidget extends Elementor {
 		$this->elControls = $this->promoContent( $this->elControls );
 
 		Fns::addElControls( $this->elControls, $this );
+
+        error_log( print_r( $this->elControls, true ), 3, __DIR__.'/log.txt');
 	}
 
 	/**

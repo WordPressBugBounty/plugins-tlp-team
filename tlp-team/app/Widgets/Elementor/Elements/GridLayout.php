@@ -96,7 +96,6 @@ class GridLayout extends ElementorWidget {
 			'pagination',
 			'image',
 		];
-
 		foreach ( $sections as $section ) {
 			Layout::$section( $this );
 		}

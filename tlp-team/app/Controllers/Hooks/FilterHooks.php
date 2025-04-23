@@ -65,92 +65,94 @@ class FilterHooks {
 	 * Grid Layouts
 	 *
 	 * @param array $layouts Layouts.
+	 *
 	 * @return array
 	 */
 	public function gridLayouts( $layouts ) {
 
 		$status = rttlp_team()->has_pro();
-        Fns::el_pro_grid_layouts();
+		Fns::el_pro_grid_layouts();
 
-        if( ! $status ) {
-            $pro_layouts=Fns::el_pro_grid_layouts(); //show pro layouts on free plugin
-            foreach ($pro_layouts as $key =>$pro_layout) {
-               $layouts[$key]=$pro_layout;
-            }
-            return $layouts;
-        }
-        $new_layouts = [
-            'layout1' => [
-                'title' => esc_html__( 'Layout 1', 'tlp-team' ),
-                'url'   => rttlp_team()->assets_url() . 'images/layouts/layout1.png',
-            ],
-            'layout3' => [
-                'title' => esc_html__( 'Layout 2', 'tlp-team' ),
-                'url'   => rttlp_team()->assets_url() . 'images/layouts/layout3.png',
-            ],
-            'layout-el-4' => [
-                'title' => esc_html__( 'Layout 3', 'tlp-team' ),
-                'url'   => rttlp_team()->assets_url() . 'images/layouts/layout4.png',
-            ],
-            'layout-el-6' => [
-                'title' => esc_html__( 'Layout 4', 'tlp-team' ),
-                'url'   => rttlp_team()->assets_url() . 'images/layouts/layout6.png',
-            ],
-            'layout7' => [
-                'title'  => esc_html__( 'Layout 5', 'tlp-team' ),
-                'url'    => rttlp_team()->assets_url() . 'images/layouts/layout7.png',
-            ],
-            'layout-el-8' => [
-                'title'  => esc_html__( 'Layout 6', 'tlp-team' ),
-                'url'    => rttlp_team()->assets_url() . 'images/layouts/layout8.png',
-            ],
-            'layout9'   =>[
-                'title'  => esc_html__( 'Layout 7', 'tlp-team' ),
-                'url'    => rttlp_team()->assets_url() . 'images/layouts/layout9.png',
-            ],
-            'layout-el-10' =>[
-                'title'  => esc_html__( 'Layout 8', 'tlp-team' ),
-                'url'    => rttlp_team()->assets_url() . 'images/layouts/layout10.png',
-            ],
-            'layout11'   =>[
-                'title'  => esc_html__( 'Layout 9', 'tlp-team' ),
-                'url'    => rttlp_team()->assets_url() . 'images/layouts/layout11.png',
-            ],
-            'layout12'   =>[
-                'title'  => esc_html__( 'Layout 10', 'tlp-team' ),
-                'url'    => rttlp_team()->assets_url() . 'images/layouts/layout12.png',
-            ],
-            'layout13'   =>[
-                'title'  => esc_html__( 'Layout 11', 'tlp-team' ),
-                'url'    => rttlp_team()->assets_url() . 'images/layouts/layout13.png',
-            ],
-            'layout14'   =>[
-                'title'  => esc_html__( 'Layout 12', 'tlp-team' ),
-                'url'    => rttlp_team()->assets_url() . 'images/layouts/layout14.png',
-            ],
-            'layout15'   =>[
-                'title'  => esc_html__( 'Layout 13', 'tlp-team' ),
-                'url'    => rttlp_team()->assets_url() . 'images/layouts/layout15.png',
-            ],
-            'layout16' => [
-                'title' => esc_html__( 'Layout 14', 'tlp-team' ),
-                'url'   => rttlp_team()->assets_url() . 'images/layouts/layout3.png',
-            ],
-            'layout17' => [
-                'title' => esc_html__( 'Layout 15', 'tlp-team' ),
-                'url'   => rttlp_team()->assets_url() . 'images/layouts/layout3.png',
-            ],
-            'layout18' => [
-                'title' => esc_html__( 'Layout 16', 'tlp-team' ),
-                'url'   => rttlp_team()->assets_url() . 'images/layouts/layout3.png',
-            ],
-            'special01'  =>[
-                'title'  => esc_html__( 'Special 01', 'tlp-team' ),
-                'url'    => rttlp_team()->assets_url() . 'images/layouts/special01.png',
-            ],
+		if ( ! $status ) {
+			$pro_layouts = Fns::el_pro_grid_layouts(); //show pro layouts on free plugin
+			foreach ( $pro_layouts as $key => $pro_layout ) {
+				$layouts[ $key ] = $pro_layout;
+			}
+
+			return $layouts;
+		}
+		$new_layouts = [
+			'layout1'      => [
+				'title' => esc_html__( 'Layout 1', 'tlp-team' ),
+				'url'   => rttlp_team()->assets_url() . 'images/layouts/layout1.png',
+			],
+			'layout3'      => [
+				'title' => esc_html__( 'Layout 2', 'tlp-team' ),
+				'url'   => rttlp_team()->assets_url() . 'images/layouts/layout3.png',
+			],
+			'layout-el-4'  => [
+				'title' => esc_html__( 'Layout 3', 'tlp-team' ),
+				'url'   => rttlp_team()->assets_url() . 'images/layouts/layout4.png',
+			],
+			'layout-el-6'  => [
+				'title' => esc_html__( 'Layout 4', 'tlp-team' ),
+				'url'   => rttlp_team()->assets_url() . 'images/layouts/layout6.png',
+			],
+			'layout7'      => [
+				'title' => esc_html__( 'Layout 5', 'tlp-team' ),
+				'url'   => rttlp_team()->assets_url() . 'images/layouts/layout7.png',
+			],
+			'layout-el-8'  => [
+				'title' => esc_html__( 'Layout 6', 'tlp-team' ),
+				'url'   => rttlp_team()->assets_url() . 'images/layouts/layout8.png',
+			],
+			'layout9'      => [
+				'title' => esc_html__( 'Layout 7', 'tlp-team' ),
+				'url'   => rttlp_team()->assets_url() . 'images/layouts/layout9.png',
+			],
+			'layout-el-10' => [
+				'title' => esc_html__( 'Layout 8', 'tlp-team' ),
+				'url'   => rttlp_team()->assets_url() . 'images/layouts/layout10.png',
+			],
+			'layout11'     => [
+				'title' => esc_html__( 'Layout 9', 'tlp-team' ),
+				'url'   => rttlp_team()->assets_url() . 'images/layouts/layout11.png',
+			],
+			'layout12'     => [
+				'title' => esc_html__( 'Layout 10', 'tlp-team' ),
+				'url'   => rttlp_team()->assets_url() . 'images/layouts/layout12.png',
+			],
+			'layout13'     => [
+				'title' => esc_html__( 'Layout 11', 'tlp-team' ),
+				'url'   => rttlp_team()->assets_url() . 'images/layouts/layout13.png',
+			],
+			'layout14'     => [
+				'title' => esc_html__( 'Layout 12', 'tlp-team' ),
+				'url'   => rttlp_team()->assets_url() . 'images/layouts/layout14.png',
+			],
+			'layout15'     => [
+				'title' => esc_html__( 'Layout 13', 'tlp-team' ),
+				'url'   => rttlp_team()->assets_url() . 'images/layouts/layout15.png',
+			],
+			'layout16'     => [
+				'title' => esc_html__( 'Layout 14', 'tlp-team' ),
+				'url'   => rttlp_team()->assets_url() . 'images/layouts/layout3.png',
+			],
+			'layout17'     => [
+				'title' => esc_html__( 'Layout 15', 'tlp-team' ),
+				'url'   => rttlp_team()->assets_url() . 'images/layouts/layout3.png',
+			],
+			'layout18'     => [
+				'title' => esc_html__( 'Layout 16', 'tlp-team' ),
+				'url'   => rttlp_team()->assets_url() . 'images/layouts/layout3.png',
+			],
+			'special01'    => [
+				'title' => esc_html__( 'Special 01', 'tlp-team' ),
+				'url'   => rttlp_team()->assets_url() . 'images/layouts/special01.png',
+			],
 
 
-        ];
+		];
 
 		return $new_layouts;
 	}
@@ -159,6 +161,7 @@ class FilterHooks {
 	 * List Layouts
 	 *
 	 * @param array $layouts Layouts.
+	 *
 	 * @return array
 	 */
 	public function listLayouts( $layouts ) {
@@ -177,6 +180,7 @@ class FilterHooks {
 	 * Slider Layouts
 	 *
 	 * @param array $layouts Layouts.
+	 *
 	 * @return array
 	 */
 	public function sliderLayouts( $layouts ) {
@@ -188,8 +192,8 @@ class FilterHooks {
 			'is_pro' => $status,
 		];
 
-		for ( $i = 3; $i < 12; $i++ ) {
-			$layouts[ "carousel{$i}" ] = [
+		for ( $i = 3; $i < 12; $i ++ ) {
+			$layouts["carousel{$i}"] = [
 				'title'  => esc_html( 'Carousel ' ) . $i,
 				'url'    => rttlp_team()->assets_url() . "images/layouts/carousel{$i}.png",
 				'is_pro' => $status,
@@ -203,6 +207,7 @@ class FilterHooks {
 	 * Isotope Layouts
 	 *
 	 * @param array $layouts Layouts.
+	 *
 	 * @return array
 	 */
 	public function isotopeLayouts( $layouts ) {
@@ -244,8 +249,8 @@ class FilterHooks {
 			'is_pro' => $status,
 		];
 
-		for ( $i = 7; $i < 11; $i++ ) {
-			$layouts[ "isotope{$i}" ] = [
+		for ( $i = 7; $i < 11; $i ++ ) {
+			$layouts["isotope{$i}"] = [
 				'title'  => esc_html( 'Isotope ' ) . ( $i + 1 ),
 				'url'    => rttlp_team()->assets_url() . "images/layouts/isotope{$i}.png",
 				'is_pro' => $status,
@@ -259,6 +264,7 @@ class FilterHooks {
 	 * Layout Controls
 	 *
 	 * @param object $obj Variable.
+	 *
 	 * @return array
 	 */
 	public function layoutControls( $obj ) {
@@ -282,6 +288,7 @@ class FilterHooks {
 	 * Slider items
 	 *
 	 * @param object $obj Variable.
+	 *
 	 * @return array
 	 */
 	public function slideItems( $obj ) {
@@ -306,9 +313,11 @@ class FilterHooks {
 	 * Category Controls
 	 *
 	 * @param object $obj Variable.
+	 *
 	 * @return array
 	 */
 	public function taxControls( $obj ) {
+
 		$obj->elControls[] = [
 			'type'        => 'select2',
 			'id'          => $obj->elPrefix . 'filter_department',
@@ -338,6 +347,7 @@ class FilterHooks {
 	 * Image Controls
 	 *
 	 * @param object $obj Variable.
+	 *
 	 * @return array
 	 */
 	public function imageControls( $obj ) {
@@ -359,6 +369,7 @@ class FilterHooks {
 	 * Pagination Controls
 	 *
 	 * @param object $obj Variable.
+	 *
 	 * @return array
 	 */
 	public function paginationControls( $obj ) {
@@ -383,6 +394,7 @@ class FilterHooks {
 	 * Pagination Controls
 	 *
 	 * @param object $obj Variable.
+	 *
 	 * @return array
 	 */
 	public function isoPaginationControls( $obj ) {
@@ -410,6 +422,7 @@ class FilterHooks {
 	 * Link Controls
 	 *
 	 * @param object $obj Variable.
+	 *
 	 * @return array
 	 */
 	public function linksControls( $obj ) {
@@ -434,10 +447,10 @@ class FilterHooks {
 	 * Visibility Controls
 	 *
 	 * @param object $obj Variable.
+	 *
 	 * @return array
 	 */
 	public function visibilityControls( $obj ) {
-
 
 
 		$obj->elControls[] = [
@@ -449,6 +462,7 @@ class FilterHooks {
 			'label_off'   => __( 'Off', 'tlp-team' ),
 			'classes'     => $this->classes,
 		];
+
 		return $obj->elControls;
 
 	}
@@ -457,6 +471,7 @@ class FilterHooks {
 	 * Filter Controls
 	 *
 	 * @param object $obj Variable.
+	 *
 	 * @return array
 	 */
 	public function filterControls( $obj ) {
@@ -484,6 +499,7 @@ class FilterHooks {
 	 * Isotope Controls
 	 *
 	 * @param object $obj Variable.
+	 *
 	 * @return array
 	 */
 	public function isotopeControls( $obj ) {
@@ -512,6 +528,7 @@ class FilterHooks {
 	 * Color Controls
 	 *
 	 * @param object $obj Variable.
+	 *
 	 * @return array
 	 */
 	public function colorControls( $obj ) {
@@ -523,6 +540,7 @@ class FilterHooks {
 				'{{WRAPPER}}' => '--rttm-primary-color: {{VALUE}}',
 			],
 		];
+
 		return $obj->elControls;
 	}
 
@@ -530,6 +548,7 @@ class FilterHooks {
 	 * Gutter Controls
 	 *
 	 * @param object $obj Variable.
+	 *
 	 * @return array
 	 */
 	public function gutterControls( $obj ) {
@@ -559,6 +578,7 @@ class FilterHooks {
 	 * Image Style Controls
 	 *
 	 * @param object $obj Variable.
+	 *
 	 * @return array
 	 */
 	public function imageStyleControls( $obj ) {

@@ -45,6 +45,7 @@ class GridView {
 	 * @return mixed
 	 */
 	public function render( $prefix, $scMeta ) {
+
 		$rand          = absint( wp_rand() );
 		$layoutID      = 'rt-team-container-' . $rand;
 		$html          = null;

@@ -81,7 +81,9 @@ class Layout {
 	 * @param object $obj Reference object.
 	 * @return static
 	 */
-	public static function listLayout( $obj ) {
+
+
+    public static function listLayout( $obj ) {
 		$obj->startSection( 'layout_section', esc_html__( 'Layouts', 'tlp-team' ), self::$tab );
 
 		$obj->elControls[] = [
@@ -443,11 +445,8 @@ class Layout {
 			],
 			'separator' => 'after',
 		];
-
 		$obj->elControls = Fns::filter( $obj->elPrefix . 'end_of_image_section', $obj );
-
 		$obj->endSection();
-
 		return new static();
 	}
 }

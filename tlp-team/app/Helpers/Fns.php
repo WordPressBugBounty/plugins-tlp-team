@@ -215,25 +215,24 @@ class Fns {
 	}
 
 
-	public static function getMemberList() {
-		$members = [];
-		$memberQ = get_posts(
-			[
-				'post_type'      => rttlp_team()->post_type,
-				'post_status'    => 'publish',
-				'posts_per_page' => - 1,
-				'orderby'        => 'title',
-				'order'          => 'ASC',
-			]
-		);
-		if ( ! empty( $memberQ ) && is_array( $memberQ ) ) {
-			foreach ( $memberQ as $member ) {
-				$members[ $member->ID ] = $member->post_title;
-			}
-		}
-
-		return $members;
-	}
+    public static function getMemberList() {
+        $members = [];
+        $memberQ = get_posts(
+            [
+                'post_type'      => rttlp_team()->post_type,
+                'post_status'    => 'publish',
+                'posts_per_page' => -1,
+                'orderby'        => 'title',
+                'order'          => 'ASC',
+            ]
+        );
+        if ( ! empty( $memberQ ) && is_array( $memberQ ) ) {
+            foreach ( $memberQ as $member ) {
+                $members[ $member->ID ] = $member->post_title;
+            }
+        }
+        return $members;
+    }
 
 	public static function getTTPShortcodeList() {
 		$scList = null;
@@ -1694,7 +1693,6 @@ class Fns {
 			if ( ! empty( $field['type'] ) ) {
 				$field['type'] = self::elFields( $field['type'] );
 			}
-
 			if ( isset( $field['mode'] ) && 'section_start' === $field['mode'] ) {
 				$id = $field['id'];
 				unset( $field['id'] );

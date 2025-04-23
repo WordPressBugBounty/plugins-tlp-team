@@ -58,6 +58,7 @@ class LoadMore {
 
 		if ( $scID && ! is_null( get_post( $scID ) ) ) {
 			$scMeta = get_post_meta( $scID );
+
 			$layout = ( isset( $scMeta['layout'][0] ) ? $scMeta['layout'][0] : 'layout1' );
 
 			if ( ! in_array( $layout, array_keys( Options::scLayout() ) ) ) {
@@ -105,7 +106,8 @@ class LoadMore {
 			/* post__not_in */
 			if ( ! empty( $scMeta['ttp_post__not_in'] ) && is_array( $scMeta['ttp_post__not_in'] ) ) {
 				// phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_post__not_in
-				$args['post__not_in'] = $scMeta['ttp_post__not_in'];
+                $GLOBALS['tlp_team_excluded_ids'] = $scMeta['ttp_post__not_in'];
+                $args['post__not_in'] = $scMeta['ttp_post__not_in'];
 			}
 			/* LIMIT */
 			$limit                  = ( ( empty( $scMeta['ttp_limit'][0] ) || $scMeta['ttp_limit'][0] === '-1' ) ? 10000000 : (int) $scMeta['limit'][0] );
@@ -438,7 +440,10 @@ class LoadMore {
 			OR {$wpdb->posts}.post_excerpt LIKE '%{$term}%')";
 		$where .= " AND {$wpdb->posts}.post_status = 'publish'";
 		$where .= " AND {$wpdb->posts}.post_type = 'team'";
-
+        if ( isset( $GLOBALS['tlp_team_excluded_ids'] ) && is_array( $GLOBALS['tlp_team_excluded_ids'] ) ) {
+            $exclude_ids = implode( ',', array_map( 'absint', $GLOBALS['tlp_team_excluded_ids'] ) );
+            $where .= " AND {$wpdb->posts}.ID NOT IN ($exclude_ids)";
+        }
 		return $where;
 	}
 

@@ -89,6 +89,7 @@
 						ttp_search = $.trim(search_wrap.find('input').val());
 					}
 					paramsRequest = {
+						'ttp_post__not_in': [20],
 						'scID': scID,
 						'order': ttp_order,
 						'order_by': ttp_order_by,

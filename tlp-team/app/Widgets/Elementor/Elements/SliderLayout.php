@@ -145,11 +145,9 @@ class SliderLayout extends ElementorWidget {
 				'gutter',
 			]
 		);
-
 		foreach ( $sections as $section ) {
 			Style::$section( $this );
 		}
-
 		return $this;
 	}
 

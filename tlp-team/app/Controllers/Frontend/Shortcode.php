@@ -129,6 +129,7 @@ class Shortcode {
 			$this->scId = $scID;
 			$scMeta     = $this->scMeta = get_post_meta( $scID );
 			$buildMetas = $this->metas( $scMeta, $scID );
+
 			$lazyLoad   = false;
 
 			if ( $buildMetas ) {
@@ -264,6 +265,7 @@ class Shortcode {
 			}
 
 			if ( $teamQuery->have_posts() ) {
+
 				if ( ! empty( $filters ) && ( $isGrid ) && ! $isSpecial ) {
 					$html .= "<div class='rt-layout-filter-container rt-clear'><div class='rt-filter-wrap rt-clear'>";
 					if ( in_array( '_taxonomy_filter', $filters ) && $taxFilter ) {
@@ -276,6 +278,7 @@ class Shortcode {
 							$isTermSelected = true;
 							$allSelect      = null;
 						}
+
 
 						if ( ! $filterType || $filterType == 'dropdown' ) {
 							$html           .= "<div class='rt-filter-item-wrap rt-tax-filter rt-filter-dropdown-wrap' data-taxonomy='{$taxFilter}'>";
@@ -376,9 +379,9 @@ class Shortcode {
 
 						$html .= '<div class="rt-filter-item-wrap rt-order-by-action rt-filter-dropdown-wrap">';
 						$html .= "<span class='order-by-default rt-filter-dropdown-default' data-order-by='{$action_orderby}'>
-                                                <span class='rt-text-order-by'>{$action_orderby_label}</span>
-                                                <i class='fa fa-angle-down rt-arrow-angle' aria-hidden='true'></i>
-                                            </span>";
+                                        <span class='rt-text-order-by'>{$action_orderby_label}</span>
+                                        <i class='fa fa-angle-down rt-arrow-angle' aria-hidden='true'></i>
+                                    </span>";
 						$html .= '<span class="order-by-dropdown rt-filter-dropdown">';
 
 						foreach ( $orders as $orderKey => $order ) {
@@ -555,7 +558,6 @@ class Shortcode {
 
 				while ( $teamQuery->have_posts() ) :
 					$teamQuery->the_post();
-
 					if ( $layout == 'layout6' ) {
 						$arg['check'] = $this->check;
 					}
