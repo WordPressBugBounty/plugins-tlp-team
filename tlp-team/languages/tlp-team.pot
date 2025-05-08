@@ -8,7 +8,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language-Team: RadiusTheme\n"
 "Last-Translator: RadiusTheme\n"
-"POT-Creation-Date: 2025-04-23 07:00+0000\n"
+"POT-Creation-Date: 2025-05-08 11:22+0000\n"
 "Report-Msgid-Bugs-To: https://radiustheme.com/tlp-team-for-wordpress/\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
@@ -129,7 +129,7 @@ msgstr ""
 msgid "Member Social Link"
 msgstr ""
 
-#: app/Controllers/Admin/Metabox/PostMeta.php:158
+#: app/Controllers/Admin/Metabox/PostMeta.php:171
 msgid "Add new"
 msgstr ""
 
@@ -401,11 +401,11 @@ msgstr ""
 msgid "Image will be at grayscale."
 msgstr ""
 
-#: app/Controllers/Hooks/FilterHooks.php:359, app/Controllers/Hooks/FilterHooks.php:413, app/Controllers/Hooks/FilterHooks.php:461, app/Controllers/Hooks/FilterHooks.php:490, app/Widgets/Elementor/Sections/Layout.php:327, app/Widgets/Elementor/Sections/Layout.php:348, app/Widgets/Elementor/Sections/Layout.php:390, app/Widgets/Elementor/Sections/Settings.php:49, app/Widgets/Elementor/Sections/Settings.php:59, app/Widgets/Elementor/Sections/Settings.php:90, app/Widgets/Elementor/Sections/Settings.php:100, app/Widgets/Elementor/Sections/Settings.php:109, app/Widgets/Elementor/Sections/Settings.php:129, app/Widgets/Elementor/Sections/Settings.php:139, app/Widgets/Elementor/Sections/Settings.php:197, app/Widgets/Elementor/Sections/Settings.php:263, app/Widgets/Elementor/Sections/Settings.php:295, app/Widgets/Elementor/Sections/Settings.php:305, app/Widgets/Elementor/Sections/Settings.php:316, app/Widgets/Elementor/Sections/Settings.php:327, app/Widgets/Elementor/Sections/Settings.php:344, app/Widgets/Elementor/Sections/Settings.php:354, app/Widgets/Elementor/Sections/Settings.php:365, app/Widgets/Elementor/Sections/Settings.php:376, app/Widgets/Elementor/Sections/Settings.php:386, app/Widgets/Elementor/Sections/Settings.php:396, app/Widgets/Elementor/Sections/Settings.php:414
+#: app/Controllers/Hooks/FilterHooks.php:359, app/Controllers/Hooks/FilterHooks.php:413, app/Controllers/Hooks/FilterHooks.php:459, app/Controllers/Hooks/FilterHooks.php:488, app/Widgets/Elementor/Sections/Layout.php:327, app/Widgets/Elementor/Sections/Layout.php:348, app/Widgets/Elementor/Sections/Layout.php:390, app/Widgets/Elementor/Sections/Settings.php:49, app/Widgets/Elementor/Sections/Settings.php:59, app/Widgets/Elementor/Sections/Settings.php:90, app/Widgets/Elementor/Sections/Settings.php:100, app/Widgets/Elementor/Sections/Settings.php:109, app/Widgets/Elementor/Sections/Settings.php:129, app/Widgets/Elementor/Sections/Settings.php:139, app/Widgets/Elementor/Sections/Settings.php:197, app/Widgets/Elementor/Sections/Settings.php:263, app/Widgets/Elementor/Sections/Settings.php:295, app/Widgets/Elementor/Sections/Settings.php:305, app/Widgets/Elementor/Sections/Settings.php:316, app/Widgets/Elementor/Sections/Settings.php:327, app/Widgets/Elementor/Sections/Settings.php:344, app/Widgets/Elementor/Sections/Settings.php:354, app/Widgets/Elementor/Sections/Settings.php:365, app/Widgets/Elementor/Sections/Settings.php:376, app/Widgets/Elementor/Sections/Settings.php:386, app/Widgets/Elementor/Sections/Settings.php:396, app/Widgets/Elementor/Sections/Settings.php:414
 msgid "On"
 msgstr ""
 
-#: app/Controllers/Hooks/FilterHooks.php:360, app/Controllers/Hooks/FilterHooks.php:414, app/Controllers/Hooks/FilterHooks.php:462, app/Controllers/Hooks/FilterHooks.php:491, app/Widgets/Elementor/Sections/Layout.php:328, app/Widgets/Elementor/Sections/Layout.php:349, app/Widgets/Elementor/Sections/Layout.php:391, app/Widgets/Elementor/Sections/Settings.php:50, app/Widgets/Elementor/Sections/Settings.php:60, app/Widgets/Elementor/Sections/Settings.php:91, app/Widgets/Elementor/Sections/Settings.php:101, app/Widgets/Elementor/Sections/Settings.php:110, app/Widgets/Elementor/Sections/Settings.php:130, app/Widgets/Elementor/Sections/Settings.php:140, app/Widgets/Elementor/Sections/Settings.php:198, app/Widgets/Elementor/Sections/Settings.php:264, app/Widgets/Elementor/Sections/Settings.php:296, app/Widgets/Elementor/Sections/Settings.php:306, app/Widgets/Elementor/Sections/Settings.php:317, app/Widgets/Elementor/Sections/Settings.php:328, app/Widgets/Elementor/Sections/Settings.php:345, app/Widgets/Elementor/Sections/Settings.php:355, app/Widgets/Elementor/Sections/Settings.php:366, app/Widgets/Elementor/Sections/Settings.php:377, app/Widgets/Elementor/Sections/Settings.php:387, app/Widgets/Elementor/Sections/Settings.php:397, app/Widgets/Elementor/Sections/Settings.php:415
+#: app/Controllers/Hooks/FilterHooks.php:360, app/Controllers/Hooks/FilterHooks.php:414, app/Controllers/Hooks/FilterHooks.php:460, app/Controllers/Hooks/FilterHooks.php:489, app/Widgets/Elementor/Sections/Layout.php:328, app/Widgets/Elementor/Sections/Layout.php:349, app/Widgets/Elementor/Sections/Layout.php:391, app/Widgets/Elementor/Sections/Settings.php:50, app/Widgets/Elementor/Sections/Settings.php:60, app/Widgets/Elementor/Sections/Settings.php:91, app/Widgets/Elementor/Sections/Settings.php:101, app/Widgets/Elementor/Sections/Settings.php:110, app/Widgets/Elementor/Sections/Settings.php:130, app/Widgets/Elementor/Sections/Settings.php:140, app/Widgets/Elementor/Sections/Settings.php:198, app/Widgets/Elementor/Sections/Settings.php:264, app/Widgets/Elementor/Sections/Settings.php:296, app/Widgets/Elementor/Sections/Settings.php:306, app/Widgets/Elementor/Sections/Settings.php:317, app/Widgets/Elementor/Sections/Settings.php:328, app/Widgets/Elementor/Sections/Settings.php:345, app/Widgets/Elementor/Sections/Settings.php:355, app/Widgets/Elementor/Sections/Settings.php:366, app/Widgets/Elementor/Sections/Settings.php:377, app/Widgets/Elementor/Sections/Settings.php:387, app/Widgets/Elementor/Sections/Settings.php:397, app/Widgets/Elementor/Sections/Settings.php:415
 msgid "Off"
 msgstr ""
 
@@ -441,39 +441,39 @@ msgstr ""
 msgid "Pop Up"
 msgstr ""
 
-#: app/Controllers/Hooks/FilterHooks.php:459
+#: app/Controllers/Hooks/FilterHooks.php:457
 msgid "Show Team Member Skills ?"
 msgstr ""
 
-#: app/Controllers/Hooks/FilterHooks.php:460
+#: app/Controllers/Hooks/FilterHooks.php:458
 msgid "Switch on to show team member skills."
 msgstr ""
 
-#: app/Controllers/Hooks/FilterHooks.php:488
+#: app/Controllers/Hooks/FilterHooks.php:486
 msgid "Show Search Filter?"
 msgstr ""
 
-#: app/Controllers/Hooks/FilterHooks.php:489
+#: app/Controllers/Hooks/FilterHooks.php:487
 msgid "Switch on to show search filter."
 msgstr ""
 
-#: app/Controllers/Hooks/FilterHooks.php:516
+#: app/Controllers/Hooks/FilterHooks.php:514
 msgid "Isotope Taxonomy Filter"
 msgstr ""
 
-#: app/Controllers/Hooks/FilterHooks.php:517
+#: app/Controllers/Hooks/FilterHooks.php:515
 msgid "Please select the filter taxonomy source."
 msgstr ""
 
-#: app/Controllers/Hooks/FilterHooks.php:538, app/Helpers/Options.php:527
+#: app/Controllers/Hooks/FilterHooks.php:536, app/Helpers/Options.php:527
 msgid "Primary Color"
 msgstr ""
 
-#: app/Controllers/Hooks/FilterHooks.php:566
+#: app/Controllers/Hooks/FilterHooks.php:564
 msgid "Element/Box Gutter"
 msgstr ""
 
-#: app/Controllers/Hooks/FilterHooks.php:589, app/Widgets/Elementor/Sections/Style.php:227, app/Widgets/Elementor/Sections/Style.php:391, app/Widgets/Elementor/Sections/Style.php:532, app/Widgets/Elementor/Sections/Style.php:714, app/Widgets/Elementor/Sections/Style.php:833, app/Widgets/Elementor/Sections/Style.php:950, app/Widgets/Elementor/Sections/Style.php:1067, app/Widgets/Elementor/Sections/Style.php:1355, app/Widgets/Elementor/Sections/Style.php:1715, app/Widgets/Elementor/Sections/Style.php:1927
+#: app/Controllers/Hooks/FilterHooks.php:587, app/Widgets/Elementor/Sections/Style.php:227, app/Widgets/Elementor/Sections/Style.php:391, app/Widgets/Elementor/Sections/Style.php:532, app/Widgets/Elementor/Sections/Style.php:714, app/Widgets/Elementor/Sections/Style.php:833, app/Widgets/Elementor/Sections/Style.php:950, app/Widgets/Elementor/Sections/Style.php:1067, app/Widgets/Elementor/Sections/Style.php:1355, app/Widgets/Elementor/Sections/Style.php:1715, app/Widgets/Elementor/Sections/Style.php:1927
 msgid "Margin"
 msgstr ""
 

@@ -40,7 +40,7 @@ class ProfileImage {
 		$id      = isset( $_REQUEST['id'] ) ? absint( $_REQUEST['id'] ) : 0;
 		$post_id = isset( $_REQUEST['post_ID'] ) ? absint( $_REQUEST['post_ID'] ) : 0;
 
-        if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! ( current_user_can( 'manage_options' ) || current_user_can( 'edit_pages' ) ) ) {
             wp_send_json( [
                 'error' => $error,
                 'msg'   => $msg,

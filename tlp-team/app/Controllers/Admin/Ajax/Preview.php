@@ -41,7 +41,7 @@ class Preview {
 		$msg   = $html = $scID = null;
 		$error = true;
 
-        if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! ( current_user_can( 'manage_options' ) || current_user_can( 'edit_pages' ) ) ) {
             wp_send_json( [
                 'error' => $error,
                 'msg'   => esc_html__( 'Permission denied', 'tlp-team' ),

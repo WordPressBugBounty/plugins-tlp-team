@@ -155,6 +155,8 @@ while ( have_posts() ) :
 					if ( ! empty( $sLink ) && is_array( $sLink ) && in_array( 'social', $fields ) ) {
 						$html .= '<div class="social-icons">';
 						foreach ( $sLink as $id => $itemLink ) {
+
+
 							$lURL = ! empty( $itemLink['url'] ) ? $itemLink['url'] : null;
 							$lID  = ! empty( $itemLink['id'] ) ? esc_html( $itemLink['id'] ) : null;
 

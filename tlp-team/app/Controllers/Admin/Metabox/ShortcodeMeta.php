@@ -368,7 +368,7 @@ class ShortcodeMeta
     public function save_team_sc_meta_data($post_id, $post, $update)
     {
 
-        if ( ! current_user_can( 'manage_options' ) ) {
+	    if ( ! ( current_user_can( 'manage_options' ) || current_user_can( 'edit_pages' ) ) ) {
             return $post_id;
         }
 

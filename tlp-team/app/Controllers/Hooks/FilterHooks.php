@@ -439,7 +439,6 @@ class FilterHooks {
 			'condition'   => [ $obj->elPrefix . 'detail_page_link' => [ 'yes' ] ],
 			'classes'     => $this->classes,
 		];
-
 		return $obj->elControls;
 	}
 
@@ -451,7 +450,6 @@ class FilterHooks {
 	 * @return array
 	 */
 	public function visibilityControls( $obj ) {
-
 
 		$obj->elControls[] = [
 			'type'        => 'switch',
