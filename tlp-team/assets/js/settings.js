@@ -477,12 +477,25 @@
 
 	function paginationEffect() {
 		var pagination = $("#ttp_pagination").is(':checked');
+
 		if (pagination) {
 			$(".tlp-field-holder.ttp-pagination-item").show();
 		} else {
 			$(".tlp-field-holder.ttp-pagination-item,.tlp-field-holder.ttp_link_target").not('.pagination').hide();
 		}
+		toggleLoadMoreField();
+
+		$('#ttp_pagination_type input[type=radio]').on('change', toggleLoadMoreField);
+		$('#ttp_pagination').on('change', toggleLoadMoreField);
 	}
+	function toggleLoadMoreField() {
+		const selectedValue = $('#ttp_pagination_type input[type=radio]:checked').val();
+		const isPaginationChecked = $('#ttp_pagination').is(':checked');
+
+		const shouldShow = selectedValue === 'load_more' && isPaginationChecked;
+		$('.tlp-field-holder.ttp-load-more-item').toggle(shouldShow);
+	}
+
 
 	function featureImageEffect() {
 		if ($("#ttp_image").is(':checked')) {
@@ -499,12 +512,17 @@
 		} else {
 			$(".tlp-field-holder.ttp_detail_page_link_type,.tlp-field-holder.ttp_link_target,.tlp-field-holder.ttp_popup_type").hide();
 		}
-		linkTypeEffect();
+		if (detailPageLink) {
+			linkTypeEffect();
+		}
+
 	}
 
 	function linkTypeEffect() {
+
 		var linkType = $("#ttp_detail_page_link_type input[name='ttp_detail_page_link_type']:checked").val();
-		if (linkType == "new_page" || linkType == "external_link") {
+
+		if (  (linkType == "new_page" || linkType == "external_link")) {
 			$(".tlp-field-holder.ttp_link_target").show();
 			$(".tlp-field-holder.ttp_popup_type").hide();
 		} else {

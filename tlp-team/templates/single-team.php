@@ -35,7 +35,7 @@ while ( have_posts() ) :
 	$web_url         = get_post_meta( $post->ID, 'web_url', true );
 	$telephone       = get_post_meta( $post->ID, 'telephone', true );
 	$mobile          = get_post_meta( $post->ID, 'mobile', true );
-	$fax          = get_post_meta( $post->ID, 'fax', true );
+	$fax             = get_post_meta( $post->ID, 'fax', true );
 	$location        = get_post_meta( $post->ID, 'location', true );
 	$experience_year = get_post_meta( $post->ID, 'experience_year', true );
 	$short_bio       = get_post_meta( $post->ID, 'short_bio', true );
@@ -49,13 +49,26 @@ while ( have_posts() ) :
 	$tlp_skill       = $tlpSkill ? unserialize( $tlpSkill ) : [];
 	$exp             = null;
 
-	$designation = wp_strip_all_tags(
-		get_the_term_list(
-			get_the_ID(),
-			rttlp_team()->taxonomies['designation'],
-			null,
-			', '
-		)
+
+	function get_team_terms( $post_id, $taxonomy) {
+		return wp_strip_all_tags(
+			get_the_term_list(
+				$post_id,
+				$taxonomy,
+				null,
+				', '
+			)
+		);
+	}
+
+	$post_id = get_the_ID();
+	$designation = get_team_terms(
+		$post_id,
+		rttlp_team()->taxonomies['designation'],
+	);
+	$department = get_team_terms(
+		$post_id,
+		rttlp_team()->taxonomies['department'],
 	);
 
 	$tag_line                 = get_post_meta( $post->ID, 'ttp_tag_line', true );
@@ -68,7 +81,7 @@ while ( have_posts() ) :
 		<div class="rt-row">
 			<article id="post-<?php the_ID(); ?>" <?php post_class( 'tlp-single-detail' ); ?>>
 				<div class="<?php echo esc_attr( $image_area ); ?> tlp-member-feature-img">
-					<div data-title="Loading ..." class="rt-content-loader ttp-pre-loader">
+					<div  class="rt-content-loader ttp-pre-loader">
 						<?php
 						Fns::print_html( Fns::memberDetailGallery( get_the_ID() ) );
 						?>
@@ -90,6 +103,10 @@ while ( have_posts() ) :
 
 					if ( $designation && in_array( 'designation', $fields ) ) {
 						$html .= '<div class="tlp-position">' . $designation . $exp . '</div>';
+					}
+
+					if ( $department && in_array( 'department', $fields ) ) {
+						$html .= '<div class="tlp-position">' . $department . '</div>';
 					}
 
 					if ( $tag_line && in_array( 'ttp_tag_line', $fields ) ) {
@@ -147,7 +164,7 @@ while ( have_posts() ) :
 					if ( is_array( $tlp_skill ) && ! empty( $tlp_skill ) && in_array( 'skill', $fields ) ) {
 						$html .= '<div class="tlp-team-skill">';
 						foreach ( $tlp_skill as $id => $skill ) {
-							$html .= "<div class='skill_name'>" . esc_html( $skill['id'] ) . "</div><div class='skill-prog' title='" . esc_attr( $skill['percent'] ) . "%'><div class='fill' data-progress-animation='" . esc_attr( $skill['percent'] ) . "%'><span class='rt-percent'>". esc_html( $skill['percent'] ) ."%</span>  </div></div>";
+							$html .= "<div class='skill_name'>".esc_html( $skill['id'] )."</div><div class='skill-prog' title='" . esc_attr( $skill['percent'] ) . "%'><div class='fill' data-progress-animation='" . esc_attr( $skill['percent'] ) . "%'><span class='rt-percent'>". esc_html( $skill['percent'] ) ."%</span>  </div></div>";
 						}
 						$html .= '</div>';
 					}
@@ -205,7 +222,7 @@ while ( have_posts() ) :
 									break;
 
 								case 'skype':
-									$icon_class = 'fab fa-skype';
+									$icon_class = 'fa-solid fa-user-plus';
 									break;
 
 								case 'whatsapp':

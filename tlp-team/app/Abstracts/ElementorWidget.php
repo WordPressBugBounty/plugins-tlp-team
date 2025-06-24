@@ -7,8 +7,10 @@
 
 namespace RT\Team\Abstracts;
 
+use Elementor\Plugin;
 use RT\Team\Helpers\Fns;
 use Elementor\Widget_Base as Elementor;
+use Rttmp\Helpers\Functions;
 
 // Do not allow directly accessing this file.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -76,11 +78,11 @@ abstract class ElementorWidget extends Elementor {
 	 * @param array $args default arg.
 	 */
 	public function __construct( $data = [], $args = null ) {
+        parent::__construct( $data, $args );
 		$this->elCategory = 'rttm-elementor-widgets';
 		$this->elPrefix   = 'rttm_el_';
 		$this->proLabel   =  '<span class="rttm-pro-label">'.__('Pro','tlp-team').'</span>';
 
-		parent::__construct( $data, $args );
 	}
 
 	/**
@@ -118,7 +120,12 @@ abstract class ElementorWidget extends Elementor {
 	public function get_categories() {
 		return [ $this->elCategory ];
 	}
-
+    public function is_builder_mode() {
+        return Functions::is_builder_preview() || $this->is_edit_mode();
+    }
+    public function is_edit_mode() {
+        return Plugin::$instance->preview->is_preview_mode() || Plugin::$instance->editor->is_edit_mode();
+    }
 	/**
 	 * Elementor Promotional section controls.
 	 *
@@ -173,7 +180,6 @@ abstract class ElementorWidget extends Elementor {
 
 		Fns::addElControls( $this->elControls, $this );
 
-        error_log( print_r( $this->elControls, true ), 3, __DIR__.'/log.txt');
 	}
 
 	/**

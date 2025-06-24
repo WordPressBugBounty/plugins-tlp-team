@@ -67,15 +67,18 @@
     });
 
     function renderTlpTeamPreview() {
-        if ($("#tlp_team_sc_settings_meta").length) {
-            var data = $("#tlp_team_sc_settings_meta").find('input[name],select[name],textarea[name]').serialize();
-            TlpTeamPreviewAjaxCall(null, 'tlpTeamPreviewAjaxCall', data, function (data) {
-                if (!data.error) {
-                    $("#tlp-team-preview-container").html(data.data);
-                    renderLayout();
-                }
-            });
-        }
+        setTimeout(function() {
+            if ($("#tlp_team_sc_settings_meta").length) {
+                var data = $("#tlp_team_sc_settings_meta").find('input[name],select[name],textarea[name]').serialize();
+
+                TlpTeamPreviewAjaxCall(null, 'tlpTeamPreviewAjaxCall', data, function (data) {
+                    if (!data.error) {
+                        $("#tlp-team-preview-container").html(data.data);
+                        renderLayout();
+                    }
+                });
+            }
+        }, 100);
     }
     function renderLayout() {
         var elementThumbInstances = [];

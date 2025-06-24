@@ -53,8 +53,12 @@ class Style {
 	 * @param object $obj Reference object.
 	 * @return static
 	 */
-	public static function name( $obj ) {
-		$condition = [ $obj->elPrefix . 'team_name' => [ 'yes' ] ];
+	public static function name( $obj,$conditional = true ) {
+        if ( $conditional ) {
+            $condition = [ $obj->elPrefix . 'team_name' => [ 'yes' ] ];
+        }else{
+            $condition = [];
+        }
 
 		$obj->startSection( 'name_section', esc_html__( 'Name', 'tlp-team' ), self::$tab, [], $condition );
 		$obj->elHeading( $obj->elPrefix . 'name_typography_note', __( 'Typography', 'tlp-team' ) );
@@ -63,7 +67,7 @@ class Style {
 			'mode'     => 'group',
 			'type'     => 'typography',
 			'id'       => $obj->elPrefix . 'name_typography',
-			'selector' => '{{WRAPPER}} .single-team-area h3, {{WRAPPER}} .rt-elementor-container h3, {{WRAPPER}} .rt-elementor-container .layout11 .single-team-area .tlp-title h3, {{WRAPPER}} .rt-elementor-container .special01 .rt-special-wrapper .rt-row h3',
+			'selector' => '{{WRAPPER}} .single-team-area h3, {{WRAPPER}} .rt-elementor-container h3, {{WRAPPER}} .rt-elementor-container .layout11 .single-team-area .tlp-title h3, {{WRAPPER}} .rt-elementor-container .special01 .rt-special-wrapper .rt-row h3,{{WRAPPER}} .rttmp-builder-team-details .tlp-member-title',
 		];
 
 		$obj->elControls[] = [
@@ -86,7 +90,7 @@ class Style {
 				],
 			],
 			'selectors' => [
-				'{{WRAPPER}} .single-team-area h3, {{WRAPPER}} .rt-elementor-container h3, {{WRAPPER}} .rt-elementor-container .layout11 .single-team-area .tlp-title h3, {{WRAPPER}} .rt-elementor-container .special01 .rt-special-wrapper .rt-row h3' => 'text-align: {{VALUE}}',
+				'{{WRAPPER}} .single-team-area h3, {{WRAPPER}} .rt-elementor-container h3, {{WRAPPER}} .rt-elementor-container .layout11 .single-team-area .tlp-title h3, {{WRAPPER}} .rt-elementor-container .special01 .rt-special-wrapper .rt-row h3,{{WRAPPER}} .rttmp-builder-team-details .tlp-member-title' => 'text-align: {{VALUE}}',
 			],
 		];
 
@@ -100,7 +104,7 @@ class Style {
 			'id'        => $obj->elPrefix . 'name_color',
 			'label'     => esc_html__( 'Color', 'tlp-team' ),
 			'selectors' => [
-				'{{WRAPPER}} .single-team-area h3, {{WRAPPER}} .rt-elementor-container h3, {{WRAPPER}} .rt-elementor-container .layout11 .single-team-area .tlp-title h3, {{WRAPPER}} .rt-elementor-container .layout13 .single-team-area .tlp-overlay h3, {{WRAPPER}} .rt-elementor-container .layout14 .rt-grid-item .tlp-overlay h3, {{WRAPPER}} .rt-elementor-container .special01 .rt-special-wrapper .rt-row h3, {{WRAPPER}} .rt-elementor-container .carousel8 .rt-grid-item .tlp-overlay h3, {{WRAPPER}} .rt-elementor-container .carousel9 .single-team-area .tlp-overlay h3,{{WRAPPER}} .rt-elementor-container .layout17 .single-team-area .tlp-title h3 a,{{WRAPPER}} .rt-elementor-container .layout17 .single-team-area .tlp-title h3' => 'color: {{VALUE}}',
+				'{{WRAPPER}} .single-team-area h3, {{WRAPPER}} .rt-elementor-container h3, {{WRAPPER}} .rt-elementor-container .layout11 .single-team-area .tlp-title h3, {{WRAPPER}} .rt-elementor-container .layout13 .single-team-area .tlp-overlay h3, {{WRAPPER}} .rt-elementor-container .layout14 .rt-grid-item .tlp-overlay h3, {{WRAPPER}} .rt-elementor-container .special01 .rt-special-wrapper .rt-row h3, {{WRAPPER}} .rt-elementor-container .carousel8 .rt-grid-item .tlp-overlay h3, {{WRAPPER}} .rt-elementor-container .carousel9 .single-team-area .tlp-overlay h3,{{WRAPPER}} .rt-elementor-container .layout17 .single-team-area .tlp-title h3 a,{{WRAPPER}} .rt-elementor-container .layout17 .single-team-area .tlp-title h3,{{WRAPPER}} .rttmp-builder-team-details .tlp-member-title' => 'color: {{VALUE}}',
 			],
 		];
 
@@ -109,7 +113,7 @@ class Style {
 			'id'        => $obj->elPrefix . 'name_bg_color',
 			'label'     => esc_html__( 'Background Color', 'tlp-team' ),
 			'selectors' => [
-				'{{WRAPPER}} .single-team-area h3, {{WRAPPER}} .rt-elementor-container h3, {{WRAPPER}} .rt-elementor-container .layout11 .single-team-area .tlp-title h3' => 'background-color: {{VALUE}}',
+				'{{WRAPPER}} .single-team-area h3, {{WRAPPER}} .rt-elementor-container h3, {{WRAPPER}} .rt-elementor-container .layout11 .single-team-area .tlp-title h3,{{WRAPPER}} .rttmp-builder-team-details .tlp-member-title' => 'background-color: {{VALUE}}',
 			],
 		];
 
@@ -151,7 +155,7 @@ class Style {
 			'id'        => $obj->elPrefix . 'name_hover_color',
 			'label'     => esc_html__( 'Hover Color', 'tlp-team' ),
 			'selectors' => [
-				'{{WRAPPER}} .single-team-area h3:hover, {{WRAPPER}} .rt-elementor-container h3:hover, {{WRAPPER}} .rt-elementor-container .layout11 .single-team-area .tlp-title h3:hover, {{WRAPPER}} .rt-elementor-container .layout13 .single-team-area .tlp-overlay h3:hover, {{WRAPPER}} .rt-elementor-container .layout14 .rt-grid-item .tlp-overlay h3:hover, {{WRAPPER}} .rt-elementor-container .special01 .rt-special-wrapper .rt-row h3:hover, {{WRAPPER}} .rt-elementor-container .carousel8 .rt-grid-item .tlp-overlay h3:hover, {{WRAPPER}} .rt-elementor-container .carousel9 .single-team-area .tlp-overlay h3:hover,{{WRAPPER}} .rt-elementor-container .layout17 .single-team-area:hover .tlp-title h3 a,{{WRAPPER}} .rt-elementor-container .layout17 .single-team-area:hover .tlp-title h3' => 'color: {{VALUE}}',
+				'{{WRAPPER}} .single-team-area h3:hover, {{WRAPPER}} .rt-elementor-container h3:hover, {{WRAPPER}} .rt-elementor-container .layout11 .single-team-area .tlp-title h3:hover, {{WRAPPER}} .rt-elementor-container .layout13 .single-team-area .tlp-overlay h3:hover, {{WRAPPER}} .rt-elementor-container .layout14 .rt-grid-item .tlp-overlay h3:hover, {{WRAPPER}} .rt-elementor-container .special01 .rt-special-wrapper .rt-row h3:hover, {{WRAPPER}} .rt-elementor-container .carousel8 .rt-grid-item .tlp-overlay h3:hover, {{WRAPPER}} .rt-elementor-container .carousel9 .single-team-area .tlp-overlay h3:hover,{{WRAPPER}} .rt-elementor-container .layout17 .single-team-area:hover .tlp-title h3 a,{{WRAPPER}} .rt-elementor-container .layout17 .single-team-area:hover .tlp-title h3,{{WRAPPER}} .rttmp-builder-team-details .tlp-member-title:hover' => 'color: {{VALUE}}',
 			],
 		];
 
@@ -160,7 +164,7 @@ class Style {
 			'id'        => $obj->elPrefix . 'name_hover_bg_color',
 			'label'     => esc_html__( 'Hover Background Color', 'tlp-team' ),
 			'selectors' => [
-				'{{WRAPPER}} .single-team-area h3:hover, {{WRAPPER}} .rt-elementor-container h3:hover, {{WRAPPER}} .rt-elementor-container .layout11 .single-team-area .tlp-title h3:hover' => 'background-color: {{VALUE}}',
+				'{{WRAPPER}} .single-team-area h3:hover, {{WRAPPER}} .rt-elementor-container h3:hover, {{WRAPPER}} .rt-elementor-container .layout11 .single-team-area .tlp-title h3:hover,{{WRAPPER}} .rttmp-builder-team-details .tlp-member-title:hover' => 'background-color: {{VALUE}}',
 			],
 		];
 
@@ -194,7 +198,7 @@ class Style {
 			'type'     => 'border',
 			'label'    => esc_html__( 'Border', 'tlp-team' ),
 			'id'       => $obj->elPrefix . 'name_border',
-			'selector' => '{{WRAPPER}} .single-team-area h3, {{WRAPPER}} .rt-elementor-container h3',
+			'selector' => '{{WRAPPER}} .single-team-area h3, {{WRAPPER}} .rt-elementor-container h3,{{WRAPPER}} .rttmp-builder-team-details .tlp-member-title',
 		];
 
 		$obj->elControls[] = [
@@ -203,7 +207,7 @@ class Style {
 			'label'     => __( 'Hover Color', 'tlp-team' ),
 			'condition' => [ $obj->elPrefix . 'name_border_border!' => [ '' ] ],
 			'selectors' => [
-				'{{WRAPPER}} .single-team-area h3:hover, {{WRAPPER}} .rt-elementor-container h3:hover' => 'border-color: {{VALUE}}',
+				'{{WRAPPER}} .single-team-area h3:hover, {{WRAPPER}} .rt-elementor-container h3:hover,{{WRAPPER}} .rttmp-builder-team-details .tlp-member-title' => 'border-color: {{VALUE}}',
 			],
 		];
 
@@ -216,7 +220,7 @@ class Style {
 			'label'      => esc_html__( 'Padding', 'tlp-team' ),
 			'size_units' => [ 'px', '%', 'em' ],
 			'selectors'  => [
-				'{{WRAPPER}} .single-team-area h3, {{WRAPPER}} .rt-elementor-container h3' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}} !important;',
+				'{{WRAPPER}} .single-team-area h3, {{WRAPPER}} .rt-elementor-container h3,{{WRAPPER}} .rttmp-builder-team-details .tlp-member-title' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}} !important;',
 			],
 		];
 
@@ -227,7 +231,7 @@ class Style {
 			'label'      => esc_html__( 'Margin', 'tlp-team' ),
 			'size_units' => [ 'px', '%', 'em' ],
 			'selectors'  => [
-				'{{WRAPPER}} .single-team-area h3, {{WRAPPER}} .rt-elementor-container h3' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}} !important;',
+				'{{WRAPPER}} .single-team-area h3, {{WRAPPER}} .rt-elementor-container h3,{{WRAPPER}} .rttmp-builder-team-details .tlp-member-title' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}} !important;',
 			],
 		];
 
@@ -239,7 +243,7 @@ class Style {
 			'size_units' => [ 'px', '%', 'em' ],
 			'condition'  => [ $obj->elPrefix . 'layout' => [ 'layout10', 'carousel5' ] ],
 			'selectors'  => [
-				'{{WRAPPER}} .rt-elementor-container .layout10 .tlp-overlay .tlp-title h3' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}} !important;',
+				'{{WRAPPER}} .rt-elementor-container .layout10 .tlp-overlay .tlp-title h3,{{WRAPPER}} .rttmp-builder-team-details .tlp-member-title' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}} !important;',
 			],
 		];
 

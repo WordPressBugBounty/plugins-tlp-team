@@ -6,6 +6,11 @@ body .elementor-panel .elementor-tab-control-settings a::before {
     content: "\e92c";
 }
 
+.elementor-element .icon {
+    height: 43px;
+ /*Builder widgets Icon*/
+}
+
 .elementor-element .icon .rttm-element::before {
     content: "";
     width: 50px;
@@ -50,6 +55,74 @@ body .elementor-panel .elementor-tab-control-settings a::before {
     padding: 3px 5px 3px;
     color: #fff;
     font-weight: bold;
+}
+
+.elementor-element .icon .icon-rttmp-builder-team-title:before {
+    background-image: url("../images/icons/team_name.svg");
+}
+
+.elementor-element .icon .icon-rttmp-builder-team-image:before {
+    background-image: url("../images/icons/team_image.svg");
+}
+
+.elementor-element .icon .icon-rttmp-builder-team-bio:before {
+    background-image: url("../images/icons/team_bio.svg");
+}
+
+.elementor-element .icon .icon-rttmp-builder-team-short-bio:before {
+    background-image: url("../images/icons/team_short_bio.svg");
+}
+
+.elementor-element .icon .icon-rttmp-builder-team-department:before {
+    background-image: url("../images/icons/team_department.svg");
+}
+
+.elementor-element .icon .icon-rttmp-builder-team-designation:before {
+    background-image: url("../images/icons/team_designation.svg");
+}
+
+.elementor-element .icon .icon-rttmp-builder-team-experience:before {
+    background-image: url("../images/icons/team_experience.svg");
+}
+
+.elementor-element .icon .icon-rttmp-builder-team-contact-list:before {
+    background-image: url("../images/icons/team_contact_list.svg");
+}
+
+.elementor-element .icon .icon-rttmp-builder-team-social-icons:before {
+    background-image: url("../images/icons/team_social_icons.svg");
+}
+
+.elementor-element .icon .icon-rttmp-builder-team-buttons:before {
+    background-image: url("../images/icons/team_buttons.svg");
+}
+
+.elementor-element .icon .icon-rttmp-builder-team-skill:before {
+    background-image: url("../images/icons/team_skill.svg");
+}
+
+.elementor-element .icon .icon-rttmp-builder-team-tag-line:before {
+    background-image: url("../images/icons/team_tag_line.svg");
+}
+
+.elementor-element .icon .icon-rttmp-builder-team-qualification:before {
+    background-image: url("../images/icons/team_qualification.svg");
+}
+
+.elementor-element .icon .icon-rttmp-builder-team-professionals:before {
+    background-image: url("../images/icons/team_professionals.svg");
+}
+
+.elementor-element .icon .icon-rttmp-builder-team-expertise:before {
+    background-image: url("../images/icons/team_expertise.svg");
+}
+
+.elementor-element .icon .icon-rttmp-builder-team-comments:before {
+    background-image: url("../images/icons/team_comments.svg");
+}
+
+.elementor-element .icon .icon-rttmp-builder-team-author-post:before {
+    background-image: url("../images/icons/team_author_post.svg");
 }
 
 .elementor-control[class*=elementor-control-rttm_el] .elementor-control-title {

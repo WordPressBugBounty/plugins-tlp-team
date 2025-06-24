@@ -79,6 +79,13 @@ if ( ! class_exists( RttlpTeam::class ) ) {
 		 */
 		public $plugin_path;
 
+        /**
+         * Theme Name.
+         *
+         * @var string
+         */
+        public $current_theme;
+
 		/**
 		 * Pro path.
 		 *
@@ -109,6 +116,7 @@ if ( ! class_exists( RttlpTeam::class ) ) {
 			$this->shortCodePT       = 'team-sc';
 			$this->version           = defined( 'WP_DEBUG' ) && WP_DEBUG ? time() : TLP_TEAM_VERSION;
 			$this->migration_version = '3.0.3';
+            $this->current_theme = wp_get_theme()->get( 'Template' ) ? wp_get_theme()->get( 'Template' ) : ( wp_get_theme()->get( 'TextDomain' ) ? wp_get_theme()->get( 'TextDomain' ) : strtolower( str_replace( ' ', '', wp_get_theme()->get( 'Name' ) ) ) );
 
 			$this->options = [
 				'settings'          => 'tlp_team_settings',

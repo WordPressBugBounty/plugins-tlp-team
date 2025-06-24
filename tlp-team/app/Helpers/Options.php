@@ -132,7 +132,7 @@ class Options {
 			'envelope-o' => esc_html__( 'Email', 'tlp-team' ),
 			'globe'      => esc_html__( 'Website', 'tlp-team' ),
 			'xing'       => esc_html__( 'Xing', 'tlp-team' ),
-			'skype'      => esc_html__( 'Skype', 'tlp-team' ),
+			'skype'      => esc_html__( 'Teams', 'tlp-team' ),
 			'whatsapp'   => esc_html__( 'Whatsapp', 'tlp-team' ),
 			'telegram'   => esc_html__( 'Telegram', 'tlp-team' ),
 			'github'     => esc_html__( 'Github', 'tlp-team' ),
@@ -161,6 +161,7 @@ class Options {
 		$sc_avaiable_fiels = [
 			'name'         => esc_html__( 'Name', 'tlp-team' ),
 			'designation'  => esc_html__( 'Designation', 'tlp-team' ),
+			'department'   => esc_html__( 'Department', 'tlp-team' ),
 			'short_bio'    => esc_html__( 'Short biography', 'tlp-team' ),
 			'content'      => esc_html__( 'Content Details', 'tlp-team' ),
 			'email'        => esc_html__( 'Email', 'tlp-team' ),
@@ -315,7 +316,7 @@ class Options {
 			'ttp_pagination_type'           => [
 				'type'        => 'radio',
 				'label'       => esc_html__( 'Pagination type', 'tlp-team' ),
-				'holderClass' => 'ttp-pagination-item ttp-hidden',
+				'holderClass' => 'ttp-pagination-item pagination-type ttp-hidden',
 				'alignment'   => 'vertical',
 				'is_pro'      => true,
 				'default'     => 'pagination',
@@ -766,6 +767,7 @@ class Options {
 				'value'       => ! empty( $settings['detail_page_fields'] ) ? $settings['detail_page_fields'] : [
 					'name',
 					'designation',
+					'department',
 					'short_bio',
 					'email',
 					'web_url',

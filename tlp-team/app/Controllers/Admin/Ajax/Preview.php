@@ -358,6 +358,7 @@ class Preview {
 			];
 			$teamQuery          = new \WP_Query( $args );
 			$containerDataAttr .= " data-sc-id='{$scID}'";
+
 			$html              .= Fns::layoutStyleGenerator( $layoutID, $cssMeta, $scID );
 			$html              .= "<div class='rt-container-fluid rt-team-container ".esc_attr($containerClass)."' id='{$layoutID}' {$containerDataAttr}'>";
 

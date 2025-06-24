@@ -436,7 +436,7 @@ class Fns {
 		if ( ! $post_id ) {
 			return;
 		}
-		$html     = null;
+		$html     = '';
 		$settings = get_option( rttlp_team()->options['settings'] );
 		$fields   = isset( $settings['detail_page_fields'] ) ? $settings['detail_page_fields'] : [];
 		$image_ids = get_post_meta( $post_id, 'tlp_team_gallery' );
@@ -983,7 +983,7 @@ class Fns {
 						$icon_class = 'fab fa-xing';
 						break;
 					case 'skype':
-						$icon_class = 'fab fa-skype';
+						$icon_class = 'fa-solid fa-user-plus';
 						break;
 					case 'whatsapp':
 						$icon_class = 'fab fa-whatsapp';
@@ -1014,7 +1014,6 @@ class Fns {
 
 		$css  = null;
 		$css .= '<style>';
-
 		// Variable
 		if ( $scID ) {
 
@@ -1401,6 +1400,7 @@ class Fns {
 
 		// Name
 		if ( ! empty( $name ) ) {
+
 			$cCss  = null;
 			$cCss .= ! empty( $name['color'] ) ? 'color:' . $name['color'] . ';' : null;
 			$cCss .= ! empty( $name['align'] ) ? 'text-align:' . $name['align'] . ';' : null;
@@ -1457,6 +1457,7 @@ class Fns {
 			$cCss .= ! empty( $email['color'] ) ? 'color:' . $email['color'] . ';' : null;
 			$cCss .= ! empty( $email['size'] ) ? 'font-size:' . $email['size'] . 'px;' : null;
 			$cCss .= ! empty( $email['weight'] ) ? 'font-weight:' . $email['weight'] . ';' : null;
+			$cCss .= ! empty( $email['align'] ) ? 'text-align:' . $email['align'] . ';' : null;
 			$css  .= "#{$layoutID} .tlp-email, #{$layoutID} a .tlp-email{ {$cCss} }";
 		}
 
@@ -1466,6 +1467,7 @@ class Fns {
 			$cCss .= ! empty( $web_url['color'] ) ? 'color:' . $web_url['color'] . ';' : null;
 			$cCss .= ! empty( $web_url['size'] ) ? 'font-size:' . $web_url['size'] . 'px;' : null;
 			$cCss .= ! empty( $web_url['weight'] ) ? 'font-weight:' . $web_url['weight'] . ';' : null;
+            $cCss .= ! empty( $web_url['align'] ) ? 'text-align:' . $web_url['align'] . ';' : null;
 			$css  .= "#{$layoutID} .tlp-url{{$cCss}}";
 		}
 
@@ -1475,6 +1477,7 @@ class Fns {
 			$cCss .= ! empty( $telephone['color'] ) ? 'color:' . $telephone['color'] . ';' : null;
 			$cCss .= ! empty( $telephone['size'] ) ? 'font-size:' . $telephone['size'] . 'px;' : null;
 			$cCss .= ! empty( $telephone['weight'] ) ? 'font-weight:' . $telephone['weight'] . ';' : null;
+            $cCss .= ! empty( $telephone['align'] ) ? 'text-align:' . $telephone['align'] . ';' : null;
 			$css  .= "#{$layoutID} .tlp-phone{{$cCss}}";
 		}
 		// mobile
@@ -1483,6 +1486,7 @@ class Fns {
 			$cCss .= ! empty( $mobile['color'] ) ? 'color:' . $mobile['color'] . ';' : null;
 			$cCss .= ! empty( $mobile['size'] ) ? 'font-size:' . $mobile['size'] . 'px;' : null;
 			$cCss .= ! empty( $mobile['weight'] ) ? 'font-weight:' . $mobile['weight'] . ';' : null;
+            $cCss .= ! empty( $mobile['align'] ) ? 'text-align:' . $mobile['align'] . ';' : null;
 			$css  .= "#{$layoutID} .tlp-mobile{{$cCss}}";
 		}
 		// Fax
@@ -1491,6 +1495,7 @@ class Fns {
 			$cCss .= ! empty( $fax['color'] ) ? 'color:' . $fax['color'] . ';' : null;
 			$cCss .= ! empty( $fax['size'] ) ? 'font-size:' . $fax['size'] . 'px;' : null;
 			$cCss .= ! empty( $fax['weight'] ) ? 'font-weight:' . $fax['weight'] . ';' : null;
+            $cCss .= ! empty( $fax['align'] ) ? 'text-align:' . $fax['align'] . ';' : null;
 			$css  .= "#{$layoutID} .tlp-fax{{$cCss}}";
 		}
 
@@ -1500,6 +1505,7 @@ class Fns {
 			$cCss .= ! empty( $location['color'] ) ? 'color:' . $location['color'] . ';' : null;
 			$cCss .= ! empty( $location['size'] ) ? 'font-size:' . $location['size'] . 'px;' : null;
 			$cCss .= ! empty( $location['weight'] ) ? 'font-weight:' . $location['weight'] . ';' : null;
+            $cCss .= ! empty( $location['align'] ) ? 'text-align:' . $location['align'] . ';' : null;
 			$css  .= "#{$layoutID} .tlp-location{{$cCss}}";
 		}
 
@@ -1987,7 +1993,33 @@ class Fns {
 		}
 		return $allowed_html;
 	}
+    public static function print_validated_html_tag( $tag ) {
+        self::print_html( self::get_validated_html_tag( $tag ) );
+    }
+    public static function get_validated_html_tag( $tag ) {
+        $allowed_html_wrapper_tags = [
+            'a',
+            'article',
+            'aside',
+            'button',
+            'div',
+            'footer',
+            'h1',
+            'h2',
+            'h3',
+            'h4',
+            'h5',
+            'h6',
+            'header',
+            'main',
+            'nav',
+            'p',
+            'section',
+            'span',
+        ];
 
+        return in_array( strtolower( $tag ), $allowed_html_wrapper_tags, true ) ? $tag : 'div';
+    }
     public static function get_header($wp_version) {
         if ( version_compare( $wp_version, '5.9', '>=' ) && function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) { ?>
             <!doctype html>

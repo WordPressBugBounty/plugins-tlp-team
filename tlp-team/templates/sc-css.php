@@ -308,7 +308,7 @@ if ( ! empty( $button ) ) {
 
 // Gutter.
 if ( $gutter ) {
-	$css    .= "$selector [class*='rt-col-']:not(.paddingl0,.paddingr0 ) {";
+	$css    .= "$selector [class*='rt-col-']:not(.paddingl0,.rt-paddingr0 ) {";
 	$css    .= "padding-left : {$gutter}px;";
 	$css    .= "padding-right : {$gutter}px;";
 	$bGutter = $gutter * 2;
@@ -425,6 +425,7 @@ if ( ! empty( $email ) ) {
 	$emailcCss  = ! empty( $email['color'] ) ? 'color:' . $email['color'] . ';' : null;
 	$emailcCss .= ! empty( $email['size'] ) ? 'font-size:' . $email['size'] . 'px;' : null;
 	$emailcCss .= ! empty( $email['weight'] ) ? 'font-weight:' . $email['weight'] . ';' : null;
+	$emailcCss .= ! empty( $email['align'] ) ? 'text-align:' . $email['align'] . ';' : null;
 
 	if ( $emailcCss ) {
 		$css .= "$selector .tlp-email, $selector .layout6 .contact-info i, $selector .tlp-email a{ {$emailcCss} }";
@@ -437,7 +438,7 @@ if ( ! empty( $web_url ) ) {
 	$web_urlcCss  = ! empty( $web_url['color'] ) ? 'color:' . $web_url['color'] . ';' : null;
 	$web_urlcCss .= ! empty( $web_url['size'] ) ? 'font-size:' . $web_url['size'] . 'px;' : null;
 	$web_urlcCss .= ! empty( $web_url['weight'] ) ? 'font-weight:' . $web_url['weight'] . ';' : null;
-
+    $web_urlcCss .= ! empty( $web_url['align'] ) ? 'text-align:' . $web_url['align'] . ';' : null;
 	if ( $web_urlcCss ) {
 		$css .= "$selector .tlp-web-url a,$selector .tlp-url{{$web_urlcCss}}";
 	}
@@ -449,7 +450,7 @@ if ( ! empty( $telephone ) ) {
 	$telephonecss  = ! empty( $telephone['color'] ) ? 'color:' . $telephone['color'] . ';' : null;
 	$telephonecss .= ! empty( $telephone['size'] ) ? 'font-size:' . $telephone['size'] . 'px;' : null;
 	$telephonecss .= ! empty( $telephone['weight'] ) ? 'font-weight:' . $telephone['weight'] . ';' : null;
-
+    $telephonecss .= ! empty( $telephone['align'] ) ? 'text-align:' . $telephone['align'] . ';' : null;
 	if ( $telephonecss ) {
 		$css .= "$selector .tlp-phone a,$selector .tlp-phone{{$telephonecss}}";
 	}
@@ -460,7 +461,7 @@ if ( ! empty( $mobile ) ) {
 	$mobilecCss  = ! empty( $mobile['color'] ) ? 'color:' . $mobile['color'] . ';' : null;
 	$mobilecCss .= ! empty( $mobile['size'] ) ? 'font-size:' . $mobile['size'] . 'px;' : null;
 	$mobilecCss .= ! empty( $mobile['weight'] ) ? 'font-weight:' . $mobile['weight'] . ';' : null;
-
+    $mobilecCss .= ! empty( $mobile['align'] ) ? 'text-align:' . $mobile['align'] . ';' : null;
 	if ( $mobilecCss ) {
 		$css .= "$selector .tlp-mobile{{$mobilecCss}}";
 	}
@@ -471,7 +472,7 @@ if ( ! empty( $fax ) ) {
 	$faxcCss  = ! empty( $fax['color'] ) ? 'color:' . $fax['color'] . ';' : null;
 	$faxcCss .= ! empty( $fax['size'] ) ? 'font-size:' . $fax['size'] . 'px;' : null;
 	$faxcCss .= ! empty( $fax['weight'] ) ? 'font-weight:' . $fax['weight'] . ';' : null;
-
+    $faxcCss .= ! empty( $fax['align'] ) ? 'text-align:' . $fax['align'] . ';' : null;
 	if ( $faxcCss ) {
 		$css .= "$selector .tlp-fax{{$faxcCss}}";
 	}
@@ -483,7 +484,7 @@ if ( ! empty( $location ) ) {
 	$locationcCss  = ! empty( $location['color'] ) ? 'color:' . $location['color'] . ';' : null;
 	$locationcCss .= ! empty( $location['size'] ) ? 'font-size:' . $location['size'] . 'px;' : null;
 	$locationcCss .= ! empty( $location['weight'] ) ? 'font-weight:' . $location['weight'] . ';' : null;
-
+    $locationcCss .= ! empty( $location['align'] ) ? 'text-align:' . $location['align'] . ';' : null;
 	if ( $locationcCss ) {
 		$css .= "$selector .tlp-location{{$locationcCss}}";
 	}

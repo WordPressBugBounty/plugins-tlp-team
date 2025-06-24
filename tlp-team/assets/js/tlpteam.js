@@ -1024,6 +1024,25 @@
 		new RttmSlider(this);
 		return this;
 	};
+	window.rttmpBuilderInit = {
+		initSlider: function () {
+			var $ = jQuery;
+			rtSliderInit($);
+		},
+		initLoader: function () {
+			$(".rttmp-team-builder").each(function (index) {
+				var container = $(this),
+					loader = container.find(".rt-content-loader");
+
+				loader.find('.rt-loading').fadeOut(300);
+				loader.removeClass('ttp-pre-loader');
+			});
+
+		}
+	};
+	rttmpBuilderInit.initLoader();
+	rttmpBuilderInit.initSlider()
+
 
 })(jQuery);
 

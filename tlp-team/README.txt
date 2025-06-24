@@ -2,7 +2,7 @@
 Contributors: techlabpro1
 Donate link:
 Tags: team, team showcase, team slider, team plugin, team members
-Stable tag: 5.0.4
+Stable tag: 5.0.5
 Requires at least: 5.0
 Tested up to: 6.7
 Requires PHP: 7.4
@@ -188,7 +188,7 @@ Install and Activate
 
 == 🔥 WHAT’S NEXT ==
 
-If you like The Post Grid Plugin, then consider checking out our other WordPress Plugins:
+If you like The Team Plugin, then consider checking out our other WordPress Plugins:
 
 * [The Post Grid](https://wordpress.org/plugins/the-post-grid/) – Shortcode, Gutenberg Blocks and Elementor Addon for Post Grid.
 
@@ -244,7 +244,9 @@ If you like The Post Grid Plugin, then consider checking out our other WordPress
 
 == Changelog ==
 
-= 5.0.4  ( April 28, 2025 ) =
-* Fixed: User Role Permission issue, Post Meta issue.
+= 5.0.5  ( Jun 23, 2025 ) =
+* Fixed: Department showing in team details page.
+* Fixed: Settings page dependency controls issue.
+* Fixed: Team Preview dynamic styling issue.
 
 [See changelog for all versions.](https://raw.githubusercontent.com/radiustheme/changelog/refs/heads/main/tlp-team.txt)
