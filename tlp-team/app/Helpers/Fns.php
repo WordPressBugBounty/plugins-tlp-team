@@ -478,7 +478,7 @@ class Fns {
                 $html .='</div>';
 			}
 		}
-		return $html;
+        return apply_filters( 'tlp_team_member_detail_gallery', $html, $post_id, $image_ids );
 	}
 
 	public static function memberDetailPosts( $post_id = null ) {

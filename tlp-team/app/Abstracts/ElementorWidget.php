@@ -323,6 +323,16 @@ abstract class ElementorWidget extends Elementor {
 
 		return $label . $this->proLabel;
 	}
+    public function theme_support_start(){
+        if ('solace' == rttlp_team()->current_theme) {
+            remove_action('pre_get_posts', 'solace_set_posts_per_page');
+        }
+    }
+    public function theme_support_end(){
+        if ('solace' == rttlp_team()->current_theme) {
+            add_action('pre_get_posts', 'solace_set_posts_per_page');
+        }
+    }
 
 	/**
 	 * Elementor Edit mode need some extra js for isotop reinitialize

@@ -162,9 +162,9 @@ class IsotopeLayout extends ElementorWidget {
 	 */
 	public function render() {
 		$settings = $this->get_settings_for_display();
-
+        $this->theme_support_start();
 		Fns::print_html( IsotopeView::get_instance()->render( $this->elPrefix, $settings ) );
-
+        $this->theme_support_end();
 		$this->edit_mode_script();
 	}
 }

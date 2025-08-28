@@ -2,9 +2,9 @@
 Contributors: techlabpro1
 Donate link:
 Tags: team, team showcase, team slider, team plugin, team members
-Stable tag: 5.0.5
+Stable tag: 5.0.6
 Requires at least: 5.0
-Tested up to: 6.7
+Tested up to: 6.8
 Requires PHP: 7.4
 License: GPL-2.0-or-later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -244,9 +244,9 @@ If you like The Team Plugin, then consider checking out our other WordPress Plug
 
 == Changelog ==
 
-= 5.0.5  ( Jun 23, 2025 ) =
-* Fixed: Department showing in team details page.
-* Fixed: Settings page dependency controls issue.
-* Fixed: Team Preview dynamic styling issue.
+
+= 5.0.6  ( August 28, 2025 ) =
+* Added: Solace Theme Support
+
 
 [See changelog for all versions.](https://raw.githubusercontent.com/radiustheme/changelog/refs/heads/main/tlp-team.txt)
