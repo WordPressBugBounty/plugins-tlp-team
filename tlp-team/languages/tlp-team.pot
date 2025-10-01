@@ -8,7 +8,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language-Team: RadiusTheme\n"
 "Last-Translator: RadiusTheme\n"
-"POT-Creation-Date: 2025-08-28 07:07+0000\n"
+"POT-Creation-Date: 2025-09-29 05:47+0000\n"
 "Report-Msgid-Bugs-To: https://radiustheme.com/tlp-team-for-wordpress/\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
@@ -41,7 +41,7 @@ msgstr ""
 msgid "TLP Team Shortcode"
 msgstr ""
 
-#: app/Controllers/Admin/Ajax/DefaultFilter.php:44, app/Controllers/Admin/Ajax/Preview.php:47, app/Controllers/Admin/Ajax/Settings.php:44, app/Controllers/Admin/Ajax/Skill.php:41, app/Controllers/Admin/Ajax/Social.php:43, app/Controllers/Admin/TaxSorting.php:58, app/Controllers/Admin/TaxSorting.php:136, app/Controllers/Admin/TaxSorting.php:222
+#: app/Controllers/Admin/Ajax/DefaultFilter.php:44, app/Controllers/Admin/Ajax/Preview.php:47, app/Controllers/Admin/Ajax/Settings.php:44, app/Controllers/Admin/Ajax/Shortcode.php:41, app/Controllers/Admin/Ajax/Skill.php:41, app/Controllers/Admin/Ajax/Social.php:43, app/Controllers/Admin/TaxSorting.php:58, app/Controllers/Admin/TaxSorting.php:136, app/Controllers/Admin/TaxSorting.php:222
 msgid "Permission denied"
 msgstr ""
 
@@ -109,15 +109,19 @@ msgstr ""
 msgid "Settings successfully updated"
 msgstr ""
 
-#: app/Controllers/Admin/Ajax/Shortcode.php:69
+#: app/Controllers/Admin/Ajax/Shortcode.php:48
+msgid "Security check failed"
+msgstr ""
+
+#: app/Controllers/Admin/Ajax/Shortcode.php:89
 msgid "No shortCode found."
 msgstr ""
 
-#: app/Controllers/Admin/Ajax/Shortcode.php:51, app/Widgets/Elementor/Sections/Layout.php:47
+#: app/Controllers/Admin/Ajax/Shortcode.php:71, app/Widgets/Elementor/Sections/Layout.php:47
 msgid "Select Shortcode"
 msgstr ""
 
-#: app/Controllers/Admin/Ajax/Shortcode.php:53, app/Helpers/Options.php:898, app/Helpers/Options.php:908, app/Helpers/Options.php:917, app/Helpers/Options.php:1047
+#: app/Controllers/Admin/Ajax/Shortcode.php:73, app/Helpers/Options.php:898, app/Helpers/Options.php:908, app/Helpers/Options.php:917, app/Helpers/Options.php:1047
 msgid "Default"
 msgstr ""
 

@@ -4,7 +4,7 @@
  * Plugin URI: https://radiustheme.com/tlp-team-for-wordpress/
  * Description: Team is a fully responsive and mobile friendly team member profile display plugin.
  * Author: Team Members by RadiusTheme
- * Version: 5.0.6
+ * Version: 5.0.7
  * Author URI: www.radiustheme.com
  * Text Domain: tlp-team
  * License: GPLv3
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Defining Constants.
  */
 define( 'TLP_TEAM_NAME', 'Team' );
-define( 'TLP_TEAM_VERSION', '5.0.6' );
+define( 'TLP_TEAM_VERSION', '5.0.7' );
 define( 'TLP_TEAM_PATH', plugin_dir_path(__FILE__) );
 define( 'TLP_TEAM_AUTHOR', 'RadiusTheme' );
 define( 'EDD_TLP_TEAM_STORE_URL', 'https://www.radiustheme.com' );

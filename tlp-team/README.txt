@@ -2,7 +2,7 @@
 Contributors: techlabpro1
 Donate link:
 Tags: team, team showcase, team slider, team plugin, team members
-Stable tag: 5.0.6
+Stable tag: 5.0.7
 Requires at least: 5.0
 Tested up to: 6.8
 Requires PHP: 7.4
@@ -245,8 +245,8 @@ If you like The Team Plugin, then consider checking out our other WordPress Plug
 == Changelog ==
 
 
-= 5.0.6  ( August 28, 2025 ) =
-* Added: Solace Theme Support
+= 5.0.7  ( September 29, 2025 ) =
+* Updated: Security check updated
 
 
 [See changelog for all versions.](https://raw.githubusercontent.com/radiustheme/changelog/refs/heads/main/tlp-team.txt)
