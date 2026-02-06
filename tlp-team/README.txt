@@ -2,182 +2,190 @@
 Contributors: techlabpro1
 Donate link:
 Tags: team, team showcase, team slider, team plugin, team members
-Stable tag: 5.0.7
+Stable tag: 5.0.13
 Requires at least: 5.0
-Tested up to: 6.8
+Tested up to: 6.9
 Requires PHP: 7.4
 License: GPL-2.0-or-later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Team Plugin allows you to showcase your team members in grid, slider, and filter layouts using shortcode and the Team Members Elementor addon.
+The best WordPress team plugin to showcase team members with grid, slider, and filterable layouts. Fully compatible with Elementor & Gutenberg.
 
 == Description ==
 
-[Team](https://www.radiustheme.com/downloads/tlp-team-pro-for-wordpress/) is the WordPress team plugin that facilitates the display of your team members on your site. It is fully responsive and mobile friendly, which guarantees the views across all devices. This team members WordPress plugin is user and developer-friendly, so it is easy to customize and use as you wish.
+The best WordPress team plugin to showcase team members with grid, slider, and filterable layouts. Fully compatible with Elementor & Gutenberg.
 
-With the WordPress Team plugin, you can showcase your team members in various layouts, including grids and isotope. The plugin lets you create 5 different grid and isotope layouts. You can then choose whether you want the profile images of your team members to appear in square or rounded shapes.
+[Team](https://www.radiustheme.com/downloads/tlp-team-pro-for-wordpress/) is a powerful WordPress team plugin that helps you create impressive team member showcases on your website. Whether you need a simple staff directory or an elaborate team page with filtering and slider layouts, this plugin delivers professional results without requiring any coding skills. Optimized for performance and SEO, it ensures your "Meet the Team" section looks perfect on mobile, tablet, and desktop devices.
+
 
 👉 [Shortcode Demo](https://www.radiustheme.com/demo/plugins/team/layout-1/) | [Elementor Demo](https://www.radiustheme.com/demo/plugins/team-elementor/) | [Documentation](
 https://www.radiustheme.com/docs/team/) | [Get Pro](https://www.radiustheme.com/downloads/tlp-team-pro-for-wordpress/) 👈
 
-== WordPress Team Plugin with Shortcode and Elementor Addons ==
 
-This Team members slider & showcase plugin makes the displays fully customizable, so you can create unique team showcases for your site. Its shortcode generator gives you an additional customization option and extra easy control over your layouts. You can use the plugin’s shortcode or Elementor widget to display team member profiles with grid, list, slider and isotope views.
+== Why Choose This WordPress Team Plugin? ==
 
-You can then choose one of the 5 different layouts and manage the primary color of the team showcase. Team plugin allows you to enable or disable the image option in case you deem images surplus to requirements. You can also embed the detail page link at will.
+Creating a professional team page shouldn't require hiring a developer. Team gives you everything needed to showcase your staff, partners, or crew members in minutes.
 
-With this team showcase WordPress plugin, you can add your team members easily from the admin end. It offers a widget that has settings for the number of team members you want to display. This team builder plugin gives you control over all fields, including the members name, image, position, social links, short bios, and detailed bios.
+This WordPress team plugin stands out with its combination of powerful features and ease of use. Add team members from your WordPress dashboard, choose from multiple layout options, customize colors and styling, and display your team anywhere using shortcodes or Elementor widgets.
 
-🏆 **How To Create Team Page Using ShortCode With WordPress Team Members Showcase Plugin:**
+The plugin works seamlessly with any WordPress theme and adapts perfectly to all screen sizes, from desktop monitors to mobile phones.
+
+With 10,000+ active installations and a 4.5-star rating, Team has become the go-to solution for businesses, agencies, and organizations looking to highlight their people.
+
+⭐⭐⭐⭐⭐
+[Fantastic plugin and superb support](https://wordpress.org/support/topic/fantastic-plugin-and-superb-support-4/)
+This is an excellent plugin to create professional and attractive team page, with intuitive styling and layout options. But what really makes the difference to me as a designer is the first class support from RadiusTheme. I use this plugin and Post Grid. When I have had any queries, the team replies quickly and really goes the extra mile to provide a solution to any needs. Much appreciated!
+-toolboxkate
+
+⭐⭐⭐⭐⭐
+[Very versatile and useful plugin](https://wordpress.org/support/topic/very-versatile-and-useful-plugin-2/)
+I find the Team Members Showcase Plugin to be a great solution for displaying employee information. And it is very versatile in a. how much and b. how easily I can configure and style it to my needs. And of course, kudos to the fine and friendly support.
+-Oligraph
+
+
+== Core Features of the WordPress Team Plugin ==
+
+**Multiple Display Layouts**
+
+**Grid Layouts:**  Present your team in clean, organized rows and columns. The free version includes 2 grid layouts with options for square or rounded profile images. Perfect for company about pages and staff directories.
+
+[View Grid Demo →](https://www.radiustheme.com/demo/plugins/team/layout-1/)
+
+**List Layouts:** Display team members in a vertical format that works well for detailed bios and contact information. Ideal when you want to show more information about each team member.
+
+[View List Demo →](https://www.radiustheme.com/demo/plugins/team/layout-2/)
+
+**Slider Layouts:** Showcase your team in an engaging carousel format. Visitors can browse through team members using navigation arrows or swipe gestures on mobile devices.
+
+[View Slider Demo →](https://www.radiustheme.com/demo/plugins/team/slider-layout-2/)
+
+**Isotope Filter Layouts:** Let visitors filter team members by department, role, or custom categories. This interactive layout is perfect for larger teams where users need to find specific people quickly.
+
+[View Isotope Demo →](https://www.radiustheme.com/demo/plugins/team/isotope-filter-1-2/)
+
+
+**How To Create Team Page Using ShortCode With WordPress Team Members Showcase Plugin:**
 
 [youtube https://www.youtube.com/watch?v=oJ_AYCk-iXU]
 
-🏆 **How To Create Team Page Using Elementor Addon With WordPress Team Members Showcase Plugin:**
+**How To Create Team Page Using Elementor Addon With WordPress Team Members Showcase Plugin:**
 
 [youtube https://www.youtube.com/watch?v=S4tXNPws9XY]
 
-== 🏆 Features of The WordPress Team Plugin ==
 
-👉 **Grid Layouts:** The free version of this team plugin offers 2 grid layouts on which you can showcase your team members. The Pro version has additional 15 layout variation to showcase your team members..
+== Elementor Integration ==
 
-[Live Demo](https://www.radiustheme.com/demo/plugins/team/layout-1/)
+Team includes 4 dedicated Elementor widgets that bring drag-and-drop team building to your workflow:
 
-👉 **List Layouts:** You get 1 list layout that gives your showcase a very clean look. But in Pro version has an additional list layout.
+* **Grid Widget** 17 layout variations with extensive customization
+* **List Widget** 2 styles for vertical team displays
+* **Slider Widget** 11 carousel layouts with smooth transitions
+* **Isotope Widget** 11 filterable layouts for interactive team pages
 
-[Live Demo](https://www.radiustheme.com/demo/plugins/team/layout-2/)
+Build your team section visually, preview changes in real-time, and achieve pixel-perfect results without touching code.
 
-👉 **Isotope Filter:** This meet the team plugin has 1 isotope filter layout to work with. Isotope hides and displays your team showcase items. The filter option that Team comes with ensures that only items that match it will be displayed.
-
-[Live Demo](https://www.radiustheme.com/demo/plugins/team/isotope-filter-1-2/)
-
-👉 **Slider Layout:** The slider layout that comes with Team enables you to showcase the most elegant team layout. The Pro version offer 10 more additional layouts and more ocntrol. What’s more, you can integrate eye-catching animations into your display.
-
-[Live Demo](https://www.radiustheme.com/demo/plugins/team/slider-layout-2/)
-
-👉 **Elementor Addon:** 4 Elementor Widgets are included. You can now display team members in the Elementor page easily with lots of customization options with lots of layout vations. It is easy to use using the drag & drop interface.
-
-[Live Demo](https://radiustheme.net/plugins/team-elementor/)
-
-👉 **Grid Filter PRO:** The premium version of this team members’ WordPress plugin enables you to display team the showcase items, having filtered precisely the team members you want to display.
-
-[Live Demo](https://www.radiustheme.com/demo/plugins/team/grid-filter-1/)
-
-👉 **Ordering Option:** The ordering option that you get with the Team plugin enables you to order the team showcase you display by drag & drop functionality. You can order them by date, title, or menu order. You also get to order your team members by different taxonomies.
-
-👉 **Image Size Control:** When you accumulate too many large images on your website, your site slows down massively. When you want to limit the size of the images that go on your website, this plugin helps you do just that. What’s more, Team PRO gives you the option of setting custom image sizes instead of completely round numbers.
-
-👉 **Style Control:** With this team showcase WordPress plugin, you get to control the style in which you display your team members. You can choose the styles and colors you want for your team showcase. This meet the team plugin even lets you showcase the profile images of your team members in square or round borders.
-
-👉 **Member Filter Option:** This team showcase plugin supports the display of team member sections by department or individual member. Your team members can be showcased with different filter options for your members.
-
-👉 **Social Profiles:** With this WordPress team plugin, you can showcase the social profiles of your team members. You can link various social profiles, including LinkedIn, Facebook, Twitter, and Instagram.
-
-👉 **Translation Support:** You can translate your website into any language you want without hiccups. This team showcase WordPress plugin comes with ready POT files for different languages.
-
-👉 **RTL Support:** Apart from being fully translatable, this plugin also supports translation into RTL layouts. The Team plugin supports all RTL languages, including Arabic, Hebrew, and Persian. Therefore, you can display all your team members with notes in their particular language preferences.
+[Elementor Demo →](https://radiustheme.net/plugins/team-elementor/)
 
 
-== 🏆 How to use WordPress Team Plugin==
+== Shortcode Generator ==
+The visual shortcode generator puts you in complete control:
 
-👉 **Shortcode Generator with Layout Preview:** The Team plugin comes with a shortcode generator that allows you to create or generate unlimited shortcodes easily. You can then use the shortcodes to display team members on any page or post. Here is how you go about it:
+* **Select Layout** Choose your preferred display style
+* **Configure Filtering** Set which members to show or hide
+* **Choose Fields** Pick what information to display (name, bio, social links, contact details)
+* **Style It** Customize colors, spacing, and typography
 
-1.	Fill your customers’ data in the right fields before generating shortcodes using the styling, layout selection, fields’ selection, and styling tabs. Save the shortcode.
-
-2.	Call up the shortcode before copying it and use it to insert your team showcase on any post or page that’s on your site easily. This superb plugin enables you to bring take a look at layout previews before publishing them on your site.
-
-**Step 1:** To Generate the shortcode first you need to select the layout from the available layout variation option. Start by choosing a layout type from the available options. With the PRO plugin, you can choose the Filters you want, with options including taxonomy filter, order, sort order (designates the descending or ascending order of the ‘order by’ parameter), and search filter and others settings.
-
-**Step 2:** Next step Filtering, Choose the members you want to display in the ‘include only’ selection. Select the members you want to hide in the ‘exclude’ part. Set limit on the number of member posts to display. Select the departments and designation you want to filter.
-
-**Step 3:** Now check the fields you want to display. The options you have include name, designation, short biography, email, web URL, telephone, mobile, fax, location, and social link.
-
-**Step 4:** Final step is styling, Select the parent class you want for adding custom CSS coding. Choose the primary color you want for your team members. Select the colors of the button background, text, hover text, hover background, active background, and border and more.
+Copy the generated shortcode and paste it anywhere—pages, posts, or widget areas.
 
 
-[Shortcode Documentation](https://www.radiustheme.com/docs/team/docs/shortcode-generate/layout/)
+== Team Member Information Fields ==
 
-👉 **Team Member Elementor Addon:**
+Add comprehensive profiles for each team member:
 
-Team Plugin Elementor addon comes with four widgets: Grid Layouts, List Layouts, Slider Layouts, and Isotope Filter Layouts. Each widget provides various layouts and customization options to help you easily create engaging team pages using Elementor.
+• Name and job title/designation
+• Department or category assignment
+• Short and detailed biography
+• Contact information (email, phone, mobile, fax)
+• Location details
+• Website URL
+• Social media profiles (LinkedIn, Facebook, Twitter, Instagram)
 
-Just drag and drop your chosen widget, tweak some settings, and your professional team page will be ready!
+== Design & Customization ==
+• Primary Color Control – Match your brand colors
+• Image Styles – Square or rounded profile photos
+• Responsive Design – Looks great on all devices
+• Typography Options – Customize fonts and text sizes
+• Spacing Control – Adjust margins and padding
+• Custom CSS Support – Advanced styling flexibility
 
-[Live Demo](https://radiustheme.net/plugins/team-elementor/)
-
-**Grid Layouts:** It enables you to show team members in a row-column arrangement. It contains total of 17 layout variations, which are entirely responsive and offer extensive customization options.
-
-**List Layouts:** Display team members in a vertical list using this List Layouts Elementor widget. It features 2 layout styles that enable you to display team members and their information in vertical (single row) or horizontal list format to enhance the visual appeal.
-
-**Slider Layouts:** This widget displays team members in a carousel-style format with sliding animations to keep visitors engaged. It comes with toal 11 layout styles to showcase team members with modern transitions.
-
-**Isotope Filter Layouts:** This widget enables you to show team members appealingly. It also allows users to filter team members based on predefined categories concurrently. It contains 11 responsive layout styles with interactive filtering options.
-
-[Elementor Addon Documentation](https://www.radiustheme.com/docs/team/docs/elementor-addons/elementor-addons/)
+== Built for Performance ==
+• Lightweight code that won't slow your site
+• Optimized database queries
+• Image size control to manage file sizes
+• Clean, semantic HTML output
 
 
-== 🏆 Available Team Fields==
+== Who Uses This WordPress Team Plugin? ==
 
-The following are the fields that you get to apply on your team member displays:
+**Businesses & Corporations:** Introduce leadership teams, departments, and staff members to build trust with customers and stakeholders.
 
-1. Title or name of the user
-2. The department or category
-3. Designation
-4. Email
-5. Telephone
-6. Mobile
-7. Fax
-8. Web
-9. Location
-10. Custom URL [PRO]
-11. Social Links [PRO]
+**Agencies & Studios:** Showcase creative teams with portfolio-style layouts that highlight individual expertise.
 
-== 🏆 Features of the Pro Version of the Team Member Plugin ==
+**Healthcare & Medical:** Display doctors, specialists, and medical staff with credentials and specializations.
 
-👉 **Layouts:** The premium version of this team builder plugin comes with additional 12 grids that have grid filter, 11 sliders, 2 lists, and 10 isotope layouts.
+**Educational Institutions:** Present faculty members, administrators, and department heads organized by subject area.
 
-[Shortcode Demo](https://www.radiustheme.com/demo/plugins/team/grid-layout-4/)
+**Nonprofits & Organizations:** Highlight board members, volunteers, and team contributors.
 
-👉 **Detail Pages Popup:** This team plugin supports multiple popups, single and smart popups on the detail pages.
+**Real Estate & Professional Services:** Feature agents, consultants, and advisors with contact information and social links.
 
-[Shortcode Demo](https://www.radiustheme.com/demo/plugins/team/grid-layout-7/)
 
-👉 **Grid Filter:** you can choose various grid layouts for filtering the team members.
+== Free vs Pro Comparison ==
 
-[Shortcode Demo](https://www.radiustheme.com/demo/plugins/team/grid-filter-1/)
+**Free Version Includes:**
+• 2 Grid layouts
+• 1 List layout
+• 1 Slider layout
+• 1 Isotope filter layout
+• 4 Elementor widgets
+• Limited styling options
+• Social profile links
+• Shortcode generator
+• Responsive design
+• Translation ready
 
-👉 **Filter by Department or Designation:** The Team plugin allows you to filter the team members by designation or department.
-Disable the ‘Show All’ Button: When displaying team members in filter or isotope layout, you can hide the ‘Show All’ button and even make a department default.
+**Pro Version Adds:**
+• 17 Grid layouts (including 12 with filters)
+• 2 List layouts
+• 11 Slider layouts
+• 11 Isotope layouts
+• Detail page popups (single, smart, multi)
+• Ajax pagination (numbered, load more, infinite scroll)
+• Masonry grid option
+• Grayscale image effects
+• Advanced filtering by department/designation
+• Custom member URLs
+• Drag & drop ordering
+• Priority support
 
-[Shortcode Demo](https://www.radiustheme.com/demo/plugins/team/grid-filter-14/)
 
-👉 **Ajax Pagination:** The Team plugin supports various paginations, including Ajax number pagination, load more, and load more on scroll.
-Gray Scale Image: Since gray scale images are more artistic, this team members WordPress plugin allows you to display your members’ profile images elegantly.
+[Upgrade to Pro →](https://www.radiustheme.com/downloads/tlp-team-pro-for-wordpress/)
 
-[Shortcode Demo](https://www.radiustheme.com/demo/plugins/team/grid-layout-14/)
 
-👉 **Masonry Grid:** You get to display your team members on masonry grid. It is more elegant than a regular grid.
+== Installation & Use ==
 
-[Shortcode Demo](https://www.radiustheme.com/demo/plugins/team/grid-layout-4-no-margin/)
+1. Install and activate Tean from the WordPress plugin repository
+2. Navigate to Team → Add New to add your first team member
+3. Fill in project details and upload a featured image
+4. Go to Team → Shortcode Generator to configure your display
+5. Copy the shortcode to any page or post
+6. Preview and publish your portfolio page
+7. For Elementor Page builder use Team plugin Elementor addon.
 
-For any bug or suggestion please mail us: support@radiustheme.com
-
-== Installation ==
-
-Install and Activate
-
-1. Unzip the downloaded 'tlp-team' zip file
-2. Upload the 'tlp-team' folder and its contents into the 'wp-content/plugins/' directory of your WordPress installation
-3. Activate 'tlp-team' from Plugins page
-
-== Implement ==
-
-1. You can call the shortcode using team plugin Gurenbreg addon.
-2. Or you can copy the shortcode and paste into page.
-3. You can use the Elementor addon
 
 = Requirements =
-* **WordPress version:** >= 4.5
-* **PHP version:** >= 5.6
+* **WordPress version:** >= 5
+* **PHP version:** >= 7.4
 
 == Need Any Help? ==
 * For any bug, support or suggestion please submit your ticket [here](https://www.radiustheme.com/ticket-support/).
@@ -200,36 +208,40 @@ If you like The Team Plugin, then consider checking out our other WordPress Plug
 
 * [Food Menu](https://wordpress.org/plugins/tlp-food-menu/) – Restaurant Menu & Online Ordering using WooCommerce.
 
+
 == Frequently Asked Questions ==
 
-= How to Use WordPress Team Plugin=
+= What is a WordPress team plugin? =
+* A WordPress team plugin is a tool that helps you create professional team member pages on your WordPress website. Instead of manually coding HTML and CSS, you can add team members through your dashboard and display them using pre-built layouts. This plugin handles the technical work while you focus on showcasing your people.
 
-* Go to `Team > Add Member`
-* Go to page or post editor insert shortcode.
+= How do I add team members in WordPress? =
+* After installing the Team plugin, go to Team > Add Member in your WordPress dashboard. Enter the team member's name, upload their photo, add their job title and biography, and include contact details or social links. Save the member, then use the shortcode generator or Elementor widget to display them on any page.
 
-= Can you add multiple team group? =
+= Can I filter team members by department? =
+* Yes. The Team plugin supports department and designation taxonomies. You can assign team members to different departments, then use isotope or grid filter layouts to let visitors filter by category. This is especially useful for organizations with multiple departments or large teams.
 
-* Yes from version 3.0.0 we allow department taxonomy so you can arrange members by department wise.
+= Does this plugin work with Elementor? =
+* Absolutely. Team includes 4 native Elementor widgets for grid, list, slider, and isotope layouts. Simply drag the widget onto your page, configure the settings in the Elementor panel, and see live previews as you customize. No shortcodes needed when using Elementor.
 
-= Can I use Team plugin with any theme? =
+= Is the Team plugin mobile responsive? =
+* Yes. All layouts are fully responsive and mobile-friendly. The plugin automatically adjusts columns and spacing based on screen size, ensuring your team page looks professional on smartphones, tablets, and desktop computers.
 
-* Yes you can use this plugin with any theme it will work. If face any issue mail our support we will help.
+= Can I display team members in a slider? =
+* Yes. The Team plugin includes carousel/slider layouts that display team members in a scrolling format. Visitors can navigate using arrows or swipe on touch devices. The Pro version offers 11 slider variations with advanced animation options.
 
-= Is this Team Plugin allow slider? =
+= How do I customize the team display colors? =
+* Use the shortcode generator's styling tab to set primary colors, button colors, hover effects, and background colors. You can also add custom CSS through the parent class option for more advanced styling.
 
-* Yes we added slider layout.
+= Does this work with any WordPress theme? =
+* The Team plugin is designed to work with any properly coded WordPress theme. It uses standard WordPress practices and outputs clean HTML that adapts to your theme's typography and container widths.
 
-= Is this Team member plugin allow filter layout? =
+= Is this plugin translation ready? =
+* Yes. The plugin includes .pot files for translation and supports RTL (right-to-left) languages including Arabic, Hebrew, and Persian. You can translate all plugin strings into your preferred language.
 
-* Yes this Team member plugin has filter layout.
+= What social profiles can I add? =
+* You can add links to LinkedIn, Facebook, Twitter/X, Instagram, and other social networks. Team members' social icons appear on their profile cards, making it easy for visitors to connect.
 
-= Is this Team showcase plugin work with multisites? =
 
-* Yes this Team showcase plugin will work with multisites.
-
-= is this Team plugin support multi-language? =
-
-* Yes this Team plugin support multi-language.
 
 == Screenshots ==
 
@@ -244,9 +256,9 @@ If you like The Team Plugin, then consider checking out our other WordPress Plug
 
 == Changelog ==
 
+= 5.0.13  ( January 23, 2026 ) =
+* Fixed: Minor Css Issue.
 
-= 5.0.7  ( September 29, 2025 ) =
-* Updated: Security check updated
 
 
 [See changelog for all versions.](https://raw.githubusercontent.com/radiustheme/changelog/refs/heads/main/tlp-team.txt)

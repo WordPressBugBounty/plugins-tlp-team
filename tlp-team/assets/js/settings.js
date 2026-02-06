@@ -290,6 +290,21 @@
 		$this.parent().addClass('active');
 		container.find($id).show();
 	});
+	jQuery(document).ready(function ($) {
+		$('#settings-tabs .rt-tab-nav li a').on('click', function (e) {
+			e.preventDefault();
+
+			const $this = $(this);
+			const target = $this.attr('href');
+
+			$('#settings-tabs .rt-tab-nav li').removeClass('active');
+			$('#settings-tabs .rt-tab-content').hide();
+
+			$this.parent('li').addClass('active');
+			$(target).fadeIn(200);
+		});
+	});
+
 
 	if (rttm.is_pro && $('.post-type-team table.posts #the-list').length) {
 		var fixHelper = function (e, ui) {

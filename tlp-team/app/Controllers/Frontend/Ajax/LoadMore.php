@@ -432,20 +432,48 @@ class LoadMore {
 		die();
 	}
 
-	function tlp_team_search_where( $where ) {
-		global $wpdb, $wp_query;
-		$term = $wpdb->esc_like( $this->s['s'] );
-		$where .= "OR ({$wpdb->posts}.post_title LIKE '%{$term}%'
-			OR {$wpdb->posts}.post_content LIKE '%{$term}%'
-			OR {$wpdb->posts}.post_excerpt LIKE '%{$term}%')";
-		$where .= " AND {$wpdb->posts}.post_status = 'publish'";
-		$where .= " AND {$wpdb->posts}.post_type = 'team'";
+//	function tlp_team_search_where( $where ) {
+//		global $wpdb, $wp_query;
+//		$term = $wpdb->esc_like( $this->s['s'] );
+//		$where .= "OR ({$wpdb->posts}.post_title LIKE '%{$term}%'
+//			OR {$wpdb->posts}.post_content LIKE '%{$term}%'
+//			OR {$wpdb->posts}.post_excerpt LIKE '%{$term}%')";
+//		$where .= " AND {$wpdb->posts}.post_status = 'publish'";
+//		$where .= " AND {$wpdb->posts}.post_type = 'team'";
+//        if ( isset( $GLOBALS['tlp_team_excluded_ids'] ) && is_array( $GLOBALS['tlp_team_excluded_ids'] ) ) {
+//            $exclude_ids = implode( ',', array_map( 'absint', $GLOBALS['tlp_team_excluded_ids'] ) );
+//            $where .= " AND {$wpdb->posts}.ID NOT IN ($exclude_ids)";
+//        }
+//		return $where;
+//	}
+    function tlp_team_search_where( $where ) {
+        global $wpdb;
+
+        $search_term = $this->s['s'];
+        $like_term = '%' . $wpdb->esc_like( $search_term ) . '%';
+
+        $where .= $wpdb->prepare(
+            " OR ({$wpdb->posts}. post_title LIKE %s
+        OR {$wpdb->posts}.post_content LIKE %s
+        OR {$wpdb->posts}.post_excerpt LIKE %s)",
+            $like_term,
+            $like_term,
+            $like_term
+        );
+
+        $where .= $wpdb->prepare(
+            " AND {$wpdb->posts}.post_status = %s AND {$wpdb->posts}. post_type = %s",
+            'publish',
+            'team'
+        );
+
         if ( isset( $GLOBALS['tlp_team_excluded_ids'] ) && is_array( $GLOBALS['tlp_team_excluded_ids'] ) ) {
             $exclude_ids = implode( ',', array_map( 'absint', $GLOBALS['tlp_team_excluded_ids'] ) );
             $where .= " AND {$wpdb->posts}.ID NOT IN ($exclude_ids)";
         }
-		return $where;
-	}
+
+        return $where;
+    }
 
 	function tlp_team_search_join( $join ) {
 		global $wpdb;

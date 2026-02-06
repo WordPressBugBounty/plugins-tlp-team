@@ -353,6 +353,7 @@ class Preview {
 				'skill'              => ( isset( $_REQUEST['skill'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_REQUEST['skill'] ) ) : null ),
 				'social'             => ( isset( $_REQUEST['social'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_REQUEST['social'] ) ) : null ),
 				'social_icon_bg'     => ( isset( $_REQUEST['social_icon_bg'] ) ? sanitize_hex_color( wp_unslash( $_REQUEST['social_icon_bg'] ) ) : null ),
+				'ttp_content_bg_color'     => ( isset( $_REQUEST['ttp_content_bg_color'] ) ? sanitize_hex_color( wp_unslash( $_REQUEST['ttp_content_bg_color'] ) ) : null ),
 				'overlay_rgba_bg'    => ( isset( $_REQUEST['overlay_rgba_bg'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_REQUEST['overlay_rgba_bg'] ) ) : null ),
 				'ttp_gutter'         => ( isset( $_REQUEST['ttp_gutter'] ) ? absint( $_REQUEST['ttp_gutter'] ) : null ),
 			];

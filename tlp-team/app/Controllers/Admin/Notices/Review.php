@@ -28,6 +28,8 @@ class Review {
 		add_action( 'admin_init', [ __CLASS__, 'rtteam_spare_me' ], 5 );
 	}
 
+
+
 	/**
 	 * Check if review notice should be shown or not
 	 *

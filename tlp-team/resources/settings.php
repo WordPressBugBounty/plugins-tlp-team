@@ -12,22 +12,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 
-<div class="wrap">
-	<h2><?php esc_html_e( 'TLP Team Settings', 'tlp-team' ); ?></h2>
+<div class="tlp-wrap">
 	<div id="tlp-team-setting-wrapper">
-		<div class="tlp-team-setting-title"><h3><?php esc_html_e( 'General settings', 'tlp-team' ); ?></h3></div>
+		<?php Fns::render_view( 'settings-header' ); ?>
 		<div class="tlp-team-setting-container">
 			<form id="tlp-team-settings">
 				<?php
 				wp_nonce_field( Fns::nonceText(), Fns::nonceID() );
 				$html  = null;
 				$html .= '<div id="settings-tabs" class="tlp-tabs rt-tab-container">';
+                $html .= '<div class="rt-settings-sidebar">';
 				$html .= '<ul class="tab-nav rt-tab-nav">
 								<li class="active"><a href="#general-settings"><i class="dashicons dashicons-admin-settings"></i>' . esc_html__( 'General Settings', 'tlp-team' ) . '</a></li>
 								<li><a href="#detail-field-selection"><i class="dashicons dashicons-editor-table"></i>' . esc_html__( 'Detail page field selection', 'tlp-team' ) . '</a></li>
 								' . apply_filters( 'rttm_license_tab', '' ) . '
 							</ul>';
+                $html .= '</div>';
 
+                $html .= '<div class="rt-settings-content">';
 				$html .= '<div id="general-settings" class="rt-tab-content" style="display: block;">';
 				$html .= Fns::rtFieldGenerator( Options::tlpTeamGeneralSettingFields() );
 				$html .= '</div>';
@@ -36,18 +38,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 				$html .= Fns::rtFieldGenerator( Options::tlpTeamDetailFieldSelection() );
 				$html .= '</div>';
 				$html .= apply_filters( 'rttm_license_tab_content', '' );
+                $html .= '<p class="rt-submit"><input type="submit" name="submit" id="tlpSaveButton" class="button button-primary rt-admin-btn" value="Save Changes"></p>';
+				$html .= '</div>';
+                if (! rttlp_team()->has_pro() ) {
+                    $html .= Fns::render_view( 'settings-promo',[],true );
+                }
+                $html .= '</div>';
 				$html .= '</div>';
 
 				Fns::print_html( $html, true );
 				?>
-				<p class="rt-submit"><input type="submit" name="submit" id="tlpSaveButton" class="button button-primary rt-admin-btn" value="Save Changes"></p>
+
 
 				<?php wp_nonce_field( Fns::nonceText(), Fns::nonceID() ); ?>
 			</form>
 			<div id="rt-response"></div>
-		</div>
-		<div class="tlp-team-setting-doc-wrap">
-			<?php Fns::rt_plugin_team_sc_pro_information(); ?>
 		</div>
 	</div>
 

@@ -31,6 +31,7 @@ class Settings {
 		add_action( 'admin_menu', [ $this, 'tlp_menu_register' ], 15 );
 
 		add_filter( 'plugin_action_links_' . plugin_basename( TLP_TEAM_PLUGIN_ACTIVE_FILE_NAME ), [ $this, 'marketing' ] );
+//        $this->remove_admin_notice();
 	}
 
 	/**
@@ -125,4 +126,17 @@ class Settings {
 
 		return $links;
 	}
+    public function remove_admin_notice() {
+
+        add_action( 'in_admin_header',
+            function () {
+                $screen = get_current_screen();
+                if ( ( ! empty( $screen->post_type ) && in_array( $screen->post_type, [rttlp_team()->post_type] ) && ($screen->base == 'team_page_tlp_team_settings' || $screen->base == 'team_page_tlp_team_get_help') )
+                ) {
+
+                    remove_all_actions( 'admin_notices' );
+                    remove_all_actions( 'all_admin_notices' );
+                }
+            }, 1000 );
+    }
 }

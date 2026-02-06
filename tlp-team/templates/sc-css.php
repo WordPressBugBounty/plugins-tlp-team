@@ -38,6 +38,7 @@ $location       = ! empty( $scMeta['location'][0] ) ? unserialize( $scMeta['loca
 $skill          = ! empty( $scMeta['skill'][0] ) ? unserialize( $scMeta['skill'][0] ) : null;
 $social_icon    = ! empty( $scMeta['social'][0] ) ? unserialize( $scMeta['social'][0] ) : null;
 $social_icon_bg = ! empty( $scMeta['social_icon_bg'][0] ) ? sanitize_text_field( $scMeta['social_icon_bg'][0] ) : null;
+$content_bg     = ! empty( $scMeta['ttp_content_bg_color'][0] ) ? sanitize_text_field( $scMeta['ttp_content_bg_color'][0] ) : null;
 $mObg           = ! empty( $scMeta['overlay_rgba_bg'][0] ) ? unserialize( $scMeta['overlay_rgba_bg'][0] ) : null;
 $itemP          = ! empty( $scMeta['overlay_padding'][0] ) ? intval( $scMeta['overlay_padding'][0] ) : null;
 $gutter         = ! empty( $scMeta['ttp_gutter'][0] ) ? absint( $scMeta['ttp_gutter'][0] ) : null;
@@ -526,6 +527,11 @@ if ( ! empty( $social_icon ) ) {
 // Social Icon bg.
 if ( $social_icon_bg ) {
 	$css .= "$selector .social-icons a,$selector .layout17 .single-team-area .social-icons a,$selector .layout17 .single-team-area .icons-wrapper a.share-icon{background:{$social_icon_bg};}";
+}
+
+// Content bg.
+if ( $content_bg ) {
+	$css .= "$selector .layout17 .single-team-area .tlp-content,$selector .layout1 .single-team-area,$selector .layout16 .single-team-area,$selector .layout3 .single-team-area,$selector .layout10 .tlp-team-item,$selector .layout18 .single-team-area .tlp-content,$selector .layout18 .single-team-area .tlp-content:after{background:{$content_bg};}";
 }
 
 if ( ! empty( $popupTextColor ) ) {

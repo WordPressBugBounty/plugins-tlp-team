@@ -274,6 +274,7 @@ class ShortcodeMeta
             rttlp_team()->shortCodePT,
             'side'
         );
+
     }
 
     public function tlp_team_sc_preview_selection()
@@ -287,8 +288,11 @@ class ShortcodeMeta
 
     public function rt_plugin_team_sc_pro_information()
     {
-
-        $html = '<div class="rt-document-box">
+        $html = '';
+        if (! rttlp_team()->has_pro() ) {
+            $html .= Fns::render_view('settings-promo', [], true);
+        }
+        $html .= '<div class="rt-document-box">
                             <div class="rt-box-icon"><i class="dashicons dashicons-media-document"></i></div>
                             <div class="rt-box-content">
                                 <h3 class="rt-box-title">Documentation</h3>
@@ -306,6 +310,7 @@ class ShortcodeMeta
                                     <a href="' . esc_url(rttlp_team()->ticket_link()) . '" target="_blank" class="rt-admin-btn">Get Support</a>
                             </div>
                         </div>';
+
 
         Fns::print_html($html);
     }

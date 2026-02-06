@@ -1035,6 +1035,7 @@ class Fns {
 			$skill          = ! empty( $scMeta['skill'][0] ) ? unserialize( $scMeta['skill'][0] ) : null;
 			$social_icon    = ! empty( $scMeta['social'][0] ) ? unserialize( $scMeta['social'][0] ) : null;
 			$social_icon_bg = ! empty( $scMeta['social_icon_bg'][0] ) ? $scMeta['social_icon_bg'][0] : null;
+			$content_bg     = ! empty( $scMeta['ttp_content_bg_color'][0] ) ? $scMeta['ttp_content_bg_color'][0] : null;
 			$mObg           = ! empty( $scMeta['overlay_rgba_bg'][0] ) ? unserialize( $scMeta['overlay_rgba_bg'][0] ) : null;
 			$itemP          = ! empty( $scMeta['overlay_padding'][0] ) ? intval( $scMeta['overlay_padding'][0] ) : null;
 			$gutter         = ! empty( $scMeta['ttp_gutter'][0] ) ? absint( $scMeta['ttp_gutter'][0] ) : null;
@@ -1058,12 +1059,14 @@ class Fns {
 			$location       = ! empty( $scMeta['location'] ) ? $scMeta['location'] : null;
 			$skill          = ! empty( $scMeta['skill'] ) ? $scMeta['skill'] : null;
 			$social_icon    = ! empty( $scMeta['social'] ) ? $scMeta['social'] : null;
+            $content_bg     = ! empty( $scMeta['ttp_content_bg_color'] ) ? $scMeta['ttp_content_bg_color'] : null;
 			$social_icon_bg = ! empty( $scMeta['social_icon_bg'] ) ? $scMeta['social_icon_bg'] : null;
 			$mObg           = ! empty( $scMeta['overlay_rgba_bg'] ) ? $scMeta['overlay_rgba_bg'] : null;
 			$itemP          = ! empty( $scMeta['overlay_padding'] ) ? intval( $scMeta['overlay_padding'] ) : null;
 			$gutter         = ! empty( $scMeta['ttp_gutter'] ) ? absint( $scMeta['ttp_gutter'] ) : null;
 
 		}
+
 		if ( $primaryColor ) {
 			$css .= "#{$layoutID} .single-team-area .overlay a.detail-popup,
 					#{$layoutID} .contact-info ul li i{";
@@ -1085,6 +1088,7 @@ class Fns {
 					#{$layoutID}.rt-team-container .layout16 .single-team-area:hover:before,
 					#{$layoutID} .special-selected-top-wrap .ttp-label,
 					#rt-smart-modal-container.rt-modal-{$scID} .rt-smart-modal-header,
+					#{$layoutID} .layout17 .single-team-area:hover .tlp-content,
 					#{$layoutID} .layout6 .tlp-info-block, #{$layoutID} .carousel9 .single-team-area .tlp-overlay{";
 			$css .= 'background:' . $primaryColor . ';';
 			$css .= '}';
@@ -1538,6 +1542,11 @@ class Fns {
 		if ( $social_icon_bg ) {
 			$css .= "#{$layoutID} .social-icons a{background:{$social_icon_bg};}";
 		}
+
+        // Content Bg
+        if ( $content_bg ) {
+            $css .= "#{$layoutID}  .layout17 .single-team-area .tlp-content,#{$layoutID}  .layout1 .single-team-area,#{$layoutID} .layout16 .single-team-area,#{$layoutID} .layout3 .single-team-area,#{$layoutID} .layout10 .tlp-team-item,#{$layoutID}  .layout18 .single-team-area .tlp-content,#{$layoutID} .layout18 .single-team-area .tlp-content:after{background:{$content_bg};}";
+        }
 
 		// Overlay
 		if ( ! empty( $mObg ) ) {

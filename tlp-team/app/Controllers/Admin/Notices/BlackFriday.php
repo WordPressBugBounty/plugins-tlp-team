@@ -24,13 +24,16 @@ class BlackFriday {
 	 * @return void
 	 */
 	protected function init() {
-		$current      = time();
-		$black_friday = mktime( 0, 0, 0, 11, 19, 2024 ) <= $current && $current <= mktime( 0, 0, 0, 1, 5, 2025 );
+		$black_friday = self::get_black_friday_time();
 		if ( ! $black_friday ) {
 			return;
 		}
 		add_action( 'admin_init', [ $this, 'bf_notice' ] );
 	}
+    public static function get_black_friday_time(){
+        $current      = time();
+        return  mktime( 0, 0, 0, 11, 12, 2025 ) <= $current && $current <= mktime( 0, 0, 0, 11, 5, 2025 );
+    }
 
 	/**
 	 * Black Friday Notice.
@@ -71,29 +74,50 @@ class BlackFriday {
                         margin-left: 2px;
                         margin-top: 15px;
                     }
+                    .rttm-black-friday .rttm-btn-wrapper .button-primary{
+                        background-color: #0022ff;
+                        border-color: #0022ff;
+                        transition: all 0.3s ease-in-out;
+                    }
+                    .rttm-black-friday .rttm-btn-wrapper .button-primary:hover{
+                        background-color: #0721c9;
+                        border-color: #0721c9;
+                    }
+                    .rttm-black-friday .rttm-btn-wrapper .button-dismiss{
+                        border-color: #0022ff;
+                        color: #0022ff;
+                        transition: all 0.3s ease-in-out;
+                    }
+                    .rttm-black-friday .rttm-btn-wrapper .button-dismiss:hover{
+                        background-color: #0721c9;
+                        border-color: #0721c9;
+                        color: #fff;
+                    }
                 </style>
                 <div class="notice notice-info is-dismissible rttm-black-friday" data-rtteamdismissable="rtteam_ny_2025"
-                    style="display:grid;grid-template-columns: 100px auto;padding-top: 25px; padding-bottom: 22px;">
+                     style="display:grid;grid-template-columns: 100px auto;padding-top: 25px; padding-bottom: 22px;background: #ECE8FF;border: 1px solid #0022ff">
+
                     <img alt="<?php echo esc_attr( $plugin_name ); ?>"
-                        src="<?php echo esc_url( rttlp_team()->assets_url() . 'images/team-pro-gif.gif' ); ?>" width="74px"
-                        height="74px" style="grid-row: 1 / 4; align-self: center;justify-self: center"/>
+                         src="<?php echo esc_url( rttlp_team()->assets_url() . 'images/team-pro-gif.gif' ); ?>" width="74px"
+                         height="74px" style="grid-row: 1 / 4; align-self: center;justify-self: center"/>
                     <h3 style="margin:0; display:flex; align-items: center"><?php echo sprintf( '%s - Black Friday ', esc_html( $plugin_name ) ); ?>
-                        <img alt="<?php echo esc_attr( $plugin_name ); ?>" src="<?php echo esc_url( rttlp_team()->assets_url() . 'images/deal.gif' ); ?>" width="40px" />
+                        <img alt="<?php echo esc_attr( $plugin_name ); ?>" src="<?php echo esc_url( rttlp_team()->assets_url() . 'images/deal.gif' ); ?>" width="40px" /> <span style="color:red;margin-left:5px"> up to  40%</span>
                     </h3>
 
                     <p style="margin:0 0 2px;">
 
                         <?php
-                            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-                            echo __( "🚀 Exciting News: <b>Team Pro </b> Black Friday sale is now live!", "tlp-team" );
+                        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                        echo __( "🚀 Exciting News: <b>Team Pro’s Black Friday Sale Has Officially Begun! </b>", "tlp-team" );
                         ?>
-                        Get the plugin today and enjoy discounts up to <b> 50%.</b>
+                        Grab the plugin today and unlock unbeatable discounts before they’re gone!
                     </p>
 
                     <p style="margin:0;" class="rttm-btn-wrapper">
-                        <a class="button button-primary" href="<?php echo esc_url( $download_link ); ?>" target="_blank">Buy Now</a>
+                        <a class="button button-primary" href="<?php echo esc_url( $download_link ); ?>" target="_blank">Get The Deal</a>
                         <a class="button button-dismiss" href="#">Dismiss</a>
                     </p>
+
                 </div>
 					<?php
 			}

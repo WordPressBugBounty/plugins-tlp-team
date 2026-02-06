@@ -822,7 +822,6 @@ class Options {
 	public static function tlpTeamGeneralSettingFields() {
 
 		$settings = get_option( rttlp_team()->options['settings'] );
-
 		return [
 			'slug' => [
 				'type'        => 'text',
@@ -830,7 +829,7 @@ class Options {
 				'id'          => 'team-slug',
 				'description' => esc_html__( 'Slug configuration', 'tlp-team' ),
 				'attr'        => "style='width:100px;'",
-				'value'       => ! empty( $settings['slug'] ) ? trim( $settings['slug'] ) : null,
+				'value'       => ! empty( $settings['slug'] ) ? trim( $settings['slug'] ) : 'team',
 			],
 
 			'resume_btn_text' => [

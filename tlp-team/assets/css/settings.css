@@ -260,7 +260,7 @@ body.post-type-team-sc div#minor-publishing-actions {
 .checkbox-group.vertical > label,
 .radio-group.vertical > label {
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: 7px;
 }
 
 .sc-meta-field .field .sc-member-select {
@@ -303,67 +303,66 @@ body.post-type-team-sc div#minor-publishing-actions {
 
 /* Nav  style  */
 ul.rt-tab-nav {
-  padding: 0;
-  display: flex;
-  border-bottom: 1px solid #dee2e6;
+  padding: 20px 0;
+  border-radius: 7px 0 0 7px;
   margin: 0;
+  position: sticky;
+  top: 32px;
+  background: #d0d0ff;
+  z-index: 999;
 }
 
 ul.rt-tab-nav li {
-  cursor: pointer;
-  display: inline-block;
-  margin-bottom: -1px;
+  padding: 0 0 4px 15px;
+  margin-right: -2px;
+  overflow: hidden;
+  margin-bottom: 0;
 }
 
-ul.rt-tab-nav li + li {
-  margin-left: 2px;
+#tlp_team_sc_settings_meta .rt-tab-nav{
+  border-bottom-left-radius: 0;
 }
-
 ul.rt-tab-nav li a {
   position: relative;
-  font-size: 15px;
-  color: #ffffff;
-  background-color: #ffffff;
-  padding: 10px 25px;
-  border-radius: 4px 4px 0 0;
-  display: inline-block;
+  font-size: 14px;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  min-height: 46px;
+  font-weight: 500;
+  padding-left: 18px;
   text-decoration: none;
-  z-index: 2;
   transition: all 0.3s ease-in-out;
+  color:#111;
+  border-radius: 7px 0 0 7px;
+  margin-right: -4px;
+  text-transform: capitalize;
+}
+ul.rt-tab-nav li a i{
+  color:#0022ff;
+  transition: all 0.3s ease-in-out;
+}
+ul.rt-tab-nav li:hover a,
+ul.rt-tab-nav li.active a {
+  color:#0022ff;
+  outline: none;
+  border: none;
+  background: #fff;
+}
+.rt-settings-header .settings-menu svg{
+  color:#0022ff;
+}
+.rt-settings-header .settings-menu a{
+  color:#1d1d1d!important;
 }
 
 ul.rt-tab-nav li:focus {
   outline: none;
 }
 
-ul.rt-tab-nav li a:after {
-  content: "";
-  height: 100%;
-  width: 100%;
-  background-color: #5d3dfd;
-  border-radius: 4px 4px 0 0;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: -1;
-  transition: all 0.3s ease-in-out;
-}
 
-ul.rt-tab-nav li.active a {
-  color: #5d3dfd;
-}
-
-ul.rt-tab-nav li.active a:after {
-  height: 10%;
-}
-
-ul.rt-tab-nav li a i {
-  margin-right: 10px;
-}
-
-ul.rt-tab-nav li:last-child a {
-  border-right: 0;
+#tlp_team_sc_settings_meta .rt-tab-nav{
+  display: flex;
 }
 
 ul.rt-tab-nav li a:focus {
@@ -380,7 +379,12 @@ ul.rt-tab-nav li a:focus {
 .tlp-field-holder.full .tlp-field {
   width: 100%;
 }
-
+.team_page_tlp_team_settings #wpfooter{
+  position:unset;
+}
+.team_page_tlp_team_settings .tlp-tabs .rt-submit{
+  margin-top: auto;
+}
 .rt-tab-content .custom-css {
   border: 1px solid #dfdfdf;
   -moz-border-radius: 3px;
@@ -409,7 +413,9 @@ input.large-text.code.tlp-code-sc {
 }
 
 .rt-tab-content .tlp-label {
-  font-weight: bold;
+  font-weight: 500;
+  font-size: 14px;
+  color: #333;
   margin-bottom: 5px;
   flex: 0 0 200px;
 }
@@ -466,6 +472,24 @@ input.large-text.code.tlp-code-sc {
   font-weight: bold;
 }
 
+#tlp_team_sc_settings_meta .rt-tab-nav li{
+  margin:0;
+  overflow: unset;
+}
+#tlp_team_sc_settings_meta .rt-tab-nav li a{
+  margin:0;
+  min-height: unset;
+  padding: 7px 15px;
+  border: none;
+  border-radius: 4px;
+  color:#000;
+}
+#tlp_team_sc_settings_meta .rt-tab-nav li a i{
+  color:#0022ff;
+}
+#tlp_team_sc_settings_meta .rt-tab-nav li{
+  padding: 0 0 4px 6px;
+}
 /* image field */
 .rt-image-preview {
   display: inline-block;
@@ -617,15 +641,124 @@ ul#tlp-team-gallery li span.tlp_loading {
 }
 
 /* settings */
-div#tlp-team-setting-wrapper {
-  display: flex;
-  flex-wrap: wrap;
-}
-
+/*div#tlp-team-setting-wrapper {*/
+/*  display: flex;*/
+/*  flex-wrap: wrap;*/
+/*}*/
+/*#tlp-team-setting-wrapper .notice{*/
+/*  display: none!important;*/
+/*}*/
 .tlp-team-setting-title {
   width: 100%;
 }
+.team_page_tlp_team_settings .wrap{
+  margin-top: 0!important;
+}
+.team_page_tlp_team_settings #settings-tabs{
+  display: flex;
+  gap: 0;
+}
+.team_page_tlp_team_settings #settings-tabs .rt-settings-sidebar {
+  flex: 0 0 250px;
+  max-width: 250px;
+}
+.team_page_tlp_team_settings #settings-tabs .rt-settings-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  /* border: 1px solid var(--rttpg-light-bg); */
+  padding: 30px;
+  background: #FFFFFF;
+  border-radius: 0 7px 7px 7px;
+  min-height: 500px;
+  filter: drop-shadow(0px 2.64151px 2.6415px #EBEBEF);
+}
 
+#tlp-team-settings {
+  padding-top: 30px;
+}
+.team_page_tlp_team_settings .rt-settings-header{
+  border-bottom: 1px solid var(--rttpg-light-bg);
+  padding-bottom: 12px;
+  padding-top: 12px;
+  margin-left: -20px;
+  background: #FFFFFF;
+  padding-left: 20px;
+}
+ .tlp-promo-container {
+  flex: 0 0 300px;
+  max-width: 300px;
+  padding-left: 30px;
+}
+ .tlp-promo-inner {
+  background: #FFF;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .1);
+  padding: var(--promo-card-padding);
+  box-sizing: border-box;
+  border-radius: 8px;
+}
+ .settings-container {
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-right: 15px;
+}
+ .rt-settings-header-inner {
+  flex-wrap: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+ .rt-settings-header-inner .settings-logo {
+  display: flex;
+  column-gap: 15px;
+  align-items: center;
+}
+ .rt-settings-header-inner .settings-logo .rt-logo img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+}
+.rt-settings-header-inner .settings-logo .rt-logo {
+  max-width: 50px;
+}
+.rt-settings-header-inner .settings-logo .rt-content h2 {
+  margin: 0 0 7px;
+  font-size: 20px;
+  font-weight: bold;
+}
+.rt-settings-header-inner .settings-logo .rt-content span {
+  color: #64748b;
+  font-size: 13px;
+}
+.rt-settings-header-inner .settings-menu a {
+  line-height: 1.25rem;
+  color: rgb(71 85 105 / 1);
+  text-decoration: none;
+  font-size: 15px;
+  margin-left: 15px;
+  transition: 0.3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+.rt-settings-header-inner .settings-menu a.doc {
+  color: #1d1d1d;
+  border: 1px solid #0022ff;
+  border-radius: 30px;
+  padding: 10px 20px;
+  transition: all 0.3s ease-in-out;
+}
+.rt-settings-header-inner .settings-menu a.doc svg{
+  transition: all 0.3s ease-in-out;
+}
+.rt-settings-header-inner .settings-menu a.doc:hover{
+  background: #0022ff;
+  color: #fff!important;
+}
+.rt-settings-header-inner .settings-menu a.doc:hover svg{
+  color:#fff;
+}
 .tlp-team-setting-title h3 {
   font-size: 18px;
   color: #000000;
@@ -734,7 +867,7 @@ body .rt-admin-btn.button-primary {
   display: inline-block;
   font-size: 15px;
   font-weight: 400;
-  color: #5d3dfd;
+  color: #0022ff;
   text-decoration: none;
   padding: 9px 18px;
   border-radius: 4px;
@@ -743,16 +876,20 @@ body .rt-admin-btn.button-primary {
   line-height: 1.4;
   transition: all 0.3s ease-in-out;
   height: auto;
-  border: 2px solid #5d3dfd;
+  border: 2px solid #0022ff;
 }
 
 body .rt-admin-btn.button-primary,
 body .rt-admin-btn:hover {
-  background-color: #4e35cc;
+  background-color: #0022ff;
   color: #ffffff;
+  border:1px solid #0022ff;
   text-decoration: none;
 }
-
+body .rt-admin-btn.button-primary:hover{
+  background-color:#0721c9;
+  border-color:#0721c9;
+}
 .rt-document-box.rt-update-pro-btn-wrap {
   padding: 0;
 }
@@ -1467,7 +1604,212 @@ div#support iframe {
 #detail-field-selection label[for="detail_page_fields-readmore_btn"]{
   display: none;
 }
+#ttp_content_bg_color_holder .tlp-field .wp-picker-container{
+   float:unset;
+}
+.post-type-team #tlp-team-setting-wrapper .select2-container--classic:not(.select2-container--open) .select2-selection--multiple:hover,
+.post-type-team #tlp-team-setting-wrapper .select2-container--classic:not(.select2-container--open) .select2-selection--single:hover,
+.post-type-team #tlp-team-setting-wrapper .wp-core-ui select:focus, .post-type-team .wp-core-ui select:hover, .post-type-team  input:focus,
+.post-type-team #tlp-team-setting-wrapper input:hover,
+.post-type-team #tlp-team-setting-wrapper select,
+.post-type-team-sc #tlp_team_sc_settings_meta  .select2-container--classic:not(.select2-container--open) .select2-selection--multiple:hover,
+.post-type-team-sc #tlp_team_sc_settings_meta .select2-container--classic:not(.select2-container--open) .select2-selection--single:hover,
+.post-type-team-sc #tlp_team_sc_settings_meta .wp-core-ui select:focus, .post-type-team-sc  .wp-core-ui select:hover, .post-type-team-sc  input:focus,
+.post-type-team-sc  #tlp_team_sc_settings_meta input:hover {
+  border-color: #a3b1de !important;
+  outline: none;
+  box-shadow: none;
+}
+.post-type-team-sc #tlp_team_sc_settings_meta .select2-container--classic .select2-selection--single,
+.post-type-team-sc #tlp_team_sc_settings_meta select,
+.post-type-team-sc #tlp_team_sc_settings_meta .select2-container--classic .select2-selection--multiple,
+.post-type-team-sc #tlp_team_sc_settings_meta input[type=time],
+.post-type-team-sc  #tlp_team_sc_settings_meta input[type=url],
+.post-type-team-sc  #tlp_team_sc_settings_meta input[type=number],
+.post-type-team-sc  #tlp_team_sc_settings_meta input[type=text],
+.post-type-team #tlp-team-setting-wrapper .select2-container--classic .select2-selection--single,
+.post-type-team #tlp-team-setting-wrapper select,
+.post-type-team #tlp-team-setting-wrapper .select2-container--classic .select2-selection--multiple,
+.post-type-team #tlp-team-setting-wrapper input[type=time],
+.post-type-team #tlp-team-setting-wrapper input[type=url],
+.post-type-team #tlp-team-setting-wrapper input[type=number],
+.post-type-team #tlp-team-setting-wrapper input[type=text]{
+  min-height: 36px;
+  transition: 0.4s;
+  border-color: #dee5e9;
+  background: #fff;
+  width: 100%;
+  max-width: inherit;
+}
+.post-type-team #tlp-team-setting-wrapper input[type="checkbox"],
+.post-type-team #tlp-team-setting-wrapper input[type="radio"],
+.post-type-team-sc #tlp_team_sc_settings_meta input[type="checkbox"],
+.post-type-team-sc #tlp_team_sc_settings_meta input[type="radio"]{
+  width: 17px;
+  height: 17px;
+  position: relative;
+}
+.post-type-team-sc #tlp_team_sc_settings_meta input[type=checkbox]:checked,
+.post-type-team #tlp-team-setting-wrapper input[type=checkbox]:checked {
+  background-color: #4e35cc;
+  border: none;
+  position: relative;
+}
+.post-type-team #tlp-team-setting-wrapper input[type=checkbox]:checked::before,
+.post-type-team-sc #tlp_team_sc_settings_meta input[type=checkbox]:checked::before {
+  content: url('data:image/svg+xml;utf8,<svg width="9" height="7" viewBox="0 0 9 7" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M7.66667 1L3.08333 5.58333L1 3.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> </svg>');
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.post-type-team-sc .postbox-container input[type=checkbox],
+.post-type-team-sc .postbox-container input[type=radio],
+.post-type-team .postbox-container input[type=checkbox],
+.post-type-team .postbox-container input[type=radio] {
+  margin: -0.1rem .50em 0 0;
+}
+.post-type-team-sc #tlp_team_sc_settings_meta input[type=radio]:checked::before,
+.post-type-team #tlp-team-setting-wrapper input[type=radio]:checked::before {
+  width: 9px;
+  height: 9px;
+  background: #4e35cc;
+  top: 3px;
+  left: 3px;
+  position: absolute;
+  float: none;
+  margin: 0;
+}
+.rt-tab-content .field-holder .field-label label {
+  font-weight: 500;
+  margin-top: 4px;
+}
+.post-type-team-sc .tlp-field label,
+.post-type-team  .tlp-field label {
+  position: relative;
+}
+.tlp-promo-container {
+  flex: 0 0 300px;
+  max-width: 300px;
+  padding-left: 30px;
+}
+.post-type-team .tlp-team-setting-container{
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-right: 15px;
+}
+.tlp-promo-inner .promo-image {
+  margin-top: calc(30px * -1);
+  margin-left: calc(30px * -1);
+  margin-right: calc(30px * -1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.tlp-promo-inner .promo-title {
+  font-size: 1.5em!important;
+  line-height: 1.3!important;
+  padding:0!important;
+  font-weight: 600!important;
+  margin:20px 0!important;
+}
+.tlp-promo-inner ul {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.tlp-promo-inner ul li {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.tlp-promo-inner ul li::before {
+  align-items: center;
+  color: rgb(39, 174, 96);
+  content: "✓";
+  display: flex;
+  flex-shrink: 0;
+  font-size: 12px;
+  font-weight: 700;
+  height: 20px;
+  justify-content: center;
+  margin-right: 10px;
+  width: 20px;
+  background: rgb(213, 244, 230);
+  border-radius: 50%;
+}
+.tlp-promo-inner .offer {
+  margin-bottom: 15px;
+  animation: pulse 1.8s linear infinite;
+  transition: 0.4s;
+}
+.tlp-promo-inner .promo-image img {
+  width: 100%;
+}
+.tlp-promo-container .rt-admin-btn{
+  text-align: center;
+  margin: 0 auto;
+  display: block;
+  font-size: 15px;
+  font-weight: 400;
+  text-decoration: none;
+  padding: 9px 18px;
+  border-radius: 4px;
+  position: relative;
+  z-index: 2;
+  line-height: 1.4;
+  border: 1px solid #0022ff;
+  background: #0022ff;
+  color: #fff;
+}
+.tlp-promo-container .rt-admin-btn:hover{
+  background-color:#0721c9;
+  border-color:#0721c9;
+}
+#tlp_team_sc_settings_meta .rt-tab-nav{
+  padding:5px 0;
+}
+#tlp_team_sc_settings_meta ul.rt-tab-nav li:hover a,#tlp_team_sc_settings_meta ul.rt-tab-nav li.active a{
+  background:#fff;
+  color:#0022ff;
+}
+#tlp_team_sc_settings_meta ul.rt-tab-nav li:hover a i,#tlp_team_sc_settings_meta ul.rt-tab-nav li.active a i{
+  color:#0022ff;
+}
+#tlp_team_sc_settings_meta ul.rt-tab-nav li {
+  padding-bottom: 0;
+}
+#tlp_team_sc_settings_meta ul.rt-tab-nav{
+  background-color: #d0d0ff;
+  padding: 8px 0;
+  border-radius: 7px 7px 0 0;
+}
 
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+ .tlp-promo-inner {
+  background: #FFF;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .1);
+  padding: 30px;
+  box-sizing: border-box;
+  border-radius: 8px;
+}
+#rt_plugin_team_sc_pro_information .tlp-promo-container{
+  margin-top: 30px;
+  margin-bottom: 30px;
+  padding-left: 0;
+}
 @media (max-width: 1450px) {
   div#tlp-team-get-help-wrapper .tlp-team-setting-container {
     width: 80%;

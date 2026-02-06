@@ -4,15 +4,16 @@
  */
 
  // Do not allow directly accessing this file.
+use RT\Team\Helpers\Fns;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'This script cannot be accessed directly.' );
 }
 ?>
 
-<div class="wrap">
+<div class="tlp-wrap">
 	<div id="tlp-team-get-help-wrapper">
 		<div class="tlp-team-setting-container">
-
 			<div id="support" class="rt-document-box">
 				<div class="rt-box-icon"><i class="dashicons dashicons-media-document"></i></div>
 				<div class="rt-box-content">

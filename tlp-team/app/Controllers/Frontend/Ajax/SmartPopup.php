@@ -45,6 +45,14 @@ class SmartPopup {
 				'error' => $error,
 			] );
 		}
+        $member_post = get_post(absint($_REQUEST['id']) );
+        if (
+            !$member_post ||
+            $member_post->post_type !== rttlp_team()->post_type ||
+            $member_post->post_status !== 'publish'
+        ) {
+            wp_send_json_error(array('error' => __('Unauthorized or member not found','tlp-team')), 403);
+        }
 		if ( ! empty( $_REQUEST['id'] ) ) {
 			global $post;
 			$post = get_post( absint( $_REQUEST['id'] ) );
