@@ -8,7 +8,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language-Team: RadiusTheme\n"
 "Last-Translator: RadiusTheme\n"
-"POT-Creation-Date: 2026-01-23 11:04+0000\n"
+"POT-Creation-Date: 2026-02-11 07:02+0000\n"
 "Report-Msgid-Bugs-To: https://radiustheme.com/tlp-team-for-wordpress/\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
@@ -229,7 +229,7 @@ msgstr ""
 msgid "No more member to load"
 msgstr ""
 
-#: app/Controllers/Frontend/Ajax/MultiPopup.php:180, app/Controllers/Frontend/Ajax/SinglePopup.php:176, app/Controllers/Frontend/Ajax/SmartPopup.php:178
+#: app/Controllers/Frontend/Ajax/MultiPopup.php:180, app/Controllers/Frontend/Ajax/SinglePopup.php:176, app/Controllers/Frontend/Ajax/SmartPopup.php:180
 msgid "No item id found"
 msgstr ""
 
@@ -237,15 +237,15 @@ msgstr ""
 msgid "Selected is is not for team member"
 msgstr ""
 
-#: app/Controllers/Frontend/Ajax/MultiPopup.php:113, app/Controllers/Frontend/Ajax/SinglePopup.php:134, app/Controllers/Frontend/Ajax/SmartPopup.php:111, templates/single-team.php:125
+#: app/Controllers/Frontend/Ajax/MultiPopup.php:113, app/Controllers/Frontend/Ajax/SinglePopup.php:134, app/Controllers/Frontend/Ajax/SmartPopup.php:112, templates/single-team.php:125
 msgid "Qualifications : "
 msgstr ""
 
-#: app/Controllers/Frontend/Ajax/MultiPopup.php:120, app/Controllers/Frontend/Ajax/SinglePopup.php:140, app/Controllers/Frontend/Ajax/SmartPopup.php:118, templates/single-team.php:129
+#: app/Controllers/Frontend/Ajax/MultiPopup.php:120, app/Controllers/Frontend/Ajax/SinglePopup.php:140, app/Controllers/Frontend/Ajax/SmartPopup.php:119, templates/single-team.php:129
 msgid "Professional Memberships : "
 msgstr ""
 
-#: app/Controllers/Frontend/Ajax/MultiPopup.php:127, app/Controllers/Frontend/Ajax/SinglePopup.php:146, app/Controllers/Frontend/Ajax/SmartPopup.php:125, templates/single-team.php:133
+#: app/Controllers/Frontend/Ajax/MultiPopup.php:127, app/Controllers/Frontend/Ajax/SinglePopup.php:146, app/Controllers/Frontend/Ajax/SmartPopup.php:126, templates/single-team.php:133
 msgid "Area of Expertise : "
 msgstr ""
 

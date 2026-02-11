@@ -1,8 +1,8 @@
 === Team - Team Members Showcase Plugin ===
-Contributors: techlabpro1
+Contributors: techlabpro1, mamunnu
 Donate link:
 Tags: team, team showcase, team slider, team plugin, team members
-Stable tag: 5.0.13
+Stable tag: 5.0.14
 Requires at least: 5.0
 Tested up to: 6.9
 Requires PHP: 7.4
@@ -20,6 +20,22 @@ The best WordPress team plugin to showcase team members with grid, slider, and f
 
 👉 [Shortcode Demo](https://www.radiustheme.com/demo/plugins/team/layout-1/) | [Elementor Demo](https://www.radiustheme.com/demo/plugins/team-elementor/) | [Documentation](
 https://www.radiustheme.com/docs/team/) | [Get Pro](https://www.radiustheme.com/downloads/tlp-team-pro-for-wordpress/) 👈
+
+**How to Showcase Team Members Using Elementor in WordPress:**
+
+[youtube https://www.youtube.com/watch?v=B5s2OHIqp6w]
+
+**How to Showcase Team Members Using Shortcode in WordPress:**
+
+[youtube https://www.youtube.com/watch?v=Baf7e0TGCso]
+
+**How to Create a Custom Team Details Page in WordPress Using Team Plugin & Elementor:**
+
+[youtube https://www.youtube.com/watch?v=FYg7wBarPpo]
+
+**How to Import Team Members in TLP Team Member Plugin (JSON & XML Formats):**
+
+[youtube https://www.youtube.com/watch?v=cg-4eYp_ISo]
 
 
 == Why Choose This WordPress Team Plugin? ==
@@ -63,14 +79,6 @@ I find the Team Members Showcase Plugin to be a great solution for displaying em
 
 [View Isotope Demo →](https://www.radiustheme.com/demo/plugins/team/isotope-filter-1-2/)
 
-
-**How To Create Team Page Using ShortCode With WordPress Team Members Showcase Plugin:**
-
-[youtube https://www.youtube.com/watch?v=oJ_AYCk-iXU]
-
-**How To Create Team Page Using Elementor Addon With WordPress Team Members Showcase Plugin:**
-
-[youtube https://www.youtube.com/watch?v=S4tXNPws9XY]
 
 
 == Elementor Integration ==
@@ -256,8 +264,8 @@ If you like The Team Plugin, then consider checking out our other WordPress Plug
 
 == Changelog ==
 
-= 5.0.13  ( January 23, 2026 ) =
-* Fixed: Minor Css Issue.
+= 5.0.14  ( February 10, 2026 ) =
+* Fixed: Shortcode single popup, multiple popup post status issue.
 
 
 

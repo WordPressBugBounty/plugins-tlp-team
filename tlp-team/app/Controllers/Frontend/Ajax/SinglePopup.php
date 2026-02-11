@@ -49,7 +49,7 @@ class SinglePopup {
 		if ( isset( $_REQUEST['id'] ) && $post_id = absint( $_REQUEST['id'] ) ) {
 			global $post;
 			$post = get_post( absint( $_REQUEST['id'] ) );
-			if ( $post && $post->post_type == rttlp_team()->post_type ) {
+			if ( $post && $post->post_type == rttlp_team()->post_type &&  $post->post_status == 'publish') {
 				$error = false;
 				setup_postdata( $post );
                 $settings     = get_option( rttlp_team()->options['settings'] );

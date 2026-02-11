@@ -50,8 +50,8 @@ class SpecialLayout {
 			] );
 
 		}
-
-		if ( $memberId ) {
+        $post = get_post( $memberId );
+		if ( $memberId && $post && $post->post_status == 'publish' ) {
 			$name        = get_the_title( $memberId );
 			$designation = wp_strip_all_tags(
 				get_the_term_list(

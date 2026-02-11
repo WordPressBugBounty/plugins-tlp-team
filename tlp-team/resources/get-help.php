@@ -21,14 +21,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<div class="rt-video-wrapper">
 						<div class="rt-video-col">
 							<div class="rt-responsive-iframe">
-								<iframe width="800" height="450" src="https://www.youtube.com/embed/oJ_AYCk-iXU" title="How To Create Team Page Using ShortCode With WordPress Team Members Showcase Plugin" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                <iframe width="800" height="450" src="https://www.youtube.com/embed/B5s2OHIqp6w?si=wgdVEK53e_aNSFu5" title="How to Showcase Team Members Using Elementor in WordPress" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 							</div>
 						</div>
 						<div class="rt-video-col">
 							<div class="rt-responsive-iframe">
-								<iframe width="800" height="450" src="//www.youtube.com/embed/S4tXNPws9XY" title="How To Create Team Page Using Elementor Addon With WordPress Team Members Showcase Plugin" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                <iframe width="800" height="450" src="https://www.youtube.com/embed/Baf7e0TGCso?si=rVRaSoDZutJgDcu4" title="How to Showcase Team Members Using Shortcode in WordPress" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 							</div>
 						</div>
+                        <div class="rt-video-col">
+                            <div class="rt-responsive-iframe">
+                                <iframe width="800" height="450" src="https://www.youtube.com/embed/FYg7wBarPpo?si=zT-X6qILgOvs0G4-" title="How to Create a Custom Team Details Page in WordPress Using Team Plugin & Elementor" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                            </div>
+                        </div>
+                        <div class="rt-video-col">
+                            <div class="rt-responsive-iframe">
+                                <iframe width="800" height="450" src="https://www.youtube.com/embed/cg-4eYp_ISo?si=MZroNJA6NZutvu2E" title="How to Import Team Members in TLP Team Member Plugin (JSON & XML Formats)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                            </div>
+                        </div>
 					</div>
 				</div>
 			</div>
