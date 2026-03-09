@@ -8,7 +8,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language-Team: RadiusTheme\n"
 "Last-Translator: RadiusTheme\n"
-"POT-Creation-Date: 2026-02-11 07:02+0000\n"
+"POT-Creation-Date: 2026-03-09 06:09+0000\n"
 "Report-Msgid-Bugs-To: https://radiustheme.com/tlp-team-for-wordpress/\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
@@ -57,19 +57,19 @@ msgstr ""
 msgid "Show All"
 msgstr ""
 
-#: app/Controllers/Admin/Ajax/Preview.php:800
+#: app/Controllers/Admin/Ajax/Preview.php:801
 msgid "No Shortcode found"
 msgstr ""
 
-#: app/Controllers/Admin/Ajax/Preview.php:270, app/Controllers/Frontend/Ajax/LoadMore.php:93, app/Controllers/Frontend/Ajax/LoadMore.php:94, app/Controllers/Frontend/Shortcode.php:774
+#: app/Controllers/Admin/Ajax/Preview.php:270, app/Controllers/Frontend/Ajax/LoadMore.php:93, app/Controllers/Frontend/Ajax/LoadMore.php:94, app/Controllers/Frontend/Shortcode.php:776
 msgid "Hire Me"
 msgstr ""
 
-#: app/Controllers/Admin/Ajax/Preview.php:272, app/Controllers/Admin/Ajax/Preview.php:273, app/Controllers/Frontend/Ajax/LoadMore.php:95, app/Controllers/Frontend/Shortcode.php:775
+#: app/Controllers/Admin/Ajax/Preview.php:272, app/Controllers/Admin/Ajax/Preview.php:273, app/Controllers/Frontend/Ajax/LoadMore.php:95, app/Controllers/Frontend/Shortcode.php:777
 msgid "Read More"
 msgstr ""
 
-#: app/Controllers/Admin/Ajax/Preview.php:789, app/Controllers/Frontend/Shortcode.php:722, app/Widgets/TeamCarousel.php:118, app/Widgets/TeamWidget.php:122
+#: app/Controllers/Admin/Ajax/Preview.php:790, app/Controllers/Frontend/Shortcode.php:723, app/Widgets/TeamCarousel.php:118, app/Widgets/TeamWidget.php:122
 msgid "No member found"
 msgstr ""
 
@@ -85,11 +85,11 @@ msgstr ""
 msgid "Loading ..."
 msgstr ""
 
-#: app/Controllers/Admin/Ajax/Preview.php:546, app/Controllers/Frontend/Shortcode.php:446, app/Widgets/Elementor/Render/RenderHelpers.php:448
+#: app/Controllers/Admin/Ajax/Preview.php:546, app/Controllers/Frontend/Shortcode.php:446, app/Widgets/Elementor/Render/RenderHelpers.php:449
 msgid "Show all"
 msgstr ""
 
-#: app/Controllers/Admin/Ajax/Preview.php:766, app/Controllers/Frontend/Shortcode.php:702, app/Widgets/Elementor/Render/RenderHelpers.php:185
+#: app/Controllers/Admin/Ajax/Preview.php:767, app/Controllers/Frontend/Shortcode.php:703, app/Widgets/Elementor/Render/RenderHelpers.php:185
 msgid "Load More"
 msgstr ""
 
@@ -221,11 +221,11 @@ msgstr ""
 msgid "Security Issue"
 msgstr ""
 
-#: app/Controllers/Frontend/Ajax/LoadMore.php:418
+#: app/Controllers/Frontend/Ajax/LoadMore.php:419
 msgid "Shortcode id missing"
 msgstr ""
 
-#: app/Controllers/Frontend/Ajax/LoadMore.php:410, app/Controllers/Frontend/Ajax/LoadMore.php:411
+#: app/Controllers/Frontend/Ajax/LoadMore.php:411, app/Controllers/Frontend/Ajax/LoadMore.php:412
 msgid "No more member to load"
 msgstr ""
 
@@ -257,7 +257,7 @@ msgstr ""
 msgid "Team Member Showcase"
 msgstr ""
 
-#: app/Controllers/Frontend/Shortcode.php:773
+#: app/Controllers/Frontend/Shortcode.php:775
 msgid "My Resume"
 msgstr ""
 

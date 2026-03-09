@@ -181,6 +181,7 @@ class SliderView {
 			$lazyLoad     = ! empty( $meta[ $prefix . 'slider_lazy_load' ] ) ? true : false;
 
 			$arg['imgHtml'] = $fImg ? null : Fns::getFeatureImageHtml( $iID, $fImgSize, $defaultImgId, $customImgSize, $lazyLoad );
+			$arg['imgHtml'] = apply_filters( 'rttm_loop_img_html', $arg['imgHtml'], $iID, $meta );
 
 			$html .= Fns::render( 'layouts/carousel_thumb', $arg, true );
 

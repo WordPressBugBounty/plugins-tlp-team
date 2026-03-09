@@ -387,6 +387,7 @@ class LoadMore {
 						$defaultImgId,
 						$customImgSize
 					) : null;
+					$arg['imgHtml']     = apply_filters( 'rttm_loop_img_html', $arg['imgHtml'], $mID, $scMeta );
 					$arg['isoFilter']   = '';
 
 					if ( $isIsotope && $isoFilterTaxonomy ) {

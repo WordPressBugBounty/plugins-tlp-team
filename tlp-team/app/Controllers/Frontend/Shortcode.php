@@ -590,6 +590,7 @@ class Shortcode {
 					$skill              = get_post_meta( $mID, 'skill', true );
 					$arg['tlp_skill']   = $skill ? maybe_unserialize( $skill ) : [];
 					$arg['imgHtml']     = ! $fImg ? Fns::getFeatureImageHtml( $mID, $fImgSize, $defaultImgId, $customImgSize, $lazyLoad ) : null;
+					$arg['imgHtml']     = apply_filters( 'rttm_loop_img_html', $arg['imgHtml'], $mID, $scMeta );
 
 					if ( ! $arg['imgHtml'] ) {
 						$arg['content_area'] = 'rt-col-md-12';
@@ -766,6 +767,7 @@ class Shortcode {
 			'target'             => ! empty( $meta['ttp_link_target'][0] ) ? $meta['ttp_link_target'][0] : '_self',
 			'parentClass'        => ! empty( $meta['ttp_parent_class'][0] ) ? trim( $meta['ttp_parent_class'][0] ) : null,
 			'grayscale'          => ! empty( $meta['ttp_grayscale'][0] ) ? trim( $meta['ttp_grayscale'][0] ) : null,
+			'image_flip'         => ! empty( $meta['ttp_image_flip'][0] ) ? true : false,
 			'fImg'               => ! empty( $meta['ttp_image'][0] ) ? true : false,
 			'fImgSize'           => isset( $meta['ttp_image_size'][0] ) ? $meta['ttp_image_size'][0] : 'medium',
 			'character_limit'    => isset( $meta['character_limit'][0] ) ? absint( $meta['character_limit'][0] ) : 0,
@@ -813,6 +815,7 @@ class Shortcode {
 			$lazyLoad     = in_array( 'lazy_load', $cOpt ) ? true : false;
 
 			$arg['imgHtml'] = $fImg ? null : Fns::getFeatureImageHtml( $iID, $fImgSize, $defaultImgId, $customImgSize, $lazyLoad );
+			$arg['imgHtml'] = apply_filters( 'rttm_loop_img_html', $arg['imgHtml'], $iID, $meta_value );
 
 			$html .= Fns::render( 'layouts/carousel_thumb', $arg, true );
 

@@ -696,6 +696,7 @@ class Preview {
 					$skill              = get_post_meta( $mID, 'skill', true );
 					$arg['tlp_skill']   = $skill ? unserialize( $skill ) : [];
 					$arg['imgHtml']     = ! $fImg ? Fns::getFeatureImageHtml( $mID, $fImgSize, $defaultImgId, $customImgSize, $lazyLoad ) : null;
+					$arg['imgHtml']     = apply_filters( 'rttm_loop_img_html', $arg['imgHtml'], $mID, $_REQUEST );
 
 					if ( $isIsotope && $isoFilterTaxonomy ) {
 						$termAs    = wp_get_post_terms( $mID, $isoFilterTaxonomy, [ 'fields' => 'all' ] );
@@ -832,6 +833,7 @@ class Preview {
 			$lazyLoad     = in_array( 'lazy_load', $cOpt ) ? true : false;
 
 			$arg['imgHtml'] = $fImg ? null : Fns::getFeatureImageHtml( $iID, $fImgSize, $defaultImgId, $customImgSize, $lazyLoad );
+			$arg['imgHtml'] = apply_filters( 'rttm_loop_img_html', $arg['imgHtml'], $iID, $meta_value );
 
 			$html .= Fns::render( 'layouts/carousel_thumb', $arg, true );
 

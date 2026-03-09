@@ -63,6 +63,8 @@ class SpecialLayout {
 			);
 			$short_bio   = get_post_meta( $memberId, 'short_bio', true );
 			$imgHtml     = Fns::getFeatureImageHtml( $memberId );
+			$scMeta      = $scID ? get_post_meta( $scID ) : [];
+			$imgHtml     = apply_filters( 'rttm_loop_img_html', $imgHtml, $memberId, $scMeta );
 
 			if ( $toggleId ) {
 				$toggle_image_src = Fns::getFeatureImageSrc( $toggleId );

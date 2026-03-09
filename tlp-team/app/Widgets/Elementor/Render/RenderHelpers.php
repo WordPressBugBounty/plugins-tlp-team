@@ -202,6 +202,7 @@ class RenderHelpers {
 			'tItem'              => ! empty( self::selectedTerm( $prefix, $meta ) ) ? self::selectedTerm( $prefix, $meta ) : 0,
 			'fShowAll'           => ! empty( $meta[ $prefix . 'iso_show_all' ] ) ? true : false,
 			'animation'          => ! empty( $meta[ $prefix . 'image_hover_animation' ] ) ? esc_html( $meta[ $prefix . 'image_hover_animation' ] ) : 'zoom_in',
+			'image_flip'         => ! empty( $meta[ $prefix . 'image_flip' ] ) ? true : false,
 		];
 	}
 
@@ -342,7 +343,7 @@ class RenderHelpers {
 			$meta['customImgSize'],
 			$lazyLoad
 		) : null;
-
+		$arg['imgHtml'] = apply_filters( 'rttm_loop_img_html', $arg['imgHtml'], $postID, $meta );
 
 		$arg['short_bio'] = Fns::get_ttp_short_description(
 			$short_bio,

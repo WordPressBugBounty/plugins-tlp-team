@@ -167,6 +167,16 @@
 .rt-elementor-container .rt-carousel-holder .swiper-pagination-bullet-active{opacity:.75;background:#000}
 .rt-elementor-container .rt-carousel-holder.swiper-autoheight .swiper-pagination{margin-top:20px;margin-left:auto;margin-right:auto;-webkit-transform:none !important;-ms-transform:none !important;transform:none !important}
 .rt-elementor-container .swiper-pagination-bullets-dynamic{margin-left:auto;margin-right:auto;-webkit-transform:none !important;-ms-transform:none !important;transform:none !important}
+.rt-flip-container{-webkit-perspective:1000px;perspective:1000px;width:100%}
+.rt-flip-inner{position:relative;width:100%;-webkit-transition:-webkit-transform .6s ease;transition:-webkit-transform .6s ease;transition:transform .6s ease;transition:transform .6s ease,-webkit-transform .6s ease;-webkit-transform-style:preserve-3d;transform-style:preserve-3d}
+.rt-flip-front,.rt-flip-back{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.rt-flip-front img,.rt-flip-back img{display:block;width:100%;height:auto}
+.rt-flip-back{position:absolute;top:0;left:0;width:100%;height:100%;-webkit-transform:rotateY(180deg);transform:rotateY(180deg)}
+.rt-flip-back img{width:100%;height:100%;-o-object-fit:cover;object-fit:cover}
+.single-team-area:hover .rt-flip-inner,.team-member:hover .rt-flip-inner,.profile-img-wrapper:hover .rt-flip-inner,tr:hover .rt-flip-inner,.tlp-img:hover .rt-flip-inner,.rt-flip-container:hover .rt-flip-inner{-webkit-transform:rotateY(180deg);transform:rotateY(180deg)}
+figure:has(.rt-flip-container),.image-container:has(.rt-flip-container){overflow:visible}
+.rt-flip-container img{-webkit-transform:none !important;-ms-transform:none !important;transform:none !important;-webkit-backface-visibility:hidden;backface-visibility:hidden}
+.single-team-area:hover .rt-flip-container img,.team-member:hover .rt-flip-container img{-webkit-transform:none !important;-ms-transform:none !important;transform:none !important}
 .rt-container,.rt-container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}
 .clearfix::after,.rt-container::after,.rt-container-fluid::after,.rt-row::after{clear:both}
 .rt-row{margin-left:-15px;margin-right:-15px}
