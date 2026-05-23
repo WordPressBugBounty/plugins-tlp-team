@@ -55,6 +55,10 @@ class Settings {
 					}
 				}
 			}
+			$existing = get_option( rttlp_team()->options['settings'] );
+			if ( is_array( $existing ) && ! empty( $existing['license_status'] ) ) {
+				$settings['license_status'] = $existing['license_status'];
+			}
 			update_option( rttlp_team()->options['settings'], $settings );
 			flush_rewrite_rules();
 			$error = false;

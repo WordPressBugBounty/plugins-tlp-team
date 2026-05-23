@@ -3,7 +3,7 @@
         'name' => 'rt/tlp-team',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'e778224a9c1be9b9505977515666607af02f7d56',
+        'reference' => '42a52bba65a40ce4c06c6a4ef09660d5559b20cb',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'rt/tlp-team' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'e778224a9c1be9b9505977515666607af02f7d56',
+            'reference' => '42a52bba65a40ce4c06c6a4ef09660d5559b20cb',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

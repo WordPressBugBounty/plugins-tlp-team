@@ -436,10 +436,11 @@ class Fns {
 		if ( ! $post_id ) {
 			return;
 		}
-		$html     = '';
-		$settings = get_option( rttlp_team()->options['settings'] );
-		$fields   = isset( $settings['detail_page_fields'] ) ? $settings['detail_page_fields'] : [];
-		$image_ids = get_post_meta( $post_id, 'tlp_team_gallery' );
+		$html         = '';
+		$settings     = get_option( rttlp_team()->options['settings'] );
+		$fields       = isset( $settings['detail_page_fields'] ) ? $settings['detail_page_fields'] : [];
+		$show_caption = ! empty( $settings['detail_image_caption'] );
+		$image_ids    = get_post_meta( $post_id, 'tlp_team_gallery' );
 
 		if ( ! empty( $image_ids ) && is_array( $image_ids ) ) {
 			$fID = get_post_thumbnail_id( $post_id );
@@ -463,6 +464,12 @@ class Fns {
 					$html .= '<div class="profile-img-wrapper">';
 					$html .=  $image_html;;
 					$html .= '</div>';
+					if ( $show_caption ) {
+						$caption = wp_get_attachment_caption( $id );
+						if ( $caption ) {
+							$html .= '<figcaption class="wp-caption-text">' . wp_kses_post( $caption ) . '</figcaption>';
+						}
+					}
 					$html .= '</div>';
 				}
 			}
@@ -475,6 +482,12 @@ class Fns {
 			if ( has_post_thumbnail( $post_id ) ) {
                 $html .= '<div class="tlp-single-img-wrapper">';
 				$html .= get_the_post_thumbnail( $post_id, 'large' );
+				if ( $show_caption ) {
+					$caption = wp_get_attachment_caption( get_post_thumbnail_id( $post_id ) );
+					if ( $caption ) {
+						$html .= '<figcaption class="wp-caption-text">' . wp_kses_post( $caption ) . '</figcaption>';
+					}
+				}
                 $html .='</div>';
 			}
 		}

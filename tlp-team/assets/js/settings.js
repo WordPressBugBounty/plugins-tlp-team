@@ -343,7 +343,7 @@
 			form = self.parents('form'),
 			arg = form.serialize(),
 			bindElement = $('#tlpSaveButton', form),
-			responseHolder = form.next('#rt-response');
+			responseHolder = $('#rt-response');
 		AjaxCallTeam(bindElement, 'tlpTeamSettings', arg, function (data) {
 			responseHolder.show('slow').text(data.msg).addClass('updated');
 			if (data.error) {

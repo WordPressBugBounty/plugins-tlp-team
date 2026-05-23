@@ -2,9 +2,9 @@
 Contributors: techlabpro1, mamunnu
 Donate link:
 Tags: team, team showcase, team slider, team plugin, team members
-Stable tag: 5.0.15
+Stable tag: 5.0.16
 Requires at least: 5.0
-Tested up to: 6.9
+Tested up to: 7.0
 Requires PHP: 7.4
 License: GPL-2.0-or-later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -265,8 +265,9 @@ If you like The Team Plugin, then consider checking out our other WordPress Plug
 
 == Changelog ==
 
-= 5.0.15  ( March 9, 2026 ) =
-* Fixed: Pro Version Compatible.
+
+= 5.0.16  ( May 24, 2026 ) =
+* Fixed: Settings page saving success message issue.
 
 
 

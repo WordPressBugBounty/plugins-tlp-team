@@ -779,6 +779,16 @@ class Options {
 				],
 			],
 
+			'detail_image_caption'  => [
+				'type'        => 'switch',
+				'label'       => esc_html__( 'Image caption', 'tlp-team' ),
+				'is_pro'      => true,
+				'description' => esc_html__( 'Show the image caption below the team member image on the details page', 'tlp-team' ),
+				'optionLabel' => esc_html__( 'Enable', 'tlp-team' ),
+				'option'      => 1,
+				'value'       => ! empty( $settings['detail_image_caption'] ) ? 1 : false,
+			],
+
 			'detail_allow_comments' => [
 				'type'        => 'switch',
 				'label'       => esc_html__( 'Comments', 'tlp-team' ),

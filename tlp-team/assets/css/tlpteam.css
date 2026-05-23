@@ -6723,3 +6723,6 @@ figure:has(.rt-flip-container),
 .team-member:hover .rt-flip-container img {
 	transform: none !important;
 }
+.tlp-single-detail  .tlp-member-feature-img .wp-caption-text{
+	margin:15px 0;
+}
