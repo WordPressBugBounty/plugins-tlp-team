@@ -184,7 +184,7 @@ class RenderHelpers {
 			'posts_loading_type' => ! empty( self::paginationType( $prefix, $meta ) ) ? self::paginationType( $prefix, $meta ) : 'pagination',
 			'load_more_text'     => ! empty( $meta[ $prefix . 'load_more_text' ] ) ? esc_html( $meta[ $prefix . 'load_more_text' ] ) : esc_html__( 'Load More', 'tlp-team' ),
 			'relation'           => ! empty( $meta[ $prefix . 'tax_relation' ] ) ? esc_html( $meta[ $prefix . 'tax_relation' ] ) : 'AND',
-			'iCol'               => ! empty( $meta[ $prefix . 'image_cols' ] ) ? absint( $meta[ $prefix . 'image_cols' ] ) : 4,
+			'iCol'               => ! empty( $meta[ $prefix . 'image_cols' ] ) ? absint( $meta[ $prefix . 'image_cols' ] ) : 6,
 			'gridType'           => ! empty( $meta[ $prefix . 'grid_style' ] ) ? esc_html( $meta[ $prefix . 'grid_style' ] ) : 'even',
 			'linkType'           => ! empty( $meta[ $prefix . 'link_type' ] ) ? esc_html( $meta[ $prefix . 'link_type' ] ) : 'external_link',
 			'popupType'          => ! empty( $meta[ $prefix . 'popup_type' ] ) ? esc_html( $meta[ $prefix . 'popup_type' ] ) : 'single',

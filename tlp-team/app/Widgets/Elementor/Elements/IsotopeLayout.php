@@ -134,6 +134,7 @@ class IsotopeLayout extends ElementorWidget {
 			$this->elPrefix . 'isotope_style_section',
 			[
 				'colorScheme',
+				'wrapper',
 				'name',
 				'designation',
 				'department',

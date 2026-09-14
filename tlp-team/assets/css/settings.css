@@ -1847,3 +1847,48 @@ div#support iframe {
       margin-bottom: 30px;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Member gallery — "Unsaved" state
+   ---------------------------------------------------------------------------
+   Images added through the media frame live only in the form until the post is
+   saved: PostMeta::save_team_meta_data() rebuilds `tlp_team_gallery` from the
+   hidden inputs on submit. Before this, a freshly added thumbnail was visually
+   identical to one already attached to the member, so there was no way to tell
+   what would survive a reload. settings.js adds `.rttm-unsaved` on insert and
+   drops it once the save completes. */
+ul#tlp-team-gallery li.rttm-unsaved img {
+  border-color: #dba617;
+  box-shadow: 0 0 0 2px rgba(219, 166, 23, .35);
+}
+
+ul#tlp-team-gallery li.rttm-unsaved .rttm-unsaved-badge {
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  bottom: 6px;
+  padding: 4px 6px;
+  border-radius: 3px;
+  background: rgba(30, 30, 30, .82);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: .6px;
+  text-align: center;
+  text-transform: uppercase;
+  /* The list is jQuery UI sortable and the whole tile is the drag handle, so the
+     badge must never swallow a mousedown. */
+  pointer-events: none;
+}
+
+ul#tlp-team-gallery li.rttm-unsaved .rttm-unsaved-badge::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 5px;
+  border-radius: 50%;
+  background: #dba617;
+  vertical-align: baseline;
+}

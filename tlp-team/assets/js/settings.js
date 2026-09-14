@@ -53,28 +53,97 @@
 				}
 			});
 		},
+		teamGalleryFrame = null,
+		/**
+		 * Existing attachment ids in the gallery list, so a re-pick cannot double up.
+		 */
+		teamGalleryIds = function () {
+			return $("ul#tlp-team-gallery input[name='tlp_team_gallery[]']").map(function () {
+				return String($(this).val());
+			}).get();
+		},
+		/**
+		 * Show the "No image found" placeholder only while the list is really empty.
+		 * It used to be hidden on the first add and never restored, so removing every
+		 * image left a blank box with no hint that the field was empty.
+		 */
+		syncTeamGalleryPlaceholder = function () {
+			var list = $("ul#tlp-team-gallery"),
+				hasImages = list.find("input[name='tlp_team_gallery[]']").length > 0,
+				placeholder = list.find("li.no-img");
+
+			if (hasImages) {
+				placeholder.hide();
+			} else if (placeholder.length) {
+				placeholder.show();
+			} else {
+				list.append("<li class='no-img'>" + (ttp.noImageText || 'No image found') + "</li>");
+			}
+		},
 		renderTeamMediaUploader = function () {
-			var file_frame, image_data;
-			if (undefined !== file_frame) {
-				file_frame.open();
+			// Build the frame once and reuse it. The previous version declared
+			// `file_frame` as a local, so its `undefined !== file_frame` guard could
+			// never be true and every click built a brand new frame.
+			if (teamGalleryFrame) {
+				teamGalleryFrame.open();
 				return;
 			}
-			file_frame = wp.media.frames.file_frame = wp.media({
+
+			teamGalleryFrame = wp.media.frames.file_frame = wp.media({
 				title: 'Select or Upload Media For your member profile gallery',
 				button: {
 					text: 'Use this media'
 				},
-				multiple: false
+				// Multi-select: pick or upload any number of images in one pass.
+				multiple: 'add'
 			});
-			file_frame.on('select', function () {
-				var attachment = file_frame.state().get('selection').first().toJSON();
-				var imgId = attachment.id;
-				var imgUrl = (typeof attachment.sizes.thumbnail === "undefined") ? attachment.url : attachment.sizes.thumbnail.url;
-				$("ul#tlp-team-gallery").append("<li><span class='dashicons dashicons-dismiss'></span><img src='" + imgUrl + "' /><input type='hidden' name='tlp_team_gallery[]' value='" + imgId + "' /></li>");
-				$("ul#tlp-team-gallery li.no-img").hide();
+
+			teamGalleryFrame.on('select', function () {
+				var selection = teamGalleryFrame.state().get('selection'),
+					list = $("ul#tlp-team-gallery"),
+					existing = teamGalleryIds();
+
+				selection.map(function (item) {
+					var attachment = item.toJSON(),
+						imgId = String(attachment.id),
+						sizes = attachment.sizes || {},
+						imgUrl = sizes.thumbnail ? sizes.thumbnail.url : attachment.url;
+
+					// Skip anything already in the list — WP keeps previous picks
+					// selected when the frame is reopened.
+					if ($.inArray(imgId, existing) !== -1) {
+						return;
+					}
+					existing.push(imgId);
+
+					// `rttm-unsaved` marks an image that exists only in this form until
+					// the post is saved — the meta row is written by PostMeta.php from the
+					// hidden inputs on submit, so until then it is not attached to anything.
+					list.append(
+						"<li class='rttm-unsaved'><span class='dashicons dashicons-dismiss'></span>" +
+						"<img src='" + imgUrl + "' alt='' />" +
+						"<span class='rttm-unsaved-badge'>" + (ttp.unsavedText || 'Unsaved') + "</span>" +
+						"<input type='hidden' name='tlp_team_gallery[]' value='" + imgId + "' />" +
+						"</li>"
+					);
+				});
+
+				syncTeamGalleryPlaceholder();
 			});
-			// Now display the actual file_frame
-			file_frame.open();
+
+			// Reopening: mark what is already in the list as selected, so the frame
+			// reflects the current gallery instead of starting blank each time.
+			teamGalleryFrame.on('open', function () {
+				var selection = teamGalleryFrame.state().get('selection');
+				selection.reset();
+				$.each(teamGalleryIds(), function (i, id) {
+					var attachment = wp.media.attachment(id);
+					attachment.fetch();
+					selection.add(attachment);
+				});
+			});
+
+			teamGalleryFrame.open();
 		};
 
 
@@ -225,6 +294,35 @@
 		renderTeamMediaUploader();
 	});
 
+	/*
+	 * Clear the "Unsaved" markers once the images really are saved.
+	 *
+	 * The classic editor reloads the whole screen on Update, so the server simply
+	 * re-renders the list without them. The block editor does NOT: it posts the
+	 * meta box form over ajax and leaves this markup in place, so without this the
+	 * badges would sit there claiming the images are unsaved long after they were
+	 * written. `isSavingMetaBoxes` is the flag that covers exactly that request; we
+	 * clear on its falling edge.
+	 */
+	if (window.wp && wp.data && typeof wp.data.subscribe === 'function') {
+		(function () {
+			var wasSaving = false;
+			wp.data.subscribe(function () {
+				var editPost = wp.data.select('core/edit-post');
+				if (!editPost || typeof editPost.isSavingMetaBoxes !== 'function') {
+					return;
+				}
+				var saving = editPost.isSavingMetaBoxes();
+				if (wasSaving && !saving) {
+					$('ul#tlp-team-gallery li.rttm-unsaved')
+						.removeClass('rttm-unsaved')
+						.find('.rttm-unsaved-badge').remove();
+				}
+				wasSaving = saving;
+			});
+		})();
+	}
+
 	if ($('ul#tlp-team-gallery').length) {
 		$('ul#tlp-team-gallery').sortable({
 			items: 'li',
@@ -233,28 +331,33 @@
 		});
 	}
 
-	//$(document).on('click', 'ul#tlp-team-gallery li span.dashicons-dismiss', function(e) {
-	$("ul#tlp-team-gallery li span.dashicons-dismiss").on("click", function (e) {
+	/*
+	 * Gallery image removal.
+	 *
+	 * Two things were wrong here. The handler was bound DIRECTLY to the elements
+	 * present at page load, so an image just added by the media frame had no handler
+	 * at all — it could not be removed until the post was saved and the server
+	 * re-rendered the list. (The delegated form was sitting right above, commented
+	 * out.) And removal went through the `tlp_team_profile_img_remove` ajax call,
+	 * which does `delete_post_meta( $post_id, 'tlp_team_gallery', $id )` — that
+	 * returns false for an image that has never been saved, so even a bound handler
+	 * would have refused to drop it.
+	 *
+	 * Removal is now delegated and purely client-side. Nothing is lost: the save
+	 * handler in PostMeta.php deletes all `tlp_team_gallery` meta and re-adds it from
+	 * the submitted `tlp_team_gallery[]` inputs, so dropping the <li> is exactly what
+	 * makes the image go away on Update — and, as everywhere else in the editor,
+	 * leaving without saving discards the change instead of committing it.
+	 */
+	$(document).on("click", "ul#tlp-team-gallery li span.dashicons-dismiss", function (e) {
 		e.preventDefault();
-		if (confirm("Are you sure?")) {
-			var li = $(this).parent('li');
-			var id = li.find('input').val();
-			var post_ID = $("#post_ID").val();
-			var tlp_nonce = $("#tlp_nonce").val();
-			if (id && post_ID && tlp_nonce) {
-				var arg = "id=" + id + "&post_ID=" + post_ID + "&" + ttp.nonceID + "=" + ttp.nonce;
-				li.find('img').css('opacity', .3);
-				AjaxCallTeam($(this), 'tlp_team_profile_img_remove', arg, function (data) {
-					console.log(data.msg);
-					if (!data.error) {
-						li.slideUp('slow').remove();
-					}
-				});
-			} else {
-				alert("Image or Post ID Not found");
-			}
-		}
 
+		var li = $(this).closest('li');
+
+		li.fadeOut(200, function () {
+			$(this).remove();
+			syncTeamGalleryPlaceholder();
+		});
 	});
 
 
@@ -456,6 +559,9 @@
 				plType = $("#ttp_pagination_type");
 			plType.find("label[for='ttp_pagination_type-pagination'],label[for='ttp_pagination_type-pagination_ajax']").show();
 			$("#ttl_image_column_holder").hide();
+			// Shown by default and taken away in the carousel branch below, so switching
+			// away from a slider brings it back.
+			$(".tlp-field-holder.ttp-grid-style-item").show();
 			if (isGrid) {
 				$(".tlp-field-holder.ttp-isotope-filter-item, .tlp-field-holder.ttp-carousel-item").hide();
 				$("#ttp_filter_holder,.tlp-field-holder.ttp-pagination-item.pagination").show();
@@ -463,7 +569,7 @@
 					$("#ttl_image_column_holder").show();
 				}
 			} else if (isCarousel) {
-				$(".tlp-field-holder.ttp-pagination-item,.tlp-field-holder.ttp-isotope-filter-item,.tlp-field-holder.sc-ttp-grid-filter").hide();
+				$(".tlp-field-holder.ttp-pagination-item,.tlp-field-holder.ttp-isotope-filter-item,.tlp-field-holder.sc-ttp-grid-filter,.tlp-field-holder.ttp-grid-style-item").hide();
 				$(".tlp-field-holder.ttp-carousel-item").show();
 			} else if (isIsotope) {
 				$(".tlp-field-holder.ttp-carousel-item,.tlp-field-holder.sc-ttp-grid-filter").hide();

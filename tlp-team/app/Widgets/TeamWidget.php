@@ -55,11 +55,12 @@ class TeamWidget extends WP_Widget {
 		$teamQuery = new \WP_Query( $args );
 		$html      = null;
 		$settings  = get_option( rttlp_team()->options['settings'] );
+		$fields    = isset( $settings['detail_page_fields'] ) ? $settings['detail_page_fields'] : [ 'name', 'designation', 'short_bio', 'email', 'web_url', 'telephone', 'mobile', 'fax', 'location', 'social' ];
 
-		$fName        = in_array( 'name', $settings['detail_page_fields'], true );
-		$fDesignation = in_array( 'designation', $settings['detail_page_fields'], true );
-		$fShort_bio   = in_array( 'short_bio', $settings['detail_page_fields'], true );
-		$fSocial      = in_array( 'social', $settings['detail_page_fields'], true );
+		$fName        = in_array( 'name', $fields, true );
+		$fDesignation = in_array( 'designation', $fields, true );
+		$fShort_bio   = in_array( 'short_bio', $fields, true );
+		$fSocial      = in_array( 'social', $fields, true );
 		$html        .= "<div class='tlp-teamul tlp-row tlp-team'>";
 
 		if ( $teamQuery->have_posts() ) {

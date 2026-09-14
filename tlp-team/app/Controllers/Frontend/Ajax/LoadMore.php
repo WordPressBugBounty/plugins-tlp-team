@@ -110,7 +110,11 @@ class LoadMore {
                 $args['post__not_in'] = $scMeta['ttp_post__not_in'];
 			}
 			/* LIMIT */
-			$limit                  = ( ( empty( $scMeta['ttp_limit'][0] ) || $scMeta['ttp_limit'][0] === '-1' ) ? 10000000 : (int) $scMeta['limit'][0] );
+			// NB: the else branch used to read $scMeta['limit'][0] — a key that does not
+			// exist, so any shortcode with a real limit got posts_per_page = 0 and every
+			// AJAX load-more / ajax-pagination request answered "No more member to load".
+			// Shortcode.php:769 and Preview.php:100 both use ttp_limit in both branches.
+			$limit                  = ( ( empty( $scMeta['ttp_limit'][0] ) || $scMeta['ttp_limit'][0] === '-1' ) ? 10000000 : (int) $scMeta['ttp_limit'][0] );
 			$args['posts_per_page'] = $limit;
 			$pagination             = ( ! empty( $scMeta['ttp_pagination'][0] ) ? true : false );
 
@@ -261,7 +265,7 @@ class LoadMore {
 			$arg['grid'] = "rt-col-md-{$dCol} rt-col-sm-{$tCol} rt-col-xs-{$mCol}";
 
 			if ( ( $layout == 'layout2' ) || ( $layout == 'layout3' ) ) {
-				$iCol                = ( isset( $scMeta['ttp_layout2_image_column'][0] ) ? absint( $scMeta['ttp_layout2_image_column'][0] ) : 4 );
+				$iCol                = ( ! empty( $scMeta['ttl_image_column'][0] ) ? absint( $scMeta['ttl_image_column'][0] ) : 6 );
 				$iCol                = $iCol > 12 ? 4 : $iCol;
 				$cCol                = 12 - $iCol;
 				$arg['image_area']   = "rt-col-sm-{$iCol} rt-col-xs-12 ";
@@ -329,8 +333,20 @@ class LoadMore {
 			}
 
 			$arg['items'] = ! empty( $scMeta['ttp_selected_field'] ) ? $scMeta['ttp_selected_field'] : [];
+			// Templates check 'tax_department'; the field-selection key is 'department'. Mirror it.
+			if ( is_array( $arg['items'] ) && in_array( 'department', $arg['items'], true ) && ! in_array( 'tax_department', $arg['items'], true ) ) {
+				$arg['items'][] = 'tax_department';
+			}
 
-			$isoFilterTaxonomy = ! empty( $scMeta['ttp_isotope_filter_taxonomy'] ) ? $scMeta['ttp_isotope_filter_taxonomy'] : null;
+			// Layout 5 keeps an image cell in every row when the column is on, so a
+			// member with no photo does not shift the rest of the row out of line.
+			// No header row here — this handler appends to a table that has one.
+			$arg['showImage'] = ! $fImg;
+
+			// Match Shortcode.php `isoFilterTaxonomy`: default to 'team_department' so load-more'd
+			// isotope items still receive their `iso_NN` filter classes (otherwise they can't be
+			// filtered by the buttons after being appended).
+			$isoFilterTaxonomy = ! empty( $scMeta['ttp_isotope_filter_taxonomy'] ) ? $scMeta['ttp_isotope_filter_taxonomy'] : 'team_department';
 
 			$teamQuery = new \WP_Query( $args );
 
@@ -367,6 +383,14 @@ class LoadMore {
 							', '
 						)
 					);
+					$arg['tax_department'] = wp_strip_all_tags(
+						get_the_term_list(
+							$mID,
+							rttlp_team()->taxonomies['department'],
+							null,
+							', '
+						)
+					);
 					$arg['email']       = get_post_meta( $mID, 'email', true );
 					$arg['web_url']     = get_post_meta( $mID, 'web_url', true );
 					$arg['telephone']   = get_post_meta( $mID, 'telephone', true );
@@ -380,7 +404,7 @@ class LoadMore {
 						$character_limit
 					) : $short_bio;
 					$arg['sLink']       = get_post_meta( $mID, 'social', true );
-					$arg['tlp_skill']   = unserialize( get_post_meta( $mID, 'skill', true ) );
+					$arg['tlp_skill']   = maybe_unserialize( get_post_meta( $mID, 'skill', true ) );
 					$arg['imgHtml']     = ! $fImg ? Fns::getFeatureImageHtml(
 						$mID,
 						$fImgSize,

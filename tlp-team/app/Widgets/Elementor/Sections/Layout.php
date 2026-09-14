@@ -171,7 +171,7 @@ class Layout {
 			'label'          => esc_html__( 'Number of <br>Image Columns', 'tlp-team' ),
 			'description'    => esc_html__( 'Please select the number of image columns to show per row. Content column will be calculated automatically.', 'tlp-team' ),
 			'options'        => Options::scElColumns(),
-			'default'        => '0',
+			'default'        => '6',
 			'tablet_default' => '0',
 			'mobile_default' => '0',
 			'required'       => true,

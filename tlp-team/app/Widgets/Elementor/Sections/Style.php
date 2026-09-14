@@ -48,6 +48,139 @@ class Style {
 	}
 
 	/**
+	 * Wrapper Style Section
+	 *
+	 * Border, radius and shadow for the member card itself. Shared by the Grid,
+	 * Slider and Isotope widgets, so the selector carries an arm for every card
+	 * root across all three families.
+	 *
+	 * `.single-team-area` is the card on every grid layout, all 11 carousels, 9 of
+	 * the 11 isotope layouts and List 1. The five exceptions each get their own arm:
+	 *   layout-el-6 -> .rt-inner-content
+	 *   special01   -> .rt-sp1-thumb   (its repeated unit is the thumbnail cell)
+	 *   isotope1    -> the bare <figure> (Isotope owns the item transform, so the
+	 *                  card is drawn on the figure, not on a wrapper div)
+	 *   isotope2    -> .rt-iso2-card
+	 *   layout5     -> .table-responsive (the table layout has no per-member card)
+	 *
+	 * `{{WRAPPER}} .rt-elementor-container <card>` is (0,5,0), so these beat the
+	 * per-layout defaults, which sit at (0,3,0).
+	 *
+	 * @param object $obj Reference object.
+	 * @return static
+	 */
+	public static function wrapper( $obj ) {
+		$card  = '{{WRAPPER}} .rt-elementor-container .single-team-area';
+		$card .= ', {{WRAPPER}} .rt-elementor-container .layout-el-6 .rt-inner-content';
+		$card .= ', {{WRAPPER}} .rt-elementor-container .special01 .rt-sp1-thumb';
+		$card .= ', {{WRAPPER}} .rt-elementor-container .isotope1 .team-member > figure';
+		$card .= ', {{WRAPPER}} .rt-elementor-container .isotope2 .rt-iso2-card';
+		/*
+		 * layout5 is the table layout in the List widget: no per-member card element at
+		 * all, so the whole table box is the wrapper, and `.table-responsive` is what
+		 * carries the layout's own border/radius/shadow on the Elementor path.
+		 *
+		 * Kept OUT of $card because $card is the set we are free to clip: this element is
+		 * the table's horizontal scroll container (`overflow-x: auto`), and an
+		 * `overflow: hidden` shorthand on it kills the scrollbar and truncates every
+		 * column past the fold. It takes the border and shadow, and the radius without
+		 * the clip -- `overflow-x: auto` already establishes one.
+		 */
+		$table = ', {{WRAPPER}} .rt-elementor-container .layout5 .table-responsive';
+
+		/*
+		 * Several layouts do not paint the card's corners on the card root -- an inner
+		 * box carries the background/clip and its own radius, so rounding the root alone
+		 * leaves the visible corners untouched (setting the control to 0 looked dead).
+		 * These arms are the elements measured at ~100% of the card box:
+		 *   .single-team        -> layout-el-4
+		 *   .tlp-team-item      -> layout7 / carousel-el-2 (hardcodes .layout7) / isotope4,
+		 *                          layout-el-10 / carousel5 (hardcodes .layout10) / isotope7
+		 *   .rt-l12-face        -> layout12 / carousel7 (hardcodes .layout12), both flip faces
+		 *   .tlp-portfolio-thum -> layout-el-8 / carousel3 (hardcodes .layout8) / isotope5,
+		 *                          where the portrait box IS the card's outer edge
+		 *   .tlp-content        -> layout18's white card body
+		 * Scoped per layout on purpose: .tlp-portfolio-thum is the *photo* on layout17/18,
+		 * which the Image Style radius already owns, and must not follow the wrapper.
+		 */
+		$inner  = '{{WRAPPER}} .rt-elementor-container .layout-el-4 .single-team';
+		$inner .= ', {{WRAPPER}} .rt-elementor-container .layout7 .tlp-team-item';
+		$inner .= ', {{WRAPPER}} .rt-elementor-container .isotope4 .tlp-team-item';
+		$inner .= ', {{WRAPPER}} .rt-elementor-container .layout-el-10 .tlp-team-item';
+		$inner .= ', {{WRAPPER}} .rt-elementor-container .layout10 .tlp-team-item';
+		$inner .= ', {{WRAPPER}} .rt-elementor-container .isotope7 .tlp-team-item';
+		$inner .= ', {{WRAPPER}} .rt-elementor-container .layout12 .rt-l12-face';
+		$inner .= ', {{WRAPPER}} .rt-elementor-container .layout-el-8 .tlp-portfolio-thum';
+		$inner .= ', {{WRAPPER}} .rt-elementor-container .layout8 .tlp-portfolio-thum';
+		$inner .= ', {{WRAPPER}} .rt-elementor-container .isotope5 .tlp-portfolio-thum';
+		$inner .= ', {{WRAPPER}} .rt-elementor-container .layout18 .tlp-content';
+		$inner .= $table;
+
+
+		/*
+		 * Radius only: Image Style's radius control also targets the card box on a few
+		 * layouts (`[data-layout="layout3"] .single-team-area`, `.layout11/.carousel6
+		 * .single-team-area`, `.layout10/.layout-el-10/.carousel5 .tlp-team-item`) at
+		 * (0,6,0), and it is emitted after this section -- so at equal weight it won and
+		 * the Wrapper radius looked dead. Repeating the container class lifts these to
+		 * (0,7,0)+ so the Wrapper owns the CARD and Image Style owns the PHOTO.
+		 *
+		 * Not applied to the border or shadow selectors: nothing competes with them there
+		 * -- layout defaults live in the static stylesheets without {{WRAPPER}}, so they
+		 * sit at (0,3,0)-(0,4,0) and the plain (0,5,0) selectors already win. Note that
+		 * this also means a user-set Wrapper shadow replaces a layout's :hover shadow,
+		 * so the card keeps one shadow across the hover transition.
+		 */
+		// Border and shadow are safe on every box, the table wrapper included.
+		$box = $card . $table;
+
+		$boost  = '.rt-elementor-container.rt-elementor-container.rt-elementor-container';
+		$cardR  = str_replace( '.rt-elementor-container', $boost, $card );
+		$innerR = str_replace( '.rt-elementor-container', $boost, $inner );
+
+		$obj->startSection( 'wrapper_style_section', esc_html__( 'Wrapper', 'tlp-team' ), self::$tab );
+
+		$obj->elControls[] = [
+			'mode'      => 'group',
+			'type'      => 'border',
+			'id'        => $obj->elPrefix . 'wrapper',
+			'selector'  => $box,
+			'separator' => 'after',
+		];
+
+		$obj->elControls[] = [
+			'mode'       => 'responsive',
+			'type'       => 'dimensions',
+			'id'         => $obj->elPrefix . 'wrapper_border_radius',
+			'label'      => esc_html__( 'Border Radius', 'tlp-team' ),
+			'size_units' => [ 'px', '%' ],
+			'separator'  => 'after',
+			'selectors'  => [
+				// `overflow: hidden` rides along with the radius so the card actually clips
+				// to the curve. Without it a full-bleed photo, or a hover overlay, keeps its
+				// square corners and pokes through the rounded edge. Verified across all 39
+				// layouts of all three families at rest and on hover: neutral or an
+				// improvement everywhere.
+				$cardR  => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}}; overflow: hidden;',
+				// Radius only -- these already clip, and forcing overflow on them would
+				// cut off decorations they deliberately let escape (layout18's fold).
+				$innerR => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+			],
+		];
+
+		$obj->elControls[] = [
+			'mode'     => 'group',
+			'type'     => 'box-shadow',
+			'id'       => $obj->elPrefix . 'wrapper_shadow',
+			'selector' => $box,
+		];
+
+		$obj->endSection();
+
+		return new static();
+	}
+
+	/**
 	 * Name section
 	 *
 	 * @param object $obj Reference object.
@@ -67,7 +200,7 @@ class Style {
 			'mode'     => 'group',
 			'type'     => 'typography',
 			'id'       => $obj->elPrefix . 'name_typography',
-			'selector' => '{{WRAPPER}} .single-team-area h3, {{WRAPPER}} .rt-elementor-container h3, {{WRAPPER}} .rt-elementor-container .layout11 .single-team-area .tlp-title h3, {{WRAPPER}} .rt-elementor-container .special01 .rt-special-wrapper .rt-row h3,{{WRAPPER}} .rttmp-builder-team-details .tlp-member-title',
+			'selector' => '{{WRAPPER}} .rt-elementor-container .layout9 .tlp-label-name, {{WRAPPER}} .rt-elementor-container .layout1 .single-team-area h3, {{WRAPPER}} .rt-elementor-container .layout1 .single-team-area h3 a, {{WRAPPER}} .single-team-area h3, {{WRAPPER}} .rt-elementor-container h3, {{WRAPPER}} .rt-elementor-container .layout11 .single-team-area .tlp-title h3, {{WRAPPER}} .rt-elementor-container .special01 .rt-special-wrapper .rt-row h3,{{WRAPPER}} .rttmp-builder-team-details .tlp-member-title',
 		];
 
 		$obj->elControls[] = [
@@ -90,7 +223,7 @@ class Style {
 				],
 			],
 			'selectors' => [
-				'{{WRAPPER}} .single-team-area h3, {{WRAPPER}} .rt-elementor-container h3, {{WRAPPER}} .rt-elementor-container .layout11 .single-team-area .tlp-title h3, {{WRAPPER}} .rt-elementor-container .special01 .rt-special-wrapper .rt-row h3,{{WRAPPER}} .rttmp-builder-team-details .tlp-member-title' => 'text-align: {{VALUE}}',
+				'{{WRAPPER}} .rt-elementor-container .layout1 .single-team-area h3, {{WRAPPER}} .rt-elementor-container .layout1 .single-team-area h3 a, {{WRAPPER}} .single-team-area h3, {{WRAPPER}} .rt-elementor-container h3, {{WRAPPER}} .rt-elementor-container .layout11 .single-team-area .tlp-title h3, {{WRAPPER}} .rt-elementor-container .special01 .rt-special-wrapper .rt-row h3,{{WRAPPER}} .rttmp-builder-team-details .tlp-member-title' => 'text-align: {{VALUE}}',
 			],
 		];
 
@@ -104,7 +237,7 @@ class Style {
 			'id'        => $obj->elPrefix . 'name_color',
 			'label'     => esc_html__( 'Color', 'tlp-team' ),
 			'selectors' => [
-				'{{WRAPPER}} .single-team-area h3, {{WRAPPER}} .rt-elementor-container h3, {{WRAPPER}} .rt-elementor-container .layout11 .single-team-area .tlp-title h3, {{WRAPPER}} .rt-elementor-container .layout13 .single-team-area .tlp-overlay h3, {{WRAPPER}} .rt-elementor-container .layout14 .rt-grid-item .tlp-overlay h3, {{WRAPPER}} .rt-elementor-container .special01 .rt-special-wrapper .rt-row h3, {{WRAPPER}} .rt-elementor-container .carousel8 .rt-grid-item .tlp-overlay h3, {{WRAPPER}} .rt-elementor-container .carousel9 .single-team-area .tlp-overlay h3,{{WRAPPER}} .rt-elementor-container .layout17 .single-team-area .tlp-title h3 a,{{WRAPPER}} .rt-elementor-container .layout17 .single-team-area .tlp-title h3,{{WRAPPER}} .rttmp-builder-team-details .tlp-member-title' => 'color: {{VALUE}}',
+				'{{WRAPPER}} .rt-elementor-container .layout9 .tlp-label-name, {{WRAPPER}} .rt-elementor-container .layout1 .single-team-area h3, {{WRAPPER}} .rt-elementor-container .layout1 .single-team-area h3 a, {{WRAPPER}} .single-team-area h3, {{WRAPPER}} .rt-elementor-container h3, {{WRAPPER}} .rt-elementor-container .layout11 .single-team-area .tlp-title h3, {{WRAPPER}} .rt-elementor-container .layout13 .single-team-area .tlp-overlay h3, {{WRAPPER}} .rt-elementor-container .layout14 .rt-grid-item .tlp-overlay h3, {{WRAPPER}} .rt-elementor-container .special01 .rt-special-wrapper .rt-row h3, {{WRAPPER}} .rt-elementor-container .carousel8 .rt-grid-item .tlp-overlay h3, {{WRAPPER}} .rt-elementor-container .carousel9 .single-team-area .tlp-overlay h3,{{WRAPPER}} .rt-elementor-container .layout17 .single-team-area .tlp-title h3 a,{{WRAPPER}} .rt-elementor-container .layout17 .single-team-area .tlp-title h3,{{WRAPPER}} .rttmp-builder-team-details .tlp-member-title' => 'color: {{VALUE}}',
 			],
 		];
 
@@ -113,7 +246,7 @@ class Style {
 			'id'        => $obj->elPrefix . 'name_bg_color',
 			'label'     => esc_html__( 'Background Color', 'tlp-team' ),
 			'selectors' => [
-				'{{WRAPPER}} .single-team-area h3, {{WRAPPER}} .rt-elementor-container h3, {{WRAPPER}} .rt-elementor-container .layout11 .single-team-area .tlp-title h3,{{WRAPPER}} .rttmp-builder-team-details .tlp-member-title' => 'background-color: {{VALUE}}',
+				'{{WRAPPER}} .rt-elementor-container .layout1 .single-team-area h3, {{WRAPPER}} .rt-elementor-container .layout1 .single-team-area h3 a, {{WRAPPER}} .single-team-area h3, {{WRAPPER}} .rt-elementor-container h3, {{WRAPPER}} .rt-elementor-container .layout11 .single-team-area .tlp-title h3,{{WRAPPER}} .rttmp-builder-team-details .tlp-member-title' => 'background-color: {{VALUE}}',
 			],
 		];
 
@@ -121,9 +254,12 @@ class Style {
 			'type'      => 'color',
 			'id'        => $obj->elPrefix . 'name_top_color',
 			'label'     => esc_html__( 'Top Title Color', 'tlp-team' ),
-			'condition' => [ $obj->elPrefix . 'layout' => [ 'layout-el-10', 'carousel5' ] ],
+			'condition' => [ $obj->elPrefix . 'layout' => [ 'layout-el-10', 'carousel5', 'isotope7' ] ],
+			// Repointed to `.ov-name`: the redesigned Layout 10 card (shared by carousel5)
+			// puts the name in an overlay pill, so the old `.tlp-overlay .tlp-title h3`
+			// element no longer exists on either layout and these controls did nothing.
 			'selectors' => [
-				'{{WRAPPER}} .rt-elementor-container .layout-el-10 .tlp-overlay .tlp-title h3, {{WRAPPER}} .rt-elementor-container .carousel5 .tlp-overlay .tlp-title h3' => 'color: {{VALUE}}',
+				'{{WRAPPER}} .rt-elementor-container .layout-el-10 .ov-name, {{WRAPPER}} .rt-elementor-container .carousel5 .ov-name, {{WRAPPER}} .rt-elementor-container .isotope7 .ov-name' => 'color: {{VALUE}}',
 			],
 		];
 
@@ -131,9 +267,9 @@ class Style {
 			'type'      => 'color',
 			'id'        => $obj->elPrefix . 'name_top_bg_color',
 			'label'     => esc_html__( 'Top Title Background Color', 'tlp-team' ),
-			'condition' => [ $obj->elPrefix . 'layout' => [ 'layout-el-10', 'carousel5' ] ],
+			'condition' => [ $obj->elPrefix . 'layout' => [ 'layout-el-10', 'carousel5', 'isotope7' ] ],
 			'selectors' => [
-				'{{WRAPPER}} .rt-elementor-container .layout-el-10 .tlp-overlay .tlp-title h3, {{WRAPPER}} .rt-elementor-container .carousel5 .tlp-overlay .tlp-title h3' => 'background-color: {{VALUE}}',
+				'{{WRAPPER}} .rt-elementor-container .layout-el-10 .ov-name, {{WRAPPER}} .rt-elementor-container .carousel5 .ov-name, {{WRAPPER}} .rt-elementor-container .isotope7 .ov-name' => 'background-color: {{VALUE}}',
 			],
 		];
 
@@ -141,9 +277,12 @@ class Style {
 			'type'      => 'color',
 			'id'        => $obj->elPrefix . 'name_inner_bg_color',
 			'label'     => esc_html__( 'Inner Background Color', 'tlp-team' ),
-			'condition' => [ $obj->elPrefix . 'layout' => [ 'layout12', 'carousel7', 'isotope-el-6' ] ],
+			// isotope-el-6 removed: it now shares Grid Layout 9's card, which has no boxed
+			// `h3 .team-name` label — the name sits in the hover overlay. layout9 is not in
+			// this list, so offering the control here made the two disagree and it did nothing.
+			'condition' => [ $obj->elPrefix . 'layout' => [ 'layout12', 'carousel7' ] ],
 			'selectors' => [
-				'{{WRAPPER}} .rt-elementor-container .layout12 .single-team-area h3 .team-name, {{WRAPPER}} .rt-elementor-container .isotope-el-6 .single-team-area h3 .team-name' => 'background-color: {{VALUE}}',
+				'{{WRAPPER}} .rt-elementor-container .layout12 .single-team-area h3 .team-name' => 'background-color: {{VALUE}}',
 			],
 		];
 
@@ -171,10 +310,13 @@ class Style {
 		$obj->elControls[] = [
 			'type'      => 'color',
 			'id'        => $obj->elPrefix . 'name_top_hover_color',
-			'condition' => [ $obj->elPrefix . 'layout' => [ 'layout10', 'carousel5' ] ],
+			// Was conditioned on `layout10`, which is the SHORTCODE key — the Elementor
+			// grid uses `layout-el-10` (AdminFilter::scLayout()), so the control only
+			// ever appeared for carousel5. Corrected so both share it.
+			'condition' => [ $obj->elPrefix . 'layout' => [ 'layout-el-10', 'carousel5', 'isotope7' ] ],
 			'label'     => esc_html__( 'Top Hover Color', 'tlp-team' ),
 			'selectors' => [
-				'{{WRAPPER}} .rt-elementor-container .layout10 .tlp-overlay .tlp-title:hover h3' => 'color: {{VALUE}}',
+				'{{WRAPPER}} .rt-elementor-container .layout-el-10 .ov-name:hover, {{WRAPPER}} .rt-elementor-container .carousel5 .ov-name:hover, {{WRAPPER}} .rt-elementor-container .isotope7 .ov-name:hover' => 'color: {{VALUE}}',
 			],
 		];
 
@@ -182,9 +324,9 @@ class Style {
 			'type'      => 'color',
 			'id'        => $obj->elPrefix . 'name_top_hover_bg_color',
 			'label'     => esc_html__( 'Top Hover Background Color', 'tlp-team' ),
-			'condition' => [ $obj->elPrefix . 'layout' => [ 'layout10', 'carousel5' ] ],
+			'condition' => [ $obj->elPrefix . 'layout' => [ 'layout-el-10', 'carousel5', 'isotope7' ] ],
 			'selectors' => [
-				'{{WRAPPER}} .rt-elementor-container .layout10 .tlp-overlay .tlp-title:hover h3' => 'background-color: {{VALUE}}',
+				'{{WRAPPER}} .rt-elementor-container .layout-el-10 .ov-name:hover, {{WRAPPER}} .rt-elementor-container .carousel5 .ov-name:hover, {{WRAPPER}} .rt-elementor-container .isotope7 .ov-name:hover' => 'background-color: {{VALUE}}',
 			],
 		];
 
@@ -198,7 +340,7 @@ class Style {
 			'type'     => 'border',
 			'label'    => esc_html__( 'Border', 'tlp-team' ),
 			'id'       => $obj->elPrefix . 'name_border',
-			'selector' => '{{WRAPPER}} .single-team-area h3, {{WRAPPER}} .rt-elementor-container h3,{{WRAPPER}} .rttmp-builder-team-details .tlp-member-title',
+			'selector' => '{{WRAPPER}} .rt-elementor-container .layout1 .single-team-area h3, {{WRAPPER}} .rt-elementor-container .layout1 .single-team-area h3 a, {{WRAPPER}} .single-team-area h3, {{WRAPPER}} .rt-elementor-container h3,{{WRAPPER}} .rttmp-builder-team-details .tlp-member-title',
 		];
 
 		$obj->elControls[] = [
@@ -220,7 +362,7 @@ class Style {
 			'label'      => esc_html__( 'Padding', 'tlp-team' ),
 			'size_units' => [ 'px', '%', 'em' ],
 			'selectors'  => [
-				'{{WRAPPER}} .single-team-area h3, {{WRAPPER}} .rt-elementor-container h3,{{WRAPPER}} .rttmp-builder-team-details .tlp-member-title' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}} !important;',
+				'{{WRAPPER}} .rt-elementor-container .layout1 .single-team-area h3, {{WRAPPER}} .rt-elementor-container .layout1 .single-team-area h3 a, {{WRAPPER}} .single-team-area h3, {{WRAPPER}} .rt-elementor-container h3,{{WRAPPER}} .rttmp-builder-team-details .tlp-member-title' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}} !important;',
 			],
 		];
 
@@ -231,7 +373,7 @@ class Style {
 			'label'      => esc_html__( 'Margin', 'tlp-team' ),
 			'size_units' => [ 'px', '%', 'em' ],
 			'selectors'  => [
-				'{{WRAPPER}} .single-team-area h3, {{WRAPPER}} .rt-elementor-container h3,{{WRAPPER}} .rttmp-builder-team-details .tlp-member-title' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}} !important;',
+				'{{WRAPPER}} .rt-elementor-container .layout1 .single-team-area h3, {{WRAPPER}} .rt-elementor-container .layout1 .single-team-area h3 a, {{WRAPPER}} .single-team-area h3, {{WRAPPER}} .rt-elementor-container h3,{{WRAPPER}} .rttmp-builder-team-details .tlp-member-title' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}} !important;',
 			],
 		];
 
@@ -241,9 +383,9 @@ class Style {
 			'id'         => $obj->elPrefix . 'name_top_padding',
 			'label'      => esc_html__( 'Top Title Padding', 'tlp-team' ),
 			'size_units' => [ 'px', '%', 'em' ],
-			'condition'  => [ $obj->elPrefix . 'layout' => [ 'layout10', 'carousel5' ] ],
+			'condition'  => [ $obj->elPrefix . 'layout' => [ 'layout-el-10', 'carousel5', 'isotope7' ] ],
 			'selectors'  => [
-				'{{WRAPPER}} .rt-elementor-container .layout10 .tlp-overlay .tlp-title h3,{{WRAPPER}} .rttmp-builder-team-details .tlp-member-title' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}} !important;',
+				'{{WRAPPER}} .rt-elementor-container .layout-el-10 .ov-name, {{WRAPPER}} .rt-elementor-container .carousel5 .ov-name, {{WRAPPER}} .rt-elementor-container .isotope7 .ov-name' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}} !important;',
 			],
 		];
 
@@ -267,11 +409,23 @@ class Style {
 		$obj->startSection( 'designation_section', esc_html__( 'Designation', 'tlp-team' ), self::$tab, [], $condition );
 		$obj->elHeading( $obj->elPrefix . 'designation_typography_note', esc_html__( 'Typography', 'tlp-team' ) );
 
+		/*
+		 * The three `.rt-content-loader` selectors in front are a layout-agnostic
+		 * specificity boost, not a new target. A control emits `{{WRAPPER}} .X`
+		 * (~0,3,0), but the per-layout designation defaults in tlp-el-team-pro.css are
+		 * `.rt-elementor-container .layoutN .tlp-position` (0,3,0) and, on layout5 /
+		 * 17 / 18 / -el-10 / layout2, 0,4,0 — so the bare selector tied or lost on
+		 * every layout that had not been given its own boosted variant below.
+		 * `.rt-content-loader` sits on the row element in all three Elementor views
+		 * (GridView:117, IsotopeView:103, SliderView:86) alongside the layout class,
+		 * so this reaches 0,5,0 for every layout at once. The per-layout entries that
+		 * follow are kept: they still carry the deeper overlay/title targets.
+		 */
 		$obj->elControls[] = [
 			'mode'     => 'group',
 			'type'     => 'typography',
 			'id'       => $obj->elPrefix . 'designation_typography',
-			'selector' => '{{WRAPPER}} .tlp-position, {{WRAPPER}} .layout2 .rttm-content-area .tlp-position, {{WRAPPER}} .rt-elementor-container .layout-el-8 .tlp-overlay .tlp-position, {{WRAPPER}} .rt-elementor-container .layout9 .single-team-area:hover .tlp-position, {{WRAPPER}} .rt-elementor-container .layout13 .single-team-area .tlp-overlay .tlp-position, {{WRAPPER}} .rt-elementor-container .special01 .rt-special-wrapper .rt-row .tlp-position, {{WRAPPER}} .rt-elementor-container .layout11 .single-team-area .tlp-title .tlp-position, {{WRAPPER}} .rt-elementor-container .special01 .rt-el-special-wrapper .rt-row .tlp-position',
+			'selector' => '{{WRAPPER}} .rt-elementor-container .rt-content-loader .tlp-position, {{WRAPPER}} .rt-elementor-container .rt-content-loader .tlp-position a, {{WRAPPER}} .rt-elementor-container .rt-content-loader .tlp-label-role, {{WRAPPER}} .rt-elementor-container .layout9 .tlp-label-role, {{WRAPPER}} .rt-elementor-container .layout1 .tlp-position, {{WRAPPER}} .rt-elementor-container .layout1 .tlp-position a, {{WRAPPER}} .tlp-position, {{WRAPPER}} .layout2 .rttm-content-area .tlp-position, {{WRAPPER}} .rt-elementor-container .layout-el-8 .tlp-overlay .tlp-position, {{WRAPPER}} .rt-elementor-container .layout9 .single-team-area:hover .tlp-position, {{WRAPPER}} .rt-elementor-container .layout13 .single-team-area .tlp-overlay .tlp-position, {{WRAPPER}} .rt-elementor-container .special01 .rt-special-wrapper .rt-row .tlp-position, {{WRAPPER}} .rt-elementor-container .layout11 .single-team-area .tlp-title .tlp-position, {{WRAPPER}} .rt-elementor-container .special01 .rt-el-special-wrapper .rt-row .tlp-position',
 		];
 
 		$obj->elControls[] = [
@@ -294,7 +448,7 @@ class Style {
 				],
 			],
 			'selectors' => [
-				'{{WRAPPER}} .tlp-position, {{WRAPPER}} .rt-elementor-container .layout-el-4 .single-team-area .overlay .overlay-element .tlp-content2 > *, {{WRAPPER}} .rt-elementor-container .layout-el-8 .tlp-overlay .tlp-position, {{WRAPPER}} .rt-elementor-container .layout11 .single-team-area .tlp-title .tlp-position, {{WRAPPER}} .rt-elementor-container .carousel9 .single-team-area .tlp-overlay .tlp-position, {{WRAPPER}} .rt-elementor-container .layout-el-4 .single-team-area .overlay .overlay-element .tlp-content2>.tlp-position, {{WRAPPER}} .rt-elementor-container .isotope4 .caption-inner-content>.tlp-position, {{WRAPPER}} .rt-elementor-container .layout7 .caption-inner-content>.tlp-position' => 'text-align: {{VALUE}}',
+				'{{WRAPPER}} .rt-elementor-container .layout1 .tlp-position, {{WRAPPER}} .rt-elementor-container .layout1 .tlp-position a, {{WRAPPER}} .tlp-position, {{WRAPPER}} .rt-elementor-container .layout-el-4 .single-team-area .overlay .overlay-element .tlp-content2 > *, {{WRAPPER}} .rt-elementor-container .layout-el-8 .tlp-overlay .tlp-position, {{WRAPPER}} .rt-elementor-container .layout11 .single-team-area .tlp-title .tlp-position, {{WRAPPER}} .rt-elementor-container .carousel9 .single-team-area .tlp-overlay .tlp-position, {{WRAPPER}} .rt-elementor-container .layout-el-4 .single-team-area .overlay .overlay-element .tlp-content2>.tlp-position, {{WRAPPER}} .rt-elementor-container .isotope4 .caption-inner-content>.tlp-position, {{WRAPPER}} .rt-elementor-container .layout7 .caption-inner-content>.tlp-position' => 'text-align: {{VALUE}}',
 			],
 		];
 
@@ -303,21 +457,23 @@ class Style {
 		$obj->startTabGroup( 'designation_color_tabs' );
 		$obj->startTab( 'designation_color_tab', esc_html__( 'Normal', 'tlp-team' ) );
 
+		// Same specificity boost as the Typography control above.
 		$obj->elControls[] = [
 			'type'      => 'color',
 			'id'        => $obj->elPrefix . 'designation_color',
 			'label'     => esc_html__( 'Color', 'tlp-team' ),
 			'selectors' => [
-				'{{WRAPPER}} .tlp-position,{{WRAPPER}} .tlp-position a, {{WRAPPER}} .layout2 .rttm-content-area .tlp-position, {{WRAPPER}} .tlp-overlay1 .tlp-position, {{WRAPPER}} .rt-elementor-container .layout3 .tlp-content .tlp-position, {{WRAPPER}} .rt-elementor-container .layout-el-8 .tlp-overlay .tlp-position, {{WRAPPER}} .rt-elementor-container .layout12 .tlp-position span, {{WRAPPER}} .rt-elementor-container .layout13 .single-team-area .tlp-overlay .tlp-position, {{WRAPPER}} .rt-elementor-container .layout14 .rt-grid-item .tlp-overlay .tlp-position, {{WRAPPER}} .rt-elementor-container .special01 .rt-special-wrapper .rt-row .tlp-position, {{WRAPPER}} .rt-elementor-container .layout11 .single-team-area .tlp-title .tlp-position, {{WRAPPER}} .rt-elementor-container .carousel8 .rt-grid-item .tlp-overlay .tlp-position, {{WRAPPER}} .rt-elementor-container .carousel9 .single-team-area .tlp-overlay .tlp-position, {{WRAPPER}} .rt-elementor-container .special01 .rt-el-special-wrapper .rt-row .tlp-position,{{WRAPPER}} .rt-elementor-container .layout17 .single-team-area .tlp-position a,{{WRAPPER}} .rt-elementor-container .layout17 .single-team-area .tlp-position' => 'color: {{VALUE}}',
+				'{{WRAPPER}} .rt-elementor-container .rt-content-loader .tlp-position, {{WRAPPER}} .rt-elementor-container .rt-content-loader .tlp-position a, {{WRAPPER}} .rt-elementor-container .rt-content-loader .tlp-label-role, {{WRAPPER}} .rt-elementor-container .layout9 .tlp-label-role, {{WRAPPER}} .rt-elementor-container .layout1 .tlp-position, {{WRAPPER}} .rt-elementor-container .layout1 .tlp-position a, {{WRAPPER}} .tlp-position,{{WRAPPER}} .tlp-position a, {{WRAPPER}} .layout2 .rttm-content-area .tlp-position, {{WRAPPER}} .tlp-overlay1 .tlp-position, {{WRAPPER}} .rt-elementor-container .layout3 .tlp-content .tlp-position, {{WRAPPER}} .rt-elementor-container .layout-el-8 .tlp-overlay .tlp-position, {{WRAPPER}} .rt-elementor-container .layout12 .tlp-position span, {{WRAPPER}} .rt-elementor-container .layout13 .single-team-area .tlp-overlay .tlp-position, {{WRAPPER}} .rt-elementor-container .layout14 .rt-grid-item .tlp-overlay .tlp-position, {{WRAPPER}} .rt-elementor-container .special01 .rt-special-wrapper .rt-row .tlp-position, {{WRAPPER}} .rt-elementor-container .layout11 .single-team-area .tlp-title .tlp-position, {{WRAPPER}} .rt-elementor-container .carousel8 .rt-grid-item .tlp-overlay .tlp-position, {{WRAPPER}} .rt-elementor-container .carousel9 .single-team-area .tlp-overlay .tlp-position, {{WRAPPER}} .rt-elementor-container .special01 .rt-el-special-wrapper .rt-row .tlp-position,{{WRAPPER}} .rt-elementor-container .layout17 .single-team-area .tlp-position a,{{WRAPPER}} .rt-elementor-container .layout17 .single-team-area .tlp-position' => 'color: {{VALUE}}',
 			],
 		];
 
+		// Same specificity boost as the Typography control above.
 		$obj->elControls[] = [
 			'type'      => 'color',
 			'id'        => $obj->elPrefix . 'designation_bg_color',
 			'label'     => esc_html__( 'Background Color', 'tlp-team' ),
 			'selectors' => [
-				'{{WRAPPER}} .tlp-position, {{WRAPPER}} .layout2 .rttm-content-area .tlp-position, {{WRAPPER}} .tlp-overlay1 .tlp-position, {{WRAPPER}} .rt-elementor-container .layout3 .tlp-content .tlp-position, {{WRAPPER}} .rt-elementor-container .layout12 .tlp-position span, {{WRAPPER}} .rt-elementor-container .layout11 .single-team-area .tlp-title .tlp-position' => 'background-color: {{VALUE}}',
+				'{{WRAPPER}} .rt-elementor-container .rt-content-loader .tlp-position, {{WRAPPER}} .rt-elementor-container .rt-content-loader .tlp-position a, {{WRAPPER}} .rt-elementor-container .rt-content-loader .tlp-label-role, {{WRAPPER}} .rt-elementor-container .layout1 .tlp-position, {{WRAPPER}} .rt-elementor-container .layout1 .tlp-position a, {{WRAPPER}} .tlp-position, {{WRAPPER}} .layout2 .rttm-content-area .tlp-position, {{WRAPPER}} .tlp-overlay1 .tlp-position, {{WRAPPER}} .rt-elementor-container .layout3 .tlp-content .tlp-position, {{WRAPPER}} .rt-elementor-container .layout12 .tlp-position span, {{WRAPPER}} .rt-elementor-container .layout11 .single-team-area .tlp-title .tlp-position' => 'background-color: {{VALUE}}',
 			],
 		];
 
@@ -325,9 +481,12 @@ class Style {
 			'type'      => 'color',
 			'id'        => $obj->elPrefix . 'designation_inner_bg_color',
 			'label'     => esc_html__( 'Inner Background Color', 'tlp-team' ),
-			'condition' => [ $obj->elPrefix . 'layout' => [ 'layout12', 'carousel7', 'isotope-el-6' ] ],
+			// isotope-el-6 removed for the same reason as the Name twin above: Grid Layout 9's
+			// card has no `.tlp-position span` box — the role is a pill at rest and plain text
+			// in the overlay.
+			'condition' => [ $obj->elPrefix . 'layout' => [ 'layout12', 'carousel7' ] ],
 			'selectors' => [
-				'{{WRAPPER}} .rt-elementor-container .layout12 .tlp-position span, {{WRAPPER}} .rt-elementor-container .isotope-el-6 .tlp-position span' => 'background-color: {{VALUE}}',
+				'{{WRAPPER}} .rt-elementor-container .layout12 .tlp-position span' => 'background-color: {{VALUE}}',
 			],
 		];
 
@@ -339,7 +498,7 @@ class Style {
 			'id'        => $obj->elPrefix . 'designation_hover_color',
 			'label'     => esc_html__( 'Hover Color', 'tlp-team' ),
 			'selectors' => [
-				'{{WRAPPER}} .tlp-position:hover, {{WRAPPER}} .tlp-position a:hover,{{WRAPPER}} .layout2 .rttm-content-area .tlp-position:hover, {{WRAPPER}} .rt-elementor-container .layout3 .tlp-content .tlp-position:hover, {{WRAPPER}} .rt-elementor-container .layout-el-8 .tlp-overlay .tlp-position:hover, {{WRAPPER}} .rt-elementor-container .layout12 .tlp-position:hover span, {{WRAPPER}} .rt-elementor-container .layout13 .single-team-area .tlp-overlay .tlp-position:hover, {{WRAPPER}} .rt-elementor-container .layout14 .rt-grid-item .tlp-overlay .tlp-position:hover, {{WRAPPER}} .rt-elementor-container .special01 .rt-special-wrapper .rt-row .tlp-position:hover, {{WRAPPER}} .rt-elementor-container .layout11 .single-team-area .tlp-title .tlp-position:hover, {{WRAPPER}} .rt-elementor-container .carousel8 .rt-grid-item .tlp-overlay .tlp-position:hover, {{WRAPPER}} .rt-elementor-container .carousel9 .single-team-area .tlp-overlay .tlp-position:hover, {{WRAPPER}} .rt-elementor-container .special01 .rt-el-special-wrapper .rt-row .tlp-position:hover,{{WRAPPER}} .rt-elementor-container .layout17 .single-team-area:hover .tlp-position a,{{WRAPPER}} .rt-elementor-container .layout17 .single-team-area:hover .tlp-position' => 'color: {{VALUE}} !important',
+				'{{WRAPPER}} .rt-elementor-container .layout1 .tlp-position, {{WRAPPER}} .rt-elementor-container .layout1 .tlp-position a, {{WRAPPER}} .tlp-position:hover, {{WRAPPER}} .tlp-position a:hover,{{WRAPPER}} .layout2 .rttm-content-area .tlp-position:hover, {{WRAPPER}} .rt-elementor-container .layout3 .tlp-content .tlp-position:hover, {{WRAPPER}} .rt-elementor-container .layout-el-8 .tlp-overlay .tlp-position:hover, {{WRAPPER}} .rt-elementor-container .layout12 .tlp-position:hover span, {{WRAPPER}} .rt-elementor-container .layout13 .single-team-area .tlp-overlay .tlp-position:hover, {{WRAPPER}} .rt-elementor-container .layout14 .rt-grid-item .tlp-overlay .tlp-position:hover, {{WRAPPER}} .rt-elementor-container .special01 .rt-special-wrapper .rt-row .tlp-position:hover, {{WRAPPER}} .rt-elementor-container .layout11 .single-team-area .tlp-title .tlp-position:hover, {{WRAPPER}} .rt-elementor-container .carousel8 .rt-grid-item .tlp-overlay .tlp-position:hover, {{WRAPPER}} .rt-elementor-container .carousel9 .single-team-area .tlp-overlay .tlp-position:hover, {{WRAPPER}} .rt-elementor-container .special01 .rt-el-special-wrapper .rt-row .tlp-position:hover,{{WRAPPER}} .rt-elementor-container .layout17 .single-team-area:hover .tlp-position a,{{WRAPPER}} .rt-elementor-container .layout17 .single-team-area:hover .tlp-position' => 'color: {{VALUE}} !important',
 			],
 		];
 
@@ -348,7 +507,7 @@ class Style {
 			'id'        => $obj->elPrefix . 'designation_hover_bg_color',
 			'label'     => esc_html__( 'Hover Background Color', 'tlp-team' ),
 			'selectors' => [
-				'{{WRAPPER}} .tlp-position:hover, {{WRAPPER}} .layout2 .rttm-content-area .tlp-position:hover, {{WRAPPER}} .rt-elementor-container .layout3 .tlp-content .tlp-position:hover, {{WRAPPER}} .rt-elementor-container .layout12 .tlp-position:hover span, {{WRAPPER}} .rt-elementor-container .layout11 .single-team-area .tlp-title .tlp-position:hover' => 'background-color: {{VALUE}}',
+				'{{WRAPPER}} .rt-elementor-container .layout1 .tlp-position, {{WRAPPER}} .rt-elementor-container .layout1 .tlp-position a, {{WRAPPER}} .tlp-position:hover, {{WRAPPER}} .layout2 .rttm-content-area .tlp-position:hover, {{WRAPPER}} .rt-elementor-container .layout3 .tlp-content .tlp-position:hover, {{WRAPPER}} .rt-elementor-container .layout12 .tlp-position:hover span, {{WRAPPER}} .rt-elementor-container .layout11 .single-team-area .tlp-title .tlp-position:hover' => 'background-color: {{VALUE}}',
 			],
 		];
 
@@ -362,7 +521,7 @@ class Style {
 			'type'     => 'border',
 			'id'       => $obj->elPrefix . 'designation_border',
 			'label'    => esc_html__( 'Border', 'tlp-team' ),
-			'selector' => '{{WRAPPER}} .tlp-position',
+			'selector' => '{{WRAPPER}} .rt-elementor-container .layout1 .tlp-position, {{WRAPPER}} .rt-elementor-container .layout1 .tlp-position a, {{WRAPPER}} .tlp-position',
 		];
 
 		$obj->elControls[] = [
@@ -371,7 +530,7 @@ class Style {
 			'label'     => esc_html__( 'Hover Color', 'tlp-team' ),
 			'condition' => [ $obj->elPrefix . 'designation_border_border!' => [ '' ] ],
 			'selectors' => [
-				'{{WRAPPER}} .tlp-position:hover' => 'border-color: {{VALUE}}',
+				'{{WRAPPER}} .rt-elementor-container .layout1 .tlp-position, {{WRAPPER}} .rt-elementor-container .layout1 .tlp-position a, {{WRAPPER}} .tlp-position:hover' => 'border-color: {{VALUE}}',
 			],
 		];
 
@@ -384,7 +543,7 @@ class Style {
 			'label'      => esc_html__( 'Padding', 'tlp-team' ),
 			'size_units' => [ 'px', '%', 'em' ],
 			'selectors'  => [
-				'{{WRAPPER}} .tlp-position, {{WRAPPER}} .rt-elementor-container .layout-el-8 .tlp-overlay .tlp-position, {{WRAPPER}} .rt-elementor-container .layout9 .single-team-area:hover .tlp-position, {{WRAPPER}} .rt-elementor-container .layout11 .single-team-area .tlp-title .tlp-position' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				'{{WRAPPER}} .rt-elementor-container .layout1 .tlp-position, {{WRAPPER}} .rt-elementor-container .layout1 .tlp-position a, {{WRAPPER}} .tlp-position, {{WRAPPER}} .rt-elementor-container .layout-el-8 .tlp-overlay .tlp-position, {{WRAPPER}} .rt-elementor-container .layout9 .single-team-area:hover .tlp-position, {{WRAPPER}} .rt-elementor-container .layout11 .single-team-area .tlp-title .tlp-position' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 			],
 		];
 
@@ -395,7 +554,7 @@ class Style {
 			'label'      => esc_html__( 'Margin', 'tlp-team' ),
 			'size_units' => [ 'px', '%', 'em' ],
 			'selectors'  => [
-				'{{WRAPPER}} .tlp-position, {{WRAPPER}} .rt-elementor-container .layout-el-8 .tlp-overlay .tlp-position, {{WRAPPER}} .rt-elementor-container .layout13 .single-team-area .tlp-overlay .tlp-position, {{WRAPPER}} .rt-elementor-container .layout11 .single-team-area .tlp-title .tlp-position' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				'{{WRAPPER}} .rt-elementor-container .layout1 .tlp-position, {{WRAPPER}} .rt-elementor-container .layout1 .tlp-position a, {{WRAPPER}} .tlp-position, {{WRAPPER}} .rt-elementor-container .layout-el-8 .tlp-overlay .tlp-position, {{WRAPPER}} .rt-elementor-container .layout13 .single-team-area .tlp-overlay .tlp-position, {{WRAPPER}} .rt-elementor-container .layout11 .single-team-area .tlp-title .tlp-position' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 			],
 		];
 
@@ -413,7 +572,14 @@ class Style {
 	public static function department( $obj ) {
 		$condition = [
 			$obj->elPrefix . 'team_department' => [ 'yes' ],
-			$obj->elPrefix . 'layout!'         => [ 'layout5', 'layout9', 'layout10', 'layout11', 'layout12', 'layout13', 'layout14', 'layout15', 'carousel2', 'carousel4', 'carousel5', 'carousel6', 'carousel6', 'carousel7', 'carousel8', 'carousel9', 'carousel11', 'isotope1', 'isotope2', 'isotope-el-3', 'isotope4', 'isotope5', 'isotope-el-6', 'isotope7', 'isotope8', 'isotope9', 'isotope10', 'carousel3', 'carousel10' ],
+			// carousel10 removed: the "Show Department?" toggle has always been offered for it
+			// (Settings.php:326 does not exclude it), and the redesigned spotlight card now
+			// prints `.tlp-department` on its meta line — so hiding the Style section left a
+			// field that could be switched on but never styled.
+			// isotope5 removed: it now shares Grid Layout 8's card, which prints the
+			// department — and `layout-el-8` is not excluded here, so the Department
+			// style section has to be offered for both or they disagree.
+			$obj->elPrefix . 'layout!'         => [ 'layout5', 'layout9', 'layout10', 'layout11', 'layout12', 'layout13', 'layout14', 'layout15', 'carousel2', 'carousel4', 'carousel5', 'carousel6', 'carousel6', 'carousel7', 'carousel8', 'carousel9', 'carousel11', 'isotope1', 'isotope2', 'isotope-el-6', 'isotope8', 'isotope9', 'isotope10', 'carousel3' ],
 		];
 
 		$obj->startSection( 'department_section', esc_html__( 'Department', 'tlp-team' ), self::$tab, [], $condition );
@@ -591,7 +757,7 @@ class Style {
 
 		$condition = [
 			$obj->elPrefix . 'team_short_bio' => [ 'yes' ],
-			$obj->elPrefix . 'layout!'        => [ 'layout5', 'layout-el-8', 'layout11', 'layout14', 'layout15', 'carousel3', 'carousel6', 'carousel8', 'carousel9', 'carousel11', 'isotope5', 'isotope7', 'isotope8', 'isotope9', 'isotope10' ],
+			$obj->elPrefix . 'layout!'        => [ 'layout5', 'layout-el-8', 'layout14', 'layout15', 'carousel3', 'carousel6', 'carousel8', 'carousel9', 'carousel11', 'isotope5', 'isotope8', 'isotope9', 'isotope10' ],
 		];
 
 		$obj->startSection( 'short_biography_section', esc_html__( 'Short Biography', 'tlp-team' ), self::$tab, [], $condition );
@@ -601,7 +767,7 @@ class Style {
 			'mode'     => 'group',
 			'type'     => 'typography',
 			'id'       => $obj->elPrefix . 'short_biography_typography',
-			'selector' => '{{WRAPPER}} .short-bio, {{WRAPPER}} .rt-elementor-container .layout9 .single-team-area .short-bio, {{WRAPPER}} .rt-elementor-container .layout10 .tlp-overlay .short-bio, {{WRAPPER}} .rt-elementor-container .layout12 .single-team-area .short-bio',
+			'selector' => '{{WRAPPER}} .rt-elementor-container .layout1 .short-bio, {{WRAPPER}} .rt-elementor-container .layout1 .short-bio p, {{WRAPPER}} .short-bio, {{WRAPPER}} .rt-elementor-container .layout9 .single-team-area .short-bio, {{WRAPPER}} .rt-elementor-container .layout10 .tlp-overlay .short-bio, {{WRAPPER}} .rt-elementor-container .layout12 .single-team-area .short-bio',
 		];
 
 		$obj->elControls[] = [
@@ -628,7 +794,7 @@ class Style {
 				],
 			],
 			'selectors' => [
-				'{{WRAPPER}} .short-bio, {{WRAPPER}} .rt-elementor-container .layout-el-4 .single-team-area .overlay .overlay-element .tlp-content2 > .short-bio, {{WRAPPER}} .rt-elementor-container .layout7 .tlp-team-item .short-bio, {{WRAPPER}} .rt-elementor-container .layout12 .single-team-area .short-bio, {{WRAPPER}} .rt-elementor-container .layout-el-4 .single-team-area .overlay .overlay-element .tlp-content2>.short-bio, {{WRAPPER}} .rt-elementor-container .isotope4 .caption-inner-content>.short-bio, {{WRAPPER}} .rt-elementor-container .layout7 .caption-inner-content>.short-bio' => 'text-align: {{VALUE}}',
+				'{{WRAPPER}} .rt-elementor-container .layout1 .short-bio, {{WRAPPER}} .rt-elementor-container .layout1 .short-bio p, {{WRAPPER}} .short-bio, {{WRAPPER}} .rt-elementor-container .layout-el-4 .single-team-area .overlay .overlay-element .tlp-content2 > .short-bio, {{WRAPPER}} .rt-elementor-container .layout7 .tlp-team-item .short-bio, {{WRAPPER}} .rt-elementor-container .layout12 .single-team-area .short-bio, {{WRAPPER}} .rt-elementor-container .layout-el-4 .single-team-area .overlay .overlay-element .tlp-content2>.short-bio, {{WRAPPER}} .rt-elementor-container .isotope4 .caption-inner-content>.short-bio, {{WRAPPER}} .rt-elementor-container .layout7 .caption-inner-content>.short-bio' => 'text-align: {{VALUE}}',
 			],
 		];
 
@@ -642,7 +808,7 @@ class Style {
 			'id'        => $obj->elPrefix . 'short_biography_color',
 			'label'     => esc_html__( 'Color', 'tlp-team' ),
 			'selectors' => [
-				'{{WRAPPER}} .short-bio, {{WRAPPER}} .rt-elementor-container .layout10 .tlp-overlay .short-bio' => 'color: {{VALUE}}',
+				'{{WRAPPER}} .rt-elementor-container .layout1 .short-bio, {{WRAPPER}} .rt-elementor-container .layout1 .short-bio p, {{WRAPPER}} .short-bio, {{WRAPPER}} .rt-elementor-container .layout10 .tlp-overlay .short-bio' => 'color: {{VALUE}}',
 			],
 		];
 
@@ -651,7 +817,7 @@ class Style {
 			'id'        => $obj->elPrefix . 'short_biography_bg_color',
 			'label'     => esc_html__( 'Background Color', 'tlp-team' ),
 			'selectors' => [
-				'{{WRAPPER}} .short-bio' => 'background-color: {{VALUE}}',
+				'{{WRAPPER}} .rt-elementor-container .layout1 .short-bio, {{WRAPPER}} .rt-elementor-container .layout1 .short-bio p, {{WRAPPER}} .short-bio' => 'background-color: {{VALUE}}',
 			],
 		];
 
@@ -663,7 +829,7 @@ class Style {
 			'id'        => $obj->elPrefix . 'short_biography_hover_color',
 			'label'     => esc_html__( 'Hover Color', 'tlp-team' ),
 			'selectors' => [
-				'{{WRAPPER}} .short-bio:hover, {{WRAPPER}} .rt-elementor-container .layout10 .tlp-overlay .short-bio:hover, {{WRAPPER}} .rt-elementor-container .short-bio a:hover' => 'color: {{VALUE}}',
+				'{{WRAPPER}} .rt-elementor-container .layout1 .short-bio, {{WRAPPER}} .rt-elementor-container .layout1 .short-bio p, {{WRAPPER}} .short-bio:hover, {{WRAPPER}} .rt-elementor-container .layout10 .tlp-overlay .short-bio:hover, {{WRAPPER}} .rt-elementor-container .short-bio a:hover' => 'color: {{VALUE}}',
 			],
 		];
 
@@ -672,7 +838,7 @@ class Style {
 			'id'        => $obj->elPrefix . 'short_biography_hover_bg_color',
 			'label'     => esc_html__( 'Hover Background Color', 'tlp-team' ),
 			'selectors' => [
-				'{{WRAPPER}} .short-bio:hover' => 'background-color: {{VALUE}}',
+				'{{WRAPPER}} .rt-elementor-container .layout1 .short-bio, {{WRAPPER}} .rt-elementor-container .layout1 .short-bio p, {{WRAPPER}} .short-bio:hover' => 'background-color: {{VALUE}}',
 			],
 		];
 
@@ -685,7 +851,7 @@ class Style {
 			'mode'     => 'group',
 			'type'     => 'border',
 			'id'       => $obj->elPrefix . 'short_biography_border',
-			'selector' => '{{WRAPPER}} .short-bio',
+			'selector' => '{{WRAPPER}} .rt-elementor-container .layout1 .short-bio, {{WRAPPER}} .rt-elementor-container .layout1 .short-bio p, {{WRAPPER}} .short-bio',
 		];
 
 		$obj->elControls[] = [
@@ -694,7 +860,7 @@ class Style {
 			'label'     => esc_html__( 'Hover Color', 'tlp-team' ),
 			'condition' => [ $obj->elPrefix . 'short_biography_border_border!' => [ '' ] ],
 			'selectors' => [
-				'{{WRAPPER}} .short-bio:hover' => 'border-color: {{VALUE}}',
+				'{{WRAPPER}} .rt-elementor-container .layout1 .short-bio, {{WRAPPER}} .rt-elementor-container .layout1 .short-bio p, {{WRAPPER}} .short-bio:hover' => 'border-color: {{VALUE}}',
 			],
 		];
 
@@ -707,7 +873,7 @@ class Style {
 			'label'      => esc_html__( 'Padding', 'tlp-team' ),
 			'size_units' => [ 'px', '%', 'em' ],
 			'selectors'  => [
-				'{{WRAPPER}} .short-bio, {{WRAPPER}} .rt-elementor-container .layout10 .tlp-overlay .short-bio, {{WRAPPER}} .rt-elementor-container .layout12 .single-team-area .short-bio' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				'{{WRAPPER}} .rt-elementor-container .layout1 .short-bio, {{WRAPPER}} .rt-elementor-container .layout1 .short-bio p, {{WRAPPER}} .short-bio, {{WRAPPER}} .rt-elementor-container .layout10 .tlp-overlay .short-bio, {{WRAPPER}} .rt-elementor-container .layout12 .single-team-area .short-bio' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 			],
 		];
 
@@ -718,7 +884,7 @@ class Style {
 			'label'      => esc_html__( 'Margin', 'tlp-team' ),
 			'size_units' => [ 'px', '%', 'em' ],
 			'selectors'  => [
-				'{{WRAPPER}} .short-bio, {{WRAPPER}} .rt-elementor-container .layout12 .single-team-area .short-bio' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				'{{WRAPPER}} .rt-elementor-container .layout1 .short-bio, {{WRAPPER}} .rt-elementor-container .layout1 .short-bio p, {{WRAPPER}} .short-bio, {{WRAPPER}} .rt-elementor-container .layout12 .single-team-area .short-bio' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 			],
 		];
 
@@ -737,8 +903,15 @@ class Style {
     public static function read_more_btn( $obj ) {
 
         $condition = [
+            // layout14 / carousel8 / isotope9 removed: their redesigned card reveals the
+            // Read More, Resume and Hire Me buttons inside the expanding panel, so these
+            // style sections must be offered. While excluded, Elementor generated no CSS
+            // for the button controls at all, no matter what was set.
             $obj->elPrefix . 'team_readmore_button' => [ 'yes' ],
-            $obj->elPrefix . 'layout!'        => [ 'layout14', 'layout5', 'layout15', 'carousel3', 'carousel6', 'carousel8', 'carousel9', 'carousel11', 'isotope5', 'isotope9', 'isotope10' ],
+            // isotope5 removed: it now shares Grid Layout 8's card, whose hover
+            // overlay reveals Read More / Resume / Hire Me, so the button style
+            // section has to be offered — `layout-el-8` is not excluded here.
+            $obj->elPrefix . 'layout!'        => [ 'layout5', 'layout15', 'carousel3', 'carousel6', 'carousel9', 'carousel11', 'isotope10' ],
         ];
 
         $obj->startSection( 'read_more_btn_section', esc_html__( 'Read More Button', 'tlp-team' ), self::$tab, [], $condition );
@@ -855,7 +1028,10 @@ class Style {
 
         $condition = [
             $obj->elPrefix . 'team_resume_button' => [ 'yes' ],
-            $obj->elPrefix . 'layout!'        => [ 'layout14', 'layout5', 'layout15', 'carousel3', 'carousel6', 'carousel8', 'carousel9', 'carousel11', 'isotope5', 'isotope7', 'isotope8', 'isotope9', 'isotope10' ],
+            // isotope5 removed: it now shares Grid Layout 8's card, whose hover
+            // overlay reveals Read More / Resume / Hire Me, so the button style
+            // section has to be offered — `layout-el-8` is not excluded here.
+            $obj->elPrefix . 'layout!'        => [ 'layout5', 'layout15', 'carousel3', 'carousel6', 'carousel9', 'carousel11', 'isotope8', 'isotope10' ],
         ];
 
         $obj->startSection( 'resume_btn_section', esc_html__( 'Resume Button', 'tlp-team' ), self::$tab, [], $condition );
@@ -972,7 +1148,10 @@ class Style {
 
         $condition = [
             $obj->elPrefix . 'team_hireme_button' => [ 'yes' ],
-            $obj->elPrefix . 'layout!'        => [ 'layout14', 'layout5', 'layout15', 'carousel3', 'carousel6', 'carousel8', 'carousel9', 'carousel11', 'isotope5', 'isotope9', 'isotope10' ],
+            // isotope5 removed: it now shares Grid Layout 8's card, whose hover
+            // overlay reveals Read More / Resume / Hire Me, so the button style
+            // section has to be offered — `layout-el-8` is not excluded here.
+            $obj->elPrefix . 'layout!'        => [ 'layout5', 'layout15', 'carousel3', 'carousel6', 'carousel9', 'carousel11', 'isotope10' ],
         ];
 
         $obj->startSection( 'hire_me_btn_section', esc_html__( 'Hire Me Button', 'tlp-team' ), self::$tab, [], $condition );
@@ -1334,7 +1513,9 @@ class Style {
 			'mode'       => 'responsive',
 			'type'       => 'dimensions',
 			'id'         => $obj->elPrefix . 'buttons_wrapper_padding',
-			'label'      => esc_html__( 'Wrapper Padding', 'tlp-team' ),
+						// Emits `margin`, not padding -- label matches the CSS. The id keeps the
+			// historical `_wrapper_padding` spelling so saved values are not orphaned.
+			'label'      => esc_html__( 'Wrapper Margin', 'tlp-team' ),
 			'size_units' => [ 'px', '%', 'em' ],
 			'selectors'  => [
 				'{{WRAPPER}} .rt-carousel-holder.top-nav .swiper-nav, {{WRAPPER}} .rt-elementor-container .rt-carousel-holder .swiper-pagination' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
@@ -1476,7 +1657,10 @@ class Style {
 			'mode'      => 'group',
 			'type'      => 'border',
 			'id'        => $obj->elPrefix . 'image',
-			'selector'  => '{{WRAPPER}} .single-team-area figure,{{WRAPPER}} .rt-elementor-container .layout17 .single-team-area .tlp-portfolio-thum,{{WRAPPER}} .rt-elementor-container .layout5 .table figure, {{WRAPPER}} .rt-elementor-container .carousel10 .profile-img-wrap img',
+			// isotope2 has no `.single-team-area` — its photo box is the bare <figure> inside
+			// `.rt-iso2-card` — so without its own arm the whole Image Style section is dead
+			// there. This is a hardcoded per-layout allow-list, not a generic selector.
+			'selector'  => '{{WRAPPER}} .single-team-area figure,{{WRAPPER}} .rt-elementor-container .isotope2 figure,{{WRAPPER}} .rt-elementor-container .layout17 .single-team-area .tlp-portfolio-thum, {{WRAPPER}} .rt-elementor-container .layout18 .single-team-area .tlp-portfolio-thum,{{WRAPPER}} .rt-elementor-container .layout5 .table figure, {{WRAPPER}} .rt-elementor-container .carousel10 .profile-img-wrap img',
 			'separator' => 'after',
 		];
 
@@ -1492,7 +1676,24 @@ class Style {
 			],
 			'separator'  => 'after',
 			'selectors'  => [
-				'{{WRAPPER}} .single-team-area figure, {{WRAPPER}} .rt-elementor-container .layout5 .table figure, {{WRAPPER}} .rt-elementor-container .carousel10 .profile-img-wrap img,{{WRAPPER}} .rt-elementor-container .layout17 .single-team-area .tlp-portfolio-thum' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				'{{WRAPPER}} .single-team-area figure, {{WRAPPER}} .rt-elementor-container .isotope2 figure, {{WRAPPER}} .rt-elementor-container .layout5 .table figure, {{WRAPPER}} .rt-elementor-container .carousel10 .profile-img-wrap img,{{WRAPPER}} .rt-elementor-container .layout17 .single-team-area .tlp-portfolio-thum, {{WRAPPER}} .rt-elementor-container .layout18 .single-team-area .tlp-portfolio-thum, {{WRAPPER}} .rt-elementor-container .carousel-el-1 .rttm-slide-media, {{WRAPPER}} .rt-elementor-container .isotope-free .rttm-iso-media' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				/*
+				 * Layout 3 is deliberately NOT in the arm above. Its photo is a square
+				 * <figure> near the top of a much taller card, not a full-bleed image, so
+				 * `[data-layout="layout3"] .single-team-area` rounded the whole CARD -- at
+				 * 50% the card itself became an ellipse. The generic
+				 * `{{WRAPPER}} .single-team-area figure` arm already rounds its image.
+				 */
+				/*
+				 * Full-bleed photo cards: the <figure> is clipped by an ancestor that has its
+				 * OWN border-radius + overflow:hidden, so rounding the figure alone is sliced
+				 * off at the card corners and the control looks dead. Round the clipper too so
+				 * the photo edge and the card edge curve together.
+				 *   layout 10 / layout-el-10 / carousel5 -> photo box .image-container,
+				 *                                           clipper  .tlp-team-item
+				 *   layout 11 / carousel6                -> .single-team-area is both
+				 */
+				'{{WRAPPER}} .rt-elementor-container .layout10 .image-container, {{WRAPPER}} .rt-elementor-container .layout10 .tlp-team-item, {{WRAPPER}} .rt-elementor-container .layout-el-10 .image-container, {{WRAPPER}} .rt-elementor-container .layout-el-10 .tlp-team-item, {{WRAPPER}} .rt-elementor-container .carousel5 .image-container, {{WRAPPER}} .rt-elementor-container .carousel5 .tlp-team-item, {{WRAPPER}} .rt-elementor-container .layout11 .single-team-area, {{WRAPPER}} .rt-elementor-container .carousel6 .single-team-area' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 			],
 		];
 
@@ -1694,7 +1895,9 @@ class Style {
 			'mode'       => 'responsive',
 			'type'       => 'dimensions',
 			'id'         => $obj->elPrefix . 'buttons_wrapper_padding',
-			'label'      => esc_html__( 'Wrapper Padding', 'tlp-team' ),
+						// Emits `margin`, not padding -- label matches the CSS. The id keeps the
+			// historical `_wrapper_padding` spelling so saved values are not orphaned.
+			'label'      => esc_html__( 'Wrapper Margin', 'tlp-team' ),
 			'size_units' => [ 'px', '%', 'em' ],
 			'selectors'  => [
 				'{{WRAPPER}} .rt-elementor-container .pagination, {{WRAPPER}} .rt-elementor-container .rt-pagination-wrap' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
@@ -1850,6 +2053,13 @@ class Style {
 			'label'     => esc_html__( 'Active Background Color', 'tlp-team' ),
 			'selectors' => [
 				'{{WRAPPER}} .rt-elementor-container .button-group .selected' => 'background-color: {{VALUE}}',
+				// The redesigned isotope filter bar paints the active pill with a sliding glider
+				// (`.rttm-iso-glider`) and clears the `.selected` button to transparent, so this
+				// control must recolour the glider or it does nothing on that layout. Use the
+				// `background` shorthand (not background-color) so it also clears the accent
+				// gradient image the glider carries by default — otherwise the gradient paints
+				// over the chosen colour.
+				'{{WRAPPER}} .ttp-isotope-buttons .rttm-iso-glider' => 'background: {{VALUE}}',
 			],
 		];
 
@@ -1906,7 +2116,9 @@ class Style {
 			'mode'       => 'responsive',
 			'type'       => 'dimensions',
 			'id'         => $obj->elPrefix . 'filter_buttons_wrapper_padding',
-			'label'      => esc_html__( 'Wrapper Padding', 'tlp-team' ),
+						// Emits `margin`, not padding -- label matches the CSS. The id keeps the
+			// historical `_wrapper_padding` spelling so saved values are not orphaned.
+			'label'      => esc_html__( 'Wrapper Margin', 'tlp-team' ),
 			'size_units' => [ 'px', '%', 'em' ],
 			'selectors'  => [
 				'{{WRAPPER}} .rt-elementor-container .button-group' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',

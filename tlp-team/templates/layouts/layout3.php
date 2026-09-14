@@ -2,6 +2,11 @@
 /**
  * Template: Grid Layout 3.
  *
+ * Same markup as Grid Layout 1 (a full, always-visible card). Layout 3 is styled
+ * ~80% like Layout 1 in assets/css/tlpteam.css (`.layout3`) with one deliberate
+ * difference: the name/role strip (`.tlp-content`) is a primary-colour band with
+ * white text, instead of Layout 1's light strip.
+ *
  * @package RT_Team
  */
 
@@ -17,6 +22,7 @@ $content = null;
 
 $html .= '<div class="' . esc_attr( $grid ) . ' ' . esc_attr( $class ) . '" data-id="' . absint( $mID ) . '">';
 $html .= '<div class="single-team-area">';
+$html .= '<div class="single-team">';
 
 if ( $imgHtml ) {
 	if ( $link ) {
@@ -25,6 +31,8 @@ if ( $imgHtml ) {
 		$html .= '<figure>' . Fns::htmlKses( $imgHtml, 'image' ) . '</figure>';
 	}
 }
+
+$html .= '</div>';
 
 if ( in_array( 'name', $items, true ) && $title ) {
 	if ( $link ) {
@@ -45,12 +53,11 @@ if ( in_array( 'designation', $items, true ) && $designation ) {
 if ( in_array( 'tax_department', $items, true ) && $tax_department ) {
 	$content .= '<div class="tlp-department">' . esc_html( $tax_department ) . '</div>';
 }
-
-
-
 $html .= $content ? '<div class="tlp-content">' . $content . '</div>' : null;
 
 $html .= Fns::get_formatted_short_bio( $short_bio, $items );
+
+
 $html .= Fns::get_formatted_contact_info(
 	[
 		'email'     => $email,
@@ -67,11 +74,11 @@ $html .= Fns::get_formatted_skill( $tlp_skill, $items );
 $html .= Fns::get_formatted_social_link( $sLink, $items );
 
 $read_more_btn = isset( $read_more_btn_text ) ? Fns::get_formatted_readmore_text($items, $read_more_btn_text, $anchorClass, $mID, $target, $title, $pLink) : null;
-$resume_btn = isset( $ttp_my_resume ) ? Fns::get_formatted_resume( $items, $ttp_my_resume, $my_resume_text ) : null;
-$hire_me_btn = isset( $ttp_hire_me ) ? Fns::get_formatted_hire_me( $items, $ttp_hire_me, $hire_me_text ) : null;
+$resume_btn = isset( $my_resume_text ) ? Fns::get_formatted_resume( $items, $ttp_my_resume, $my_resume_text ) : null;
+$hire_me_btn = isset( $hire_me_text ) ? Fns::get_formatted_hire_me( $items, $ttp_hire_me, $hire_me_text ) : null;
 
 if ( $read_more_btn || $resume_btn || $hire_me_btn ) {
-    $html .= '<div class="readmore-btn">';
+    $html .= '<div class="readmore-btn hirme-resume">';
     if( $resume_btn ){
         $html .= $resume_btn;
     }
@@ -79,12 +86,13 @@ if ( $read_more_btn || $resume_btn || $hire_me_btn ) {
         $html .= $hire_me_btn;
     }
     $html .= '</div>';
-    $html .= '<div class="readmore-btn hirme-resume">';
+    $html .= '<div class="readmore-btn tlp-readmore-button">';
     if( $read_more_btn ){
         $html .= $read_more_btn;
     }
     $html .= '</div>';
 }
+
 $html .= '</div>';
 $html .= '</div>';
 

@@ -184,7 +184,7 @@ class Preview {
 			$arg         = [];
 			$arg['grid'] = "rt-col-md-{$dCol} rt-col-sm-{$tCol} rt-col-xs-{$mCol}";
 			if ( ( $layout == 'layout2' ) || ( $layout == 'layout3' ) ) {
-				$iCol                = ! empty( $_REQUEST['ttl_image_column'] ) ? absint( $_REQUEST['ttl_image_column'] ) : 4;
+				$iCol                = ! empty( $_REQUEST['ttl_image_column'] ) ? absint( $_REQUEST['ttl_image_column'] ) : 6;
 				$iCol                = $iCol > 12 ? 4 : $iCol;
 				$cCol                = 12 - $iCol;
 				$arg['image_area']   = "rt-col-sm-{$iCol} rt-col-xs-12 ";
@@ -267,10 +267,19 @@ class Preview {
 			$character_limit  = ( isset( $_REQUEST['character_limit'] ) ? absint( $_REQUEST['character_limit'] ) : 0 );
 			$after_short_desc = isset( $_REQUEST['ttp_after_short_desc_text'] ) ? sanitize_textarea_field( wp_unslash( $_REQUEST['ttp_after_short_desc_text'] ) ) : '';
 
-            $hire_me_text = isset( $_REQUEST['ttp_hire_me_text'] ) ? sanitize_textarea_field( wp_unslash( $_REQUEST['ttp_hire_me_text'] ) ) : esc_html__('Hire Me','tlp-team');
+            // Use ! empty() (not isset): the metabox posts these text fields as empty
+            // strings when the user leaves them blank, and isset() is true for "".
+            // On the front end the meta is null, so isset() there is false and the
+            // default text applies — which is why Read More / Resume / Hire Me render
+            // on the site but vanished in this preview. Falling back on empty keeps
+            // them in sync.
+            $hire_me_text = ! empty( $_REQUEST['ttp_hire_me_text'] ) ? sanitize_textarea_field( wp_unslash( $_REQUEST['ttp_hire_me_text'] ) ) : esc_html__('Hire Me','tlp-team');
 
-            $my_resume_text = isset( $_REQUEST['ttp_my_resume_text'] ) ? sanitize_textarea_field( wp_unslash( $_REQUEST['ttp_my_resume_text'] ) ) : esc_html__('Read More','tlp-team');
-            $read_more_btn_text = isset( $_REQUEST['ttp_read_more_btn_text'] ) ? sanitize_textarea_field( wp_unslash( $_REQUEST['ttp_read_more_btn_text'] ) ) : esc_html__('Read More','tlp-team');
+            $my_resume_text = ! empty( $_REQUEST['ttp_my_resume_text'] ) ? sanitize_textarea_field( wp_unslash( $_REQUEST['ttp_my_resume_text'] ) ) : esc_html__('My Resume','tlp-team');
+            $read_more_btn_text = ! empty( $_REQUEST['ttp_read_more_btn_text'] ) ? sanitize_textarea_field( wp_unslash( $_REQUEST['ttp_read_more_btn_text'] ) ) : esc_html__('Read More','tlp-team');
+            // Mirrors Shortcode::metas()'s `load_more_text` so the admin preview shows the
+            // same label the front end will render.
+            $load_more_text = ! empty( $_REQUEST['ttp_load_more_button_text'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['ttp_load_more_button_text'] ) ) : esc_html__( 'Load More', 'tlp-team' );
 
             $defaultImgId     = ! empty( $_REQUEST['default_preview_image'] ) ? absint( $_REQUEST['default_preview_image'] ) : null;
 			$customImgSize    = ! empty( $_REQUEST['ttp_custom_image_size'] ) && is_array( $_REQUEST['ttp_custom_image_size'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_REQUEST['ttp_custom_image_size'] ) ) : [];
@@ -279,11 +288,22 @@ class Preview {
 			$containerClass .= $parentClass ? ' ' . $parentClass : null;
 			$containerClass .= $grayscale ? ' rt-grayscale' : null;
 			$arg['items']    = ! empty( $_REQUEST['ttp_selected_field'] ) && is_array( $_REQUEST['ttp_selected_field'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_REQUEST['ttp_selected_field'] ) ) : [];
+			// Templates check 'tax_department'; the field-selection key is 'department'. Mirror it.
+			if ( in_array( 'department', $arg['items'], true ) && ! in_array( 'tax_department', $arg['items'], true ) ) {
+				$arg['items'][] = 'tax_department';
+			}
+			// Layout 5 keeps an image cell in every row when the column is on, so a
+			// member with no photo does not shift the rest of the row out of line.
+			$arg['showImage'] = ! $fImg;
 			$filters         = ! empty( $_REQUEST['ttp_filter'] ) && is_array( $_REQUEST['ttp_filter'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_REQUEST['ttp_filter'] ) ) : [];
 			$taxFilter       = ! empty( $_REQUEST['ttp_filter_taxonomy'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['ttp_filter_taxonomy'] ) ) : null;
 			$action_term     = ! empty( $_REQUEST['ttp_default_filter'] ) ? absint( $_REQUEST['ttp_default_filter'] ) : 0;
 
-			$isoFilterTaxonomy = ! empty( $_REQUEST['ttp_isotope_filter_taxonomy'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['ttp_isotope_filter_taxonomy'] ) ) : null;
+			// Match the front end (Shortcode.php `isoFilterTaxonomy`): when no taxonomy is
+			// chosen, isotope layouts still render the filter bar defaulted to 'team_department'.
+			// Without this default the admin preview silently dropped the filter buttons while the
+			// real shortcode showed them.
+			$isoFilterTaxonomy = ! empty( $_REQUEST['ttp_isotope_filter_taxonomy'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['ttp_isotope_filter_taxonomy'] ) ) : 'team_department';
 
 			$arg['my_resume_text'] = $my_resume_text;
 			$arg['hire_me_text'] = $hire_me_text;
@@ -370,6 +390,7 @@ class Preview {
 					if ( in_array( '_taxonomy_filter', $filters ) && $taxFilter ) {
 						$filterType = ( ! empty( $_REQUEST['ttp_filter_type'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['ttp_filter_type'] ) ) : null );
 						$terms      = Fns::rt_get_all_terms_by_taxonomy( $taxFilter );
+						$termCounts = Fns::rt_filter_term_counts( $taxFilter );
 
 						$allSelect      = ' selected';
 						$isTermSelected = false;
@@ -436,7 +457,7 @@ class Preview {
 								$html .= "<span class='term-button-item rt-filter-button-item {$allSelect}' data-term='all'>" . esc_html__(
 									'All',
 									'tlp-team'
-								) . '</span>';
+								) . Fns::rt_filter_count_badge( $termCounts, 'all' ) . '</span>';
 							}
 
 							if ( ! empty( $terms ) ) {
@@ -447,10 +468,10 @@ class Preview {
 									}
 									if ( is_array( $taxFilterTerms ) && ! empty( $taxFilterTerms ) ) {
 										if ( in_array( $id, $taxFilterTerms ) ) {
-											$html .= "<span class='term-button-item rt-filter-button-item {$termSelected}' data-term='{$id}'>{$term}</span>";
+											$html .= "<span class='term-button-item rt-filter-button-item {$termSelected}' data-term='{$id}'>{$term}" . Fns::rt_filter_count_badge( $termCounts, $id ) . '</span>';
 										}
 									} else {
-										$html .= "<span class='term-button-item rt-filter-button-item {$termSelected}' data-term='{$id}'>{$term}</span>";
+										$html .= "<span class='term-button-item rt-filter-button-item {$termSelected}' data-term='{$id}'>{$term}" . Fns::rt_filter_count_badge( $termCounts, $id ) . '</span>';
 									}
 								}
 							}
@@ -495,7 +516,7 @@ class Preview {
 					if ( in_array( '_search', $filters ) ) {
 						$html .= '<div class="rt-filter-item-wrap rt-search-filter-wrap">';
 						$html .= "<input type='text' class='rt-search-input' placeholder='Search...'>";
-						$html .= "<span class='rt-action'>&#128269;</span>";
+						$html .= "<span class='rt-action'><i class='rt-search-ico' aria-hidden='true'></i></span>";
 						$html .= "<span class='rt-loading'></span>";
 						$html .= '</div>';
 					}
@@ -656,6 +677,7 @@ class Preview {
 				// layout 5 table
 				if ( $layout == 'layout5' ) {
 					$html .= "<table class='table table-striped table-responsive {$round_img}'>";
+					$html .= Fns::layout5TableHead( $arg['items'], ! $fImg );
 				}
 
 				while ( $teamQuery->have_posts() ) :
@@ -678,6 +700,14 @@ class Preview {
 							', '
 						)
 					);
+					$arg['tax_department'] = wp_strip_all_tags(
+						get_the_term_list(
+							$mID,
+							rttlp_team()->taxonomies['department'],
+							null,
+							', '
+						)
+					);
 					$arg['email']       = get_post_meta( $mID, 'email', true );
 					$arg['web_url']     = get_post_meta( $mID, 'web_url', true );
 					$arg['telephone']   = get_post_meta( $mID, 'telephone', true );
@@ -694,7 +724,12 @@ class Preview {
 					$social             = get_post_meta( $mID, 'social', true );
 					$arg['sLink']       = $social ? $social : [];
 					$skill              = get_post_meta( $mID, 'skill', true );
-					$arg['tlp_skill']   = $skill ? unserialize( $skill ) : [];
+					// `get_post_meta()` has ALREADY unserialized this, so a raw unserialize()
+					// gets an array and throws a TypeError on PHP 8 — which 500s the whole
+					// admin preview for any member that has skills filled in. The frontend
+					// copies of this loop (Shortcode.php, RenderHelpers.php) use
+					// maybe_unserialize(); this one was the odd one out.
+					$arg['tlp_skill']   = $skill ? maybe_unserialize( $skill ) : [];
 					$arg['imgHtml']     = ! $fImg ? Fns::getFeatureImageHtml( $mID, $fImgSize, $defaultImgId, $customImgSize, $lazyLoad ) : null;
 					$arg['imgHtml']     = apply_filters( 'rttm_loop_img_html', $arg['imgHtml'], $mID, $_REQUEST );
 
@@ -764,7 +799,7 @@ class Preview {
 						$htmlUtility .= "<div class='rt-page-numbers'></div>";
 					} elseif ( $posts_loading_type == 'load_more' ) {
 						$htmlUtility .= "<div class='rt-loadmore-btn rt-loadmore-action rt-loadmore-style{$hide}'>
-										<span class='rt-loadmore-text'>" . esc_html__( 'Load More', 'tlp-team' ) . "</span>
+										<span class='rt-loadmore-text'>" . esc_html( $load_more_text ) . "</span>
 										<div class='rt-loadmore-loading rt-ball-scale-multiple rt-2x'><div></div><div></div><div></div></div>
 									</div>";
 

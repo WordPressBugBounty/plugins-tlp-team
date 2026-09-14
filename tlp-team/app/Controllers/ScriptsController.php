@@ -74,6 +74,7 @@ class ScriptsController {
 		);
 
 		add_action( 'wp_enqueue_scripts', [ $this, 'tlp_script' ] );
+		add_filter( 'style_loader_tag', [ $this, 'maybe_skip_font_awesome' ], 10, 2 );
 	}
 
 	/**
@@ -88,11 +89,271 @@ class ScriptsController {
 		if ( in_array( $settings, [ 'default', 'shortcode' ], true ) || is_singular( 'team' ) ) {
 			wp_enqueue_style( 'rt-team-css' );
 			wp_enqueue_style( 'rt-team-sc' );
+			wp_enqueue_script( 'rttm-iso-filter' );
 		}
 
 		if ( did_action( 'elementor/loaded' ) && in_array( $settings, [ 'default', 'elementor' ], true ) && ! is_singular( 'team' ) ) {
 			wp_enqueue_style( 'tlp-el-team-css' );
+			wp_enqueue_script( 'rttm-iso-filter' );
 		}
+	}
+
+	/**
+	 * Handle the bundled Font Awesome is registered under.
+	 */
+	const FA_HANDLE = 'tlp-fontawsome';
+
+	/**
+	 * Lowest Font Awesome major release that can render every icon this plugin emits.
+	 *
+	 * The templates use the `fab` / `fas` / `far` family prefixes, which do not exist
+	 * before Font Awesome 5, and two brand glyphs that only shipped later still:
+	 * `fa-x-twitter` (6.4) and `fa-bluesky` (6.6).
+	 *
+	 * So the floor is 6.6, not merely "version 6": a theme on 6.0-6.5 passes a
+	 * major-only check and still renders those two as blank boxes.
+	 *
+	 * A site that does not use X or Bluesky can lower it and save the extra request:
+	 *
+	 *     add_filter( 'tlp_team_font_awesome_min_version', fn() => '5.0' );
+	 *
+	 * @return string
+	 */
+	private function font_awesome_min_version() {
+		return (string) apply_filters( 'tlp_team_font_awesome_min_version', '6.6' );
+	}
+
+	/**
+	 * Does this handle/src pair look like a Font Awesome stylesheet?
+	 *
+	 * @param string $handle Style handle.
+	 * @param string $src    Style source URL.
+	 *
+	 * @return bool
+	 */
+	private function looks_like_font_awesome( $handle, $src ) {
+		return (bool) preg_match( '#font[-_]?awesome#i', $handle . ' ' . (string) $src );
+	}
+
+	/**
+	 * Does this stylesheet provide the WHOLE icon set, rather than one family?
+	 *
+	 * Font Awesome ships per-family files — `solid.min.css`, `brands.min.css`,
+	 * `regular.min.css` — and Elementor's icon library registers exactly those, one
+	 * handle per family. They carry a full version number but define only their own
+	 * glyphs, and not even the `@font-face` base, so deferring to one leaves every
+	 * icon on the page blank. Only a combined build may suppress the bundled copy.
+	 *
+	 * The list is an allowlist on purpose: an unrecognised filename is treated as
+	 * partial, so an unusual bundle costs a duplicate request rather than breaking
+	 * icons. `tlp_team_load_font_awesome` is the override for that case.
+	 *
+	 * @param string $src Style source URL.
+	 *
+	 * @return bool
+	 */
+	private function is_complete_font_awesome( $src ) {
+		$file = strtolower( basename( strtok( (string) $src, '?' ) ) );
+		$file = preg_replace( '#\.css$#', '', $file );
+		$file = preg_replace( '#\.min$#', '', $file );
+
+		return in_array( $file, [ 'all', 'fontawesome', 'font-awesome' ], true );
+	}
+
+	/**
+	 * Best-effort local path for an asset URL, so its version banner can be read.
+	 *
+	 * @param string $src Style source URL.
+	 *
+	 * @return string Empty string when the URL is remote or cannot be mapped.
+	 */
+	private function local_path_for_src( $src ) {
+		$src = strtok( (string) $src, '?' );
+
+		if ( ! $src ) {
+			return '';
+		}
+
+		if ( 0 === strpos( $src, '//' ) ) {
+			$src = ( is_ssl() ? 'https:' : 'http:' ) . $src;
+		}
+
+		$content_url = set_url_scheme( content_url() );
+		$src         = set_url_scheme( $src );
+
+		if ( 0 !== strpos( $src, $content_url ) ) {
+			return '';
+		}
+
+		$path = WP_CONTENT_DIR . substr( $src, strlen( $content_url ) );
+		$path = wp_normalize_path( $path );
+
+		return file_exists( $path ) ? $path : '';
+	}
+
+	/**
+	 * Work out which Font Awesome major a registered stylesheet provides.
+	 *
+	 * The registered version string is not trustworthy on its own — Elementor, for
+	 * instance, registers its `font-awesome` handle as `4.7.0` while shipping a 5.x
+	 * build elsewhere — so the file's own banner is preferred when it can be read,
+	 * then the version string, then a version number embedded in the path.
+	 *
+	 * @param object $style Registered style object from WP_Styles.
+	 *
+	 * @return string `major.minor`, or an empty string when it cannot be determined.
+	 */
+	private function font_awesome_version( $style ) {
+		$src  = isset( $style->src ) ? (string) $style->src : '';
+		$path = $this->local_path_for_src( $src );
+
+		if ( $path ) {
+			$key    = 'tlp_team_fa_ver_' . md5( $path . '|' . filemtime( $path ) );
+			$cached = get_transient( $key );
+
+			if ( false !== $cached ) {
+				return (string) $cached;
+			}
+
+			$ver    = '';
+			$handle = fopen( $path, 'rb' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
+
+			if ( $handle ) {
+				$head = fread( $handle, 1024 ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fread
+				fclose( $handle ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
+
+				if ( preg_match( '#Font\s*Awesome[^0-9]{0,40}?(\d+\.\d+)#i', (string) $head, $m ) ) {
+					$ver = $m[1];
+				}
+			}
+
+			set_transient( $key, $ver, DAY_IN_SECONDS );
+
+			if ( $ver ) {
+				return $ver;
+			}
+		}
+
+		if ( ! empty( $style->ver ) && preg_match( '#^(\d+(?:\.\d+)?)#', (string) $style->ver, $m ) ) {
+			return $m[1];
+		}
+
+		if ( preg_match( '#font[-_]?awesome[^0-9]{0,20}(\d+\.\d+)#i', $src, $m ) ) {
+			return $m[1];
+		}
+
+		return '';
+	}
+
+	/**
+	 * Find a Font Awesome already on its way to the page from somewhere else.
+	 *
+	 * Only styles that are actually enqueued or already printed count — a theme that
+	 * merely registers Font Awesome without using it must not suppress ours. Resolved
+	 * once per request; the answer is most accurate at print time, which is when the
+	 * filter below asks for it, because by then everything in the head is done.
+	 *
+	 * @return array{handle:string,version:string}
+	 */
+	public function detect_foreign_font_awesome() {
+		static $found = null;
+
+		if ( null !== $found ) {
+			return $found;
+		}
+
+		$found     = [
+			'handle'  => '',
+			'version' => '',
+		];
+		$wp_styles = wp_styles();
+
+		if ( ! $wp_styles instanceof \WP_Styles ) {
+			return $found;
+		}
+
+		foreach ( $wp_styles->registered as $handle => $style ) {
+			if ( self::FA_HANDLE === $handle ) {
+				continue;
+			}
+
+			if ( ! $this->looks_like_font_awesome( $handle, isset( $style->src ) ? $style->src : '' ) ) {
+				continue;
+			}
+
+			if ( ! wp_style_is( $handle, 'enqueued' ) && ! wp_style_is( $handle, 'done' ) ) {
+				continue;
+			}
+
+			if ( ! $this->is_complete_font_awesome( isset( $style->src ) ? $style->src : '' ) ) {
+				continue;
+			}
+
+			$version = $this->font_awesome_version( $style );
+
+			// Keep the newest one on the page: a site may carry both an old theme copy
+			// and a modern one, and only the newest decides whether ours is needed.
+			if ( $version && ( ! $found['version'] || version_compare( $version, $found['version'], '>' ) ) ) {
+				$found = [
+					'handle'  => $handle,
+					'version' => $version,
+				];
+			} elseif ( ! $found['handle'] ) {
+				// Present but unversioned — remembered so the decision below can still
+				// name it, though an unknown version never suppresses our copy.
+				$found['handle'] = $handle;
+			}
+		}
+
+		return $found;
+	}
+
+	/**
+	 * Should the bundled Font Awesome be printed?
+	 *
+	 * @return bool
+	 */
+	public function should_load_font_awesome() {
+		$forced = apply_filters( 'tlp_team_load_font_awesome', null );
+
+		if ( is_bool( $forced ) ) {
+			return $forced;
+		}
+
+		$found = $this->detect_foreign_font_awesome();
+
+		// Nothing else provides it, or what does is too old for this plugin's icons.
+		// An undetectable version reads as 0 and therefore also falls back to ours,
+		// which is the safe direction: a duplicate request costs a little, missing
+		// glyphs are a visible bug.
+		return ! $found['handle']
+			|| ! $found['version']
+			|| version_compare( $found['version'], $this->font_awesome_min_version(), '<' );
+	}
+
+	/**
+	 * Drop the bundled Font Awesome tag when the page already has a usable one.
+	 *
+	 * Filtering the printed tag rather than the enqueue keeps every caller unchanged
+	 * and defers the decision to the last possible moment.
+	 *
+	 * @param string $tag    Complete link tag.
+	 * @param string $handle Style handle.
+	 *
+	 * @return string
+	 */
+	public function maybe_skip_font_awesome( $tag, $handle ) {
+		if ( self::FA_HANDLE !== $handle || $this->should_load_font_awesome() ) {
+			return $tag;
+		}
+
+		$found = $this->detect_foreign_font_awesome();
+
+		return sprintf(
+			"<!-- tlp-team: reusing Font Awesome %s from '%s'; bundled copy not loaded. -->\n",
+			esc_attr( $found['version'] ),
+			esc_attr( $found['handle'] )
+		);
 	}
 
 	/**
@@ -256,6 +517,15 @@ class ScriptsController {
 		$this->scripts[] = [
 			'handle' => 'tlp-el-team-js',
 			'src'    => rttlp_team()->assets_url() . 'js/tlp-el-team.min.js',
+			'deps'   => [ 'jquery' ],
+			'footer' => true,
+		];
+
+		// Isotope filter-bar enhancement (count badges + sliding glider). Standalone so it
+		// loads on BOTH the shortcode and Elementor paths; self-guards on .ttp-isotope-buttons.
+		$this->scripts[] = [
+			'handle' => 'rttm-iso-filter',
+			'src'    => rttlp_team()->assets_url() . 'js/iso-filter.js',
 			'deps'   => [ 'jquery' ],
 			'footer' => true,
 		];

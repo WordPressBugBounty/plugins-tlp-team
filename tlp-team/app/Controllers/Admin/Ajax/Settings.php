@@ -60,6 +60,23 @@ class Settings {
 				$settings['license_status'] = $existing['license_status'];
 			}
 			update_option( rttlp_team()->options['settings'], $settings );
+
+			/*
+			 * The single page's Resume / Hire Me rules are written inside the source
+			 * shortcode's own fence in team-sc.css, and that file is only rewritten when a
+			 * shortcode is saved. Rebuild the outgoing and the incoming source here so
+			 * switching the setting takes effect immediately rather than the next time
+			 * someone happens to open those shortcodes.
+			 */
+			$old_source = is_array( $existing ) && ! empty( $existing['detail_button_style_source'] ) ? absint( $existing['detail_button_style_source'] ) : 0;
+			$new_source = ! empty( $settings['detail_button_style_source'] ) ? absint( $settings['detail_button_style_source'] ) : 0;
+
+			if ( $old_source !== $new_source ) {
+				foreach ( array_filter( array_unique( [ $old_source, $new_source ] ) ) as $sc_id ) {
+					Fns::generatorShortcodeCss( $sc_id );
+				}
+			}
+
 			flush_rewrite_rules();
 			$error = false;
 			$msg   = esc_html__( 'Settings successfully updated', 'tlp-team' );

@@ -280,7 +280,11 @@ class Settings {
 	 * @return static
 	 */
 	public static function ContentVisibility( $obj ) {
-		$layoutCondition = [ $obj->elPrefix . 'layout!' => [ 'layout-el-4', 'layout7', 'layout-el-8', 'layout9', 'layout-el-10', 'layout11', 'layout12', 'layout13', 'layout14', 'layout15', 'carousel-el-2', 'carousel3', 'carousel4', 'carousel5', 'carousel6', 'carousel7', 'carousel8', 'carousel9', 'carousel11', 'isotope1', 'isotope3', 'isotope4', 'isotope5', 'isotope6', 'isotope7', 'isotope8', 'isotope9', 'isotope10' ] ];
+		// `isotope-el-6` added: this list gates the Elementor Contact tab, so it must use the
+		// ELEMENTOR layout key. The `isotope6` entry is the shortcode key and never matches
+		// here, which is why the Contact toggles kept showing for a card that renders no
+		// contact list — isotope 6 now shares Grid Layout 9's card, and layout9 is excluded.
+		$layoutCondition = [ $obj->elPrefix . 'layout!' => [ 'layout-el-4', 'layout7', 'layout-el-8', 'layout9', 'layout-el-10', 'layout11', 'layout12', 'layout13', 'layout14', 'layout15', 'carousel-el-2', 'carousel3', 'carousel4', 'carousel5', 'carousel6', 'carousel7', 'carousel8', 'carousel9', 'carousel11', 'isotope1', 'isotope3', 'isotope4', 'isotope5', 'isotope6', 'isotope-el-6', 'isotope7', 'isotope8', 'isotope9', 'isotope10' ] ];
 
 		$obj->startSection( 'visibility_section', esc_html__( 'Content Visibility', 'tlp-team' ), self::$tab );
 
@@ -315,7 +319,18 @@ class Settings {
 			'description' => esc_html__( 'Switch on to show team member department.', 'tlp-team' ),
 			'label_on'    => esc_html__( 'On', 'tlp-team' ),
 			'label_off'   => esc_html__( 'Off', 'tlp-team' ),
-			'condition'   => [ $obj->elPrefix . 'layout!' => [ 'layout9', 'layout10', 'layout11', 'layout12', 'layout13', 'layout14', 'layout5', 'layout15', 'carousel2', 'carousel3', 'carousel3', 'carousel6', 'carousel7', 'carousel8', 'carousel9', 'carousel11', 'isotope1', 'isotope2', 'isotope3', 'isotope4', 'isotope5', 'isotope6', 'isotope7', 'isotope8', 'isotope9', 'isotope10', 'carousel4', 'carousel5' ] ],
+			// carousel4 removed: it now shares Grid Layout 9's card, which renders the
+			// department — and layout9 itself is not excluded here, so the toggle has
+			// to be offered for both or they disagree.
+			// carousel5 removed for the same reason: it now shares Grid Layout 10's
+			// card, whose overlay role pill prefers the department and falls back to
+			// the designation. `layout-el-10` (the Elementor key for that card) is not
+			// excluded, so hiding the toggle for carousel5 alone made them disagree —
+			// `tax_department` never reached $items and the pill always fell back.
+			// isotope5 removed: it now shares Grid Layout 8's card, which prints the
+			// department in the floating name label — and `layout-el-8` is not excluded
+			// here, so hiding the toggle for isotope5 alone made the two disagree.
+			'condition'   => [ $obj->elPrefix . 'layout!' => [ 'layout10', 'layout11', 'layout12', 'layout13', 'layout14', 'layout5', 'layout15', 'carousel2', 'carousel3', 'carousel3', 'carousel6', 'carousel7', 'carousel8', 'carousel9', 'carousel11', 'isotope1', 'isotope2', 'isotope6', 'isotope8', 'isotope9', 'isotope10' ] ],
 			'separator'   => 'before',
 		];
 
@@ -328,7 +343,19 @@ class Settings {
 			'label_off'   => esc_html__( 'Off', 'tlp-team' ),
 			'default'     => 'yes',
 			'separator'   => 'before',
-			'condition'   => [ $obj->elPrefix . 'layout!' => [ 'layout-el-8', 'layout11', 'layout14', 'layout5', 'layout15', 'carousel3', 'carousel6', 'carousel8', 'carousel9', 'carousel11', 'isotope5', 'isotope7', 'isotope8', 'isotope9', 'isotope10' ] ],
+			// `isotope8` is deliberately NOT excluded: it shares Grid Layout 13's card,
+			// which has a bio slot. Leaving it here hid the toggle, so the Elementor
+			// path never put `short_bio` in $items and the bio silently vanished —
+			// while the shortcode path rendered it. Same fix as layout11.
+			// `carousel6` removed: it shares Grid Layout 11's card, whose hover-revealed
+			// block has a bio slot — and `layout11` is not excluded here, so hiding the
+			// toggle for the carousel alone meant the Elementor path never put
+			// `short_bio` in $items and the bio silently vanished. Same fix as isotope8.
+			// `carousel9` removed: `carousel9.php` has ALWAYS called get_formatted_short_bio(),
+			// so the bio renders on the shortcode path — but the toggle being hidden here meant
+			// the Elementor path never put `short_bio` in $items and the same field silently
+			// vanished. The redesigned blue panel gives it a place, so the two paths now agree.
+			'condition'   => [ $obj->elPrefix . 'layout!' => [ 'layout-el-8', 'layout14', 'layout5', 'layout15', 'carousel3', 'carousel8', 'carousel11', 'isotope5', 'isotope9', 'isotope10' ] ],
 		];
 
 		$obj->elControls = Fns::filter( $obj->elPrefix . 'end_of_details_tab', $obj );

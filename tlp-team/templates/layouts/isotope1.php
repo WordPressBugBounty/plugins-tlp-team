@@ -27,6 +27,28 @@ if ( $imgHtml ) {
 	}
 }
 
+/*
+ * Resting name plate. Everything else on this card lives inside `.overlay`, which is only
+ * revealed on hover — so before this the grid was a wall of anonymous photos, which is a poor
+ * fit for the one layout people actively FILTER. It reuses `h3 > .team-name` and
+ * `.tlp-position` rather than private classes so every Name / Designation style control
+ * reaches it exactly as it reaches the overlay copy, and it is aria-hidden because the same
+ * text is announced from the overlay below.
+ */
+$restPlate = null;
+
+if ( in_array( 'name', $items, true ) && $title ) {
+	$restPlate .= '<h3><span class="team-name">' . esc_html( $title ) . '</span></h3>';
+}
+
+if ( in_array( 'designation', $items, true ) && $designation ) {
+	$restPlate .= '<div class="tlp-position">' . esc_html( $designation ) . '</div>';
+}
+
+if ( $restPlate ) {
+	$html .= '<div class="rest-plate" aria-hidden="true">' . $restPlate . '</div>';
+}
+
 $html .= '<div class="overlay">';
 $html .= '<div class="overlay-element">';
 

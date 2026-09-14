@@ -172,7 +172,16 @@ if ( ! class_exists( RttlpTeam::class ) ) {
 		 * @return void
 		 */
 		public function initialize() {
-			\do_action( 'rttm_loaded' );
+			/**
+			 * `rttm_loaded` is the single action Team Pro boots from. Withhold it
+			 * when the installed Pro is older than TLP_TEAM_MIN_PRO_VERSION so an
+			 * incompatible Pro never hooks into this release. Pro stays active and
+			 * simply does nothing until it is updated.
+			 */
+			if ( Helpers\Compatibility::is_pro_compatible() ) {
+				\do_action( 'rttm_loaded' );
+			}
+
 			Helpers\Fns::instances( $this->controllers() );
 		}
 
@@ -204,6 +213,9 @@ if ( ! class_exists( RttlpTeam::class ) ) {
 		 * @return void
 		 */
 		public function on_plugins_loaded() {
+			// Runs at priority -1, before Pro's own priority 15 bootstrap.
+			Helpers\Compatibility::block_pro_hooks();
+
 			\do_action( 'rttm_loading' );
 		}
 

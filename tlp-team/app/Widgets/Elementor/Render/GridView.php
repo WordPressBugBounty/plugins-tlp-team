@@ -58,6 +58,10 @@ class GridView {
 
 		$arg   = RenderHelpers::argBuilder( $metas );
 
+		// Layout 5 keeps an image cell in every row when the column is on, so a
+		// member with no photo does not shift the rest of the row out of line.
+		$arg['showImage'] = ! $metas['fImg'];
+
 		$args  = ( new QueryArgs() )->buildArgs( $metas, false );
 
 		$layout     = $metas['layout'];
@@ -115,12 +119,13 @@ class GridView {
 			if ( 'layout5' === $layout ) {
 				$stripedRow = $metas['stripedRow'] ? ' table-striped' : '';
 				$html      .= '<div class="rt-col-xs-12"><div class="table-responsive"><table class="table' . esc_attr( $stripedRow ) . '">';
+				$html      .= Fns::layout5TableHead( $arg['items'], ! $metas['fImg'] );
 			}
 
 			if ( $isSpecial ) {
-				$html .= "<div class='rt-el-special-wrapper'>";
-				$html .= "<div class='rt-col-sm-4'><div class='rt-row' id='special-selected-wrapper'></div></div>";
-				$html .= "<div class='rt-col-sm-8'>";
+				$html .= "<div class='rt-el-special-wrapper rt-sp1-stage'>";
+				$html .= "<div class='rt-col-sm-4 rt-sp1-aside'><div class='rt-row' id='special-selected-wrapper'></div></div>";
+				$html .= "<div class='rt-col-sm-8 rt-sp1-main'>";
 				$html .= "<div class='rt-row special-items-wrapper'>";
 			}
 

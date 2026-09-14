@@ -113,8 +113,7 @@
 .rt-elementor-container > .rt-row > .rt-el-special-wrapper,
 .rt-row.special-items-wrapper,
 .rt-elementor-container[data-layout*=layout] .rt-row.ttp-even,
-.rt-d-flex,
-.rt-elementor-container .layout2 .single-team-area {
+.rt-d-flex {
 	display: -webkit-box;
 	display: -ms-flexbox;
 	display: flex;
@@ -123,8 +122,7 @@
 .rt-elementor-container > .rt-row > .rt-el-special-wrapper,
 .rt-row.special-items-wrapper,
 .rt-elementor-container[data-layout*=layout] .rt-row.ttp-even,
-.rt-flex-wrap,
-.rt-elementor-container .layout2 .single-team-area {
+.rt-flex-wrap {
 	-ms-flex-wrap: wrap;
 	flex-wrap: wrap;
 }
@@ -159,6 +157,7 @@
 
 .rt-default-gutter,
 .rt-elementor-container .equal-height,
+.rt-elementor-container .masonry-grid-item,
 .rt-elementor-container .even-grid-item {
 	margin-bottom: 30px;
 }
@@ -172,15 +171,10 @@
 .rt-primary-color,
 .rt-elementor-container .carousel-el-1 .tlp-overlay1 h3,
 .rt-elementor-container .carousel-el-1 .tlp-overlay1 .tlp-position,
-.rt-elementor-container .layout3 .tlp-content h3,
-.rt-elementor-container .layout3 .tlp-content .tlp-position,
-.rt-elementor-container .layout2 .rttm-content-area h3,
-.rt-elementor-container .layout2 .rttm-content-area .tlp-position,
 .rt-elementor-container .pagination > li > span,
 .rt-elementor-container .contact-info i,
 .rt-elementor-container .contact-info ul li:hover a,
 .rt-elementor-container .contact-info ul li:hover i,
-.isotope-free .single-team-area .social-icons a,
 .rt-elementor-container .social-icons a,
 .rt-elementor-container .short-bio a:hover,
 .rt-elementor-container .rt-loading {
@@ -189,7 +183,6 @@
 
 .rt-primary-color-bg,
 .rt-elementor-container .isotope-free .tlp-content,
-.rt-elementor-container .layout1 .tlp-content,
 .rt-elementor-container .pagination > .active > span:focus,
 .rt-elementor-container .pagination > .active > span:hover,
 .rt-elementor-container .pagination > .active > span,
@@ -210,9 +203,6 @@
 .rt-elementor-container .isotope-free .tlp-content,
 .rt-elementor-container .isotope-free h3,
 .rt-elementor-container .isotope-free .tlp-position,
-.rt-elementor-container .layout1 .tlp-content,
-.rt-elementor-container .layout1 h3,
-.rt-elementor-container .layout1 .tlp-position,
 .rt-carousel-holder .swiper-arrow,
 .rt-elementor-container .pagination > .active > span:focus,
 .rt-elementor-container .pagination > .active > span:hover,
@@ -638,6 +628,42 @@ to a reusable component.
 	overflow: hidden;
 }
 
+/* ---------------------------------------------------------------------------
+   "After Short Description" text
+   ---------------------------------------------------------------------------
+   `ttp_after_short_desc_text` appends its value to the member's short bio.
+   Fns::get_ttp_short_description() wraps it in `.rttm-after-bio` so it can be
+   told apart from the bio itself — before that it was concatenated with no
+   element at all and read as part of the member's own words.
+
+   This lives in the Elementor stylesheet as well as tlpteam.css because with
+   Settings > Block type set to "elementor", tlpteam.css is not enqueued at all
+   (ScriptsController::tlp_script) and the chip would render unstyled.
+
+   Kept at (0,1,0) with no !important: it is a default, and the Short Bio
+   typography/colour controls carry {{WRAPPER}}, so a user styling the bio wins. */
+
+.rttm-after-bio {
+	display: inline-block;
+	margin-left: 4px;
+	padding: 1px 9px;
+	border-radius: 999px;
+	background: rgba(20, 62, 229, 0.09);
+	color: #143ee5;
+	font-size: 0.86em;
+	font-weight: 600;
+	line-height: 1.6;
+	vertical-align: baseline;
+	white-space: nowrap;
+}
+
+.rt-elementor-container .tlp-overlay .rttm-after-bio,
+.rt-elementor-container .overlay .rttm-after-bio,
+.rt-elementor-container .layout-el-6 .tlp-info-block .rttm-after-bio {
+	background: rgba(255, 255, 255, 0.18);
+	color: inherit;
+}
+
 /* ===========================
 	Social Icons
 ==============================*/
@@ -731,48 +757,51 @@ to a reusable component.
 	background-color: #00afd1;
 }
 
-.isotope-free .single-team-area .social-icons a {
-	font-size: 16px;
-	background: transparent;
-}
+/* NOTE: the old `.isotope-free .single-team-area .social-icons a { font-size:16px;
+   background:transparent }` block was removed. It described the pre-redesign isotope-free
+   card, but this compiled file loads LAST in the cascade (after team-sc.css), so at equal
+   specificity (0,3,1) it beat BOTH the `.rttm-iso` redesign defaults AND the user's Social
+   Icon Size / Social Icon BG style controls, silently breaking them on every page where the
+   block type is "default". The redesigned social chip is styled in tlpteam.css (`.rttm-iso
+   .social-icons a`) and stays overridable by those controls. */
 
 /* ===========================
 	Contact Info
 ==============================*/
 
 .rt-elementor-container .contact-info {
-	margin: 0px;
-	padding: 0px 0px 10px 0px;
+    margin: 0px;
+    padding: 0px 0px 10px 0px;
 }
 
 .rt-elementor-container .contact-info ul {
-	margin: 0px;
-	padding: 0px;
-	list-style: none;
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
 }
 
 .rt-elementor-container .contact-info ul li {
-	margin: 0px;
-	padding: 0px;
-	line-height: 22px;
-	list-style: none !important;
-	border: none;
-	background: no-repeat;
+    margin: 0px;
+    padding: 0px;
+    line-height: 22px;
+    list-style: none !important;
+    border: none;
+    background: no-repeat;
 }
 
 .rt-elementor-container .contact-info ul li a {
-	color: inherit;
-	display: inline-block;
+    color: inherit;
+    display: inline-block;
 }
 
 .rt-elementor-container .contact-info ul li + li {
-	margin-top: 10px;
+    margin-top: 10px;
 }
 
 .rt-elementor-container .contact-info i {
-	width: 20px;
-	margin-right: 4px;
-	text-align: center;
+    width: 20px;
+    margin-right: 4px;
+    text-align: center;
 }
 
 /* ===========================
@@ -780,24 +809,24 @@ to a reusable component.
 ==============================*/
 
 .rt-elementor-container .single-team-area img {
-	max-width: 100%;
-	-webkit-transition: opacity 0.6s, -webkit-transform 0.6s;
-	transition: opacity 0.6s, -webkit-transform 0.6s;
-	transition: opacity 0.6s, transform 0.6s;
-	transition: opacity 0.6s, transform 0.6s, -webkit-transform 0.6s;
-	-webkit-backface-visibility: hidden;
-	backface-visibility: hidden;
-	-webkit-transform: scale3d(1, 1, 1);
-	transform: scale3d(1, 1, 1);
+    max-width: 100%;
+    -webkit-transition: opacity 0.6s, -webkit-transform 0.6s;
+    transition: opacity 0.6s, -webkit-transform 0.6s;
+    transition: opacity 0.6s, transform 0.6s;
+    transition: opacity 0.6s, transform 0.6s, -webkit-transform 0.6s;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
 }
 
 .rt-elementor-container .single-team-area:hover img {
-	-webkit-transform: scale3d(1.1, 1.1, 1);
-	transform: scale3d(1.1, 1.1, 1);
+    -webkit-transform: scale3d(1.1, 1.1, 1);
+    transform: scale3d(1.1, 1.1, 1);
 }
 
 .rt-carousel-holder .default-img {
-	width: 100%;
+    width: 100%;
 }
 
 /* ===========================
@@ -805,41 +834,41 @@ to a reusable component.
 ==============================*/
 
 .rt-elementor-container .button-group {
-	text-align: center;
-	padding-bottom: 20px;
-	padding-left: 10px;
-	padding-right: 10px;
+    text-align: center;
+    padding-bottom: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .rt-elementor-container .button-group button {
-	background: #000000;
-	border: none;
-	text-transform: none;
-	font-weight: 400;
-	margin: 5px;
-	padding: 10px 15px;
-	outline: 0px;
-	-webkit-box-shadow: none;
-	box-shadow: none;
-	text-shadow: none;
+    background: #000000;
+    border: none;
+    text-transform: none;
+    font-weight: 400;
+    margin: 5px;
+    padding: 10px 15px;
+    outline: 0px;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    text-shadow: none;
 }
 
 .rt-team-container .readmore-btn {
-	margin-top: 20px;
+    margin-top: 20px;
 }
 
 .rt-team-container .readmore-btn a {
-	padding: 10px 20px;
-	background: #007acc;
-	text-decoration: none;
-	color: #fff;
-	border-radius: 4px;
-	-webkit-transition: all 0.3s;
-	transition: all 0.3s;
+    padding: 10px 20px;
+    background: #007acc;
+    text-decoration: none;
+    color: #fff;
+    border-radius: 4px;
+    -webkit-transition: all 0.3s;
+    transition: all 0.3s;
 }
 
 .rt-team-container .readmore-btn a:hover {
-	background-color: #07639e;
+    background-color: #07639e;
 }
 
 /* ===========================
@@ -847,147 +876,147 @@ to a reusable component.
 ==============================*/
 
 .rt-elementor-container .tlp-pagination {
-	text-align: center;
+    text-align: center;
 }
 
 .rt-elementor-container .pagination {
-	display: -webkit-box;
-	display: -ms-flexbox;
-	display: flex;
-	-webkit-box-pack: center;
-	-ms-flex-pack: center;
-	justify-content: center;
-	-webkit-box-align: center;
-	-ms-flex-align: center;
-	align-items: center;
-	padding-left: 0;
-	margin: 20px 0;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    padding-left: 0;
+    margin: 20px 0;
 }
 
 .rt-elementor-container .pagination > li {
-	display: inline;
-	margin-left: 3px;
-	margin-right: 3px;
+    display: inline;
+    margin-left: 3px;
+    margin-right: 3px;
 }
 
 .rt-elementor-container .pagination > li > a {
-	float: left;
-	padding: 6px 12px;
-	line-height: 1.4;
-	text-decoration: none;
-	border: 0;
-	margin-left: -1px;
-	outline: none;
-	color: inherit;
-	border-radius: 0;
+    float: left;
+    padding: 6px 12px;
+    line-height: 1.4;
+    text-decoration: none;
+    border: 0;
+    margin-left: -1px;
+    outline: none;
+    color: inherit;
+    border-radius: 0;
 }
 
 .rt-elementor-container .pagination > li > a:hover {
-	z-index: 2;
+    z-index: 2;
 }
 
 .rt-elementor-container .pagination > li > a:focus {
-	z-index: 2;
+    z-index: 2;
 }
 
 .rt-elementor-container .pagination > li > span {
-	float: left;
-	padding: 6px 12px;
-	line-height: 1.4;
-	text-decoration: none;
-	border: 0;
-	margin-left: -1px;
+    float: left;
+    padding: 6px 12px;
+    line-height: 1.4;
+    text-decoration: none;
+    border: 0;
+    margin-left: -1px;
 }
 
 .rt-elementor-container .pagination > li > span:hover {
-	z-index: 2;
+    z-index: 2;
 }
 
 .rt-elementor-container .pagination > li > span:focus {
-	z-index: 2;
+    z-index: 2;
 }
 
 .rt-elementor-container .pagination > li:first-child > a {
-	margin-left: 0;
+    margin-left: 0;
 }
 
 .rt-elementor-container .pagination > li:first-child > span {
-	margin-left: 0;
+    margin-left: 0;
 }
 
 .rt-elementor-container .pagination > li:last-child > a {
-	margin-left: 0;
-	border-radius: 0;
+    margin-left: 0;
+    border-radius: 0;
 }
 
 .rt-elementor-container .pagination > li:last-child > span {
-	margin-left: 0;
+    margin-left: 0;
 }
 
 .rt-elementor-container .pagination > .active > a {
-	z-index: 3;
-	cursor: default;
+    z-index: 3;
+    cursor: default;
 }
 
 .rt-elementor-container .pagination > .active > a:hover {
-	z-index: 3;
-	cursor: default;
+    z-index: 3;
+    cursor: default;
 }
 
 .rt-elementor-container .pagination > .active > a:focus {
-	z-index: 3;
-	cursor: default;
+    z-index: 3;
+    cursor: default;
 }
 
 .rt-elementor-container .pagination > .active > span {
-	z-index: 3;
-	cursor: default;
+    z-index: 3;
+    cursor: default;
 }
 
 .rt-elementor-container .pagination > .active > span:hover {
-	z-index: 3;
-	cursor: default;
+    z-index: 3;
+    cursor: default;
 }
 
 .rt-elementor-container .pagination > .active > span:focus {
-	z-index: 3;
-	cursor: default;
+    z-index: 3;
+    cursor: default;
 }
 
 .rt-elementor-container .pagination > .disabled > span {
-	color: #777777;
-	border-color: #dddddd;
-	cursor: not-allowed;
+    color: #777777;
+    border-color: #dddddd;
+    cursor: not-allowed;
 }
 
 .rt-elementor-container .pagination > .disabled > span:hover {
-	color: #777777;
-	border-color: #dddddd;
-	cursor: not-allowed;
+    color: #777777;
+    border-color: #dddddd;
+    cursor: not-allowed;
 }
 
 .rt-elementor-container .pagination > .disabled > span:focus {
-	color: #777777;
-	border-color: #dddddd;
-	cursor: not-allowed;
+    color: #777777;
+    border-color: #dddddd;
+    cursor: not-allowed;
 }
 
 .rt-elementor-container .pagination > .disabled > a {
-	color: #777777;
-	border-color: #dddddd;
-	cursor: not-allowed;
+    color: #777777;
+    border-color: #dddddd;
+    cursor: not-allowed;
 }
 
 .rt-elementor-container .pagination > .disabled > a:hover {
-	color: #777777;
-	border-color: #dddddd;
-	cursor: not-allowed;
+    color: #777777;
+    border-color: #dddddd;
+    cursor: not-allowed;
 }
 
 .rt-elementor-container .pagination > .disabled > a:focus {
-	color: #777777;
-	border-color: #dddddd;
-	cursor: not-allowed;
+    color: #777777;
+    border-color: #dddddd;
+    cursor: not-allowed;
 }
 
 /* ===========================
@@ -995,25 +1024,25 @@ to a reusable component.
 ==============================*/
 
 .rt-carousel-holder .carousel-item {
-	display: block;
+    display: block;
 }
 
 .rt-carousel-holder .default-img + .swiper-lazy-preloader {
-	display: none;
+    display: none;
 }
 
 .rt-carousel-holder.slider-loading {
-	opacity: 0;
-	visibility: hidden;
+    opacity: 0;
+    visibility: hidden;
 }
 
 .rt-elementor-container .img-responsive.swiper-lazy:not(.swiper-lazy-loaded) {
-	visibility: hidden;
-	opacity: 0;
+    visibility: hidden;
+    opacity: 0;
 }
 
 .rt-elementor-container .swiper-lazy-preloader::after {
-	background: none;
+    background: none;
 }
 
 /* ===========================
@@ -1021,120 +1050,120 @@ to a reusable component.
 ==============================*/
 
 .rt-carousel-holder .swiper-arrow {
-	width: 30px;
-	height: 30px;
-	-webkit-transition: all 0.3s;
-	transition: all 0.3s;
-	background-image: none;
-	background: #000;
+    width: 30px;
+    height: 30px;
+    -webkit-transition: all 0.3s;
+    transition: all 0.3s;
+    background-image: none;
+    background: #000;
 }
 
 .rt-carousel-holder .swiper-arrow::after {
-	content: none !important;
+    content: none !important;
 }
 
 .rt-carousel-holder .swiper-arrow:hover {
-	background: #333;
+    background: #333;
 }
 
 .rt-carousel-holder .swiper-arrow i {
-	color: inherit;
+    color: inherit;
 }
 
 .rt-carousel-holder.top-nav .swiper-nav {
-	position: absolute;
-	right: -15px;
-	top: -30px;
+    position: absolute;
+    right: -15px;
+    top: -30px;
 }
 
 .rt-carousel-holder.top-nav .swiper-button-next {
-	right: 15px;
+    right: 15px;
 }
 
 .rt-carousel-holder.top-nav .swiper-button-prev {
-	left: -85px;
+    left: -85px;
 }
 
 .rt-carousel-holder.top-nav.swiper-rtl .swiper-nav {
-	right: auto;
-	left: 85px;
+    right: auto;
+    left: 85px;
 }
 
 .rt-carousel-holder.top-nav.swiper-rtl .swiper-button-prev {
-	right: 15px;
-	left: auto;
+    right: 15px;
+    left: auto;
 }
 
 .rt-carousel-holder.top-nav.swiper-rtl .swiper-button-next {
-	left: -85px;
-	right: auto;
+    left: -85px;
+    right: auto;
 }
 
 .rt-carousel-holder.standard-nav .swiper-nav {
-	position: absolute;
-	top: 50%;
-	margin-top: -30px;
-	width: 100%;
+    position: absolute;
+    top: 50%;
+    margin-top: -30px;
+    width: 100%;
 }
 
 .rt-carousel-holder.standard-nav .swiper-nav .swiper-arrow {
-	top: 7.5px;
+    top: 7.5px;
 }
 
 .rt-carousel-holder.standard-nav .swiper-nav .swiper-button-next {
-	right: -15px;
+    right: -15px;
 }
 
 .rt-carousel-holder.standard-nav .swiper-nav .swiper-button-prev {
-	left: -15px;
+    left: -15px;
 }
 
 .rt-carousel-holder.bottom-nav .swiper-nav {
-	position: absolute;
-	bottom: 0;
-	left: 50%;
-	bottom: 50px;
-	-webkit-transform: translateX(-50%);
-	-ms-transform: translateX(-50%);
-	transform: translateX(-50%);
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    bottom: 50px;
+    -webkit-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    transform: translateX(-50%);
 }
 
 .rt-carousel-holder.bottom-nav .swiper-nav .swiper-button-next {
-	right: auto;
-	left: 5px;
+    right: auto;
+    left: 5px;
 }
 
 .rt-carousel-holder.bottom-nav .swiper-nav .swiper-button-prev {
-	left: auto;
-	right: 5px;
+    left: auto;
+    right: 5px;
 }
 
 .rt-carousel-holder.bottom-nav.no-dots {
-	margin-bottom: 40px;
+    margin-bottom: 40px;
 }
 
 .rt-carousel-holder.bottom-nav.no-dots .swiper-nav {
-	bottom: 20px;
+    bottom: 20px;
 }
 
 .rt-carousel-holder.bottom-nav.no-dots.no-nav {
-	margin-bottom: 0;
+    margin-bottom: 0;
 }
 
 .rt-carousel-holder.swiper-rtl .swiper-button-prev i {
-	-webkit-transform: rotate(180deg);
-	-ms-transform: rotate(180deg);
-	transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    transform: rotate(180deg);
 }
 
 .rt-carousel-holder.swiper-rtl .swiper-button-next i {
-	-webkit-transform: rotate(180deg);
-	-ms-transform: rotate(180deg);
-	transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    transform: rotate(180deg);
 }
 
 .rt-elementor-container .rt-carousel-holder.bottom-nav .swiper-nav + .swiper-pagination {
-	margin-top: 40px;
+    margin-top: 40px;
 }
 
 /* ===========================
@@ -1142,43 +1171,43 @@ to a reusable component.
 ==============================*/
 
 .rt-elementor-container .rt-carousel-holder.swiper .swiper-pagination-bullet {
-	width: 10px;
-	height: 10px;
-	margin: 10px 5px 5px;
-	-webkit-transition: all 0.3s;
-	transition: all 0.3s;
+    width: 10px;
+    height: 10px;
+    margin: 10px 5px 5px;
+    -webkit-transition: all 0.3s;
+    transition: all 0.3s;
 }
 
 .rt-elementor-container .rt-carousel-holder .swiper-pagination {
-	bottom: -20px;
-	height: 30px;
+    bottom: -20px;
+    height: 30px;
 }
 
 .rt-elementor-container .rt-carousel-holder .swiper-pagination-bullet:hover {
-	background: #000;
-	opacity: 0.75;
+    background: #000;
+    opacity: 0.75;
 }
 
 .rt-elementor-container .rt-carousel-holder .swiper-pagination-bullet-active {
-	opacity: 0.75;
-	background: #000;
+    opacity: 0.75;
+    background: #000;
 }
 
 .rt-elementor-container .rt-carousel-holder.swiper-autoheight .swiper-pagination {
-	margin-top: 20px;
-	margin-left: auto;
-	margin-right: auto;
-	-webkit-transform: none !important;
-	-ms-transform: none !important;
-	transform: none !important;
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    -webkit-transform: none !important;
+    -ms-transform: none !important;
+    transform: none !important;
 }
 
 .rt-elementor-container .swiper-pagination-bullets-dynamic {
-	margin-left: auto;
-	margin-right: auto;
-	-webkit-transform: none !important;
-	-ms-transform: none !important;
-	transform: none !important;
+    margin-left: auto;
+    margin-right: auto;
+    -webkit-transform: none !important;
+    -ms-transform: none !important;
+    transform: none !important;
 }
 
 /* ===========================
@@ -1186,50 +1215,50 @@ to a reusable component.
 ==============================*/
 
 .rt-flip-container {
-	-webkit-perspective: 1000px;
-	perspective: 1000px;
-	width: 100%;
+    -webkit-perspective: 1000px;
+    perspective: 1000px;
+    width: 100%;
 }
 
 .rt-flip-inner {
-	position: relative;
-	width: 100%;
-	-webkit-transition: -webkit-transform 0.6s ease;
-	transition: -webkit-transform 0.6s ease;
-	transition: transform 0.6s ease;
-	transition: transform 0.6s ease, -webkit-transform 0.6s ease;
-	-webkit-transform-style: preserve-3d;
-	transform-style: preserve-3d;
+    position: relative;
+    width: 100%;
+    -webkit-transition: -webkit-transform 0.6s ease;
+    transition: -webkit-transform 0.6s ease;
+    transition: transform 0.6s ease;
+    transition: transform 0.6s ease, -webkit-transform 0.6s ease;
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
 }
 
 .rt-flip-front,
 .rt-flip-back {
-	backface-visibility: hidden;
-	-webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
 }
 
 .rt-flip-front img,
 .rt-flip-back img {
-	display: block;
-	width: 100%;
-	height: auto;
+    display: block;
+    width: 100%;
+    height: auto;
 }
 
 .rt-flip-back {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	-webkit-transform: rotateY(180deg);
-	transform: rotateY(180deg);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    -webkit-transform: rotateY(180deg);
+    transform: rotateY(180deg);
 }
 
 .rt-flip-back img {
-	width: 100%;
-	height: 100%;
-	-o-object-fit: cover;
-	object-fit: cover;
+    width: 100%;
+    height: 100%;
+    -o-object-fit: cover;
+    object-fit: cover;
 }
 
 .single-team-area:hover .rt-flip-inner,
@@ -1238,28 +1267,28 @@ to a reusable component.
 tr:hover .rt-flip-inner,
 .tlp-img:hover .rt-flip-inner,
 .rt-flip-container:hover .rt-flip-inner {
-	-webkit-transform: rotateY(180deg);
-	transform: rotateY(180deg);
+    -webkit-transform: rotateY(180deg);
+    transform: rotateY(180deg);
 }
 
 figure:has(.rt-flip-container),
 .image-container:has(.rt-flip-container) {
-	overflow: visible;
+    overflow: visible;
 }
 
 .rt-flip-container img {
-	-webkit-transform: none !important;
-	-ms-transform: none !important;
-	transform: none !important;
-	-webkit-backface-visibility: hidden;
-	backface-visibility: hidden;
+    -webkit-transform: none !important;
+    -ms-transform: none !important;
+    transform: none !important;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
 }
 
 .single-team-area:hover .rt-flip-container img,
 .team-member:hover .rt-flip-container img {
-	-webkit-transform: none !important;
-	-ms-transform: none !important;
-	transform: none !important;
+    -webkit-transform: none !important;
+    -ms-transform: none !important;
+    transform: none !important;
 }
 
 /*
@@ -1274,84 +1303,141 @@ to a reusable layout.
 
 .rt-container,
 .rt-container-fluid {
-	margin-right: auto;
-	margin-left: auto;
-	padding-left: 15px;
-	padding-right: 15px;
+    margin-right: auto;
+    margin-left: auto;
+    padding-left: 15px;
+    padding-right: 15px;
 }
 
 .clearfix::after,
 .rt-container::after,
 .rt-container-fluid::after,
 .rt-row::after {
-	clear: both;
+    clear: both;
 }
 
 .rt-row {
-	margin-left: -15px;
-	margin-right: -15px;
+    margin-left: -15px;
+    margin-right: -15px;
 }
 
 .rt-clear:after {
-	clear: both;
-	content: "";
-	display: block;
+    clear: both;
+    content: "";
+    display: block;
 }
 
 /* ===========================
-	Layout 1
+	Layout 1 (Elementor)
 ==============================*/
+
+/*
+ * Grid Layout 1's card design comes from the shared `.rt-team-container .layout1`
+ * rules in assets/css/tlpteam.css, which derive every accent (designation,
+ * contact-icon chips, social chips, buttons, pagination) from the custom
+ * property `--l1-primary`.
+ *
+ * On the Elementor path we route that property to `--rttm-primary-color` — the
+ * variable the Elementor "Primary Color" Style control writes on `{{WRAPPER}}`
+ * (see Pro ElementorFilters::colorControls). So changing Primary Color in the
+ * Elementor editor now recolours the whole redesigned card, instead of doing
+ * nothing.
+ *
+ * `.rt-elementor-container[data-layout="layout1"]` matches the same container as
+ * the tlpteam.css `--l1-primary` definition at equal specificity, and this file
+ * (tlp-el-team.css) loads after tlpteam.css, so this wins — the Elementor path
+ * follows the control while the shortcode path keeps its own `--l1-primary`.
+ *
+ * The previous white-text-on-primary-strip rules for Layout 1 were removed: the
+ * redesign uses a white strip, and those over-specific defaults also blocked the
+ * Style controls.
+ *
+ * DEFAULT: the literal `#143ee5` below, matching the shortcode path's
+ * `.rt-team-container[data-layout="layout1"]` in tlpteam.css and the rest of the
+ * redesigned layouts. It is NOT chained through `--rttm-primary-color` any more:
+ * Pro pins `:root { --rttm-primary-color: #007acc }`, which left Layout 1 alone
+ * defaulting to the legacy teal while every sibling layout was on the design blue.
+ *
+ * The Primary Color control still wins, because it writes `--l1-primary` straight
+ * onto the container (`{{WRAPPER}} .rt-elementor-container`, 0,4,0) in both
+ * FilterHooks::colorControls and Pro ElementorFilters::colorControls, which
+ * out-weighs this (0,2,0) default. Do not replace that arm with a CSS chain --
+ * that is exactly how Layout 3 ended up pinned to blue with a dead control.
+ */
+
+.rt-elementor-container[data-layout=layout1] {
+    --l1-primary: #143ee5;
+}
 
 /* ===========================
-	Layout 2
+	Layout 2 (List) — Elementor
 ==============================*/
 
-.rt-elementor-container .layout2 .single-team-area .img-area {
-	padding: 0 0 15px 0;
+/*
+ * The List (layout2) horizontal-card redesign lives in assets/css/tlpteam.css
+ * under `.rt-team-container .layout2`. tlpteam.css is enqueued on the Elementor
+ * path too (rt-team-css), and the Elementor container also carries
+ * `.rt-team-container`, so the "List Layouts" widget gets the same design with no
+ * duplication here.
+ *
+ * Paintable defaults are declared there via `:where(.rt-team-container .layout2)`
+ * at zero specificity, so the Elementor Style-tab controls (name / designation /
+ * short-bio / read-more colours, etc.) override them exactly like the shortcode
+ * Styling tab does.
+ *
+ * The previous rules in this file (`@extend .rt-primary-color` on the name /
+ * designation, and the flex override on `.single-team-area`) were removed: they
+ * loaded after tlpteam.css and fought the new card.
+ */
+
+.rt-elementor-container .layout2 {
+ /*
+   * Elementor-only fix. Generic resets in this stylesheet paint the role as
+   *   .rt-elementor-container .tlp-position   { color: initial }   (0,2,0)
+   *   .rt-elementor-container .tlp-position a  { color: initial }   (0,2,1)
+   * which is black and out-ranks the zero-specificity `:where()` accent
+   * default in tlpteam.css — so on Elementor the role lost its colour.
+   *
+   * Re-assert the accent at (0,3,0)/(0,3,1): above those `initial` resets, but
+   * still BELOW the Elementor "Designation → Color" control
+   * (`{{WRAPPER}} .layout2 .rttm-content-area .tlp-position`, 0,4,0), so that
+   * control keeps overriding it. The link inherits the div, so a user colour
+   * set on the div shows through on the (linked) role too.
+   */
 }
 
-.rt-elementor-container .layout2 .rttm-content-area h3 a,
-.rt-elementor-container .layout2 .rttm-content-area .tlp-position a {
-	color: inherit;
-	-webkit-transition: none;
-	transition: none;
+.rt-elementor-container .layout2 .tlp-position {
+    color: var(--l2-primary);
 }
 
-.rt-elementor-container .layout2 .rttm-content-area .tlp-position {
-	font-weight: 500;
-}
-
-.rt-elementor-container .layout2 .rttm-content-area .tlp-position a {
-	font-size: inherit;
-	font-weight: inherit;
+.rt-elementor-container .layout2 .tlp-position a {
+    color: inherit;
 }
 
 /* ===========================
-	Layout 3
+	Layout 3 (Elementor)
 ==============================*/
 
-.rt-elementor-container .layout3 {
-	text-align: center;
-}
+/*
+ * Grid Layout 3's hover-reveal card is defined once, by the shared
+ * `.rt-team-container .layout3` rules in assets/css/tlpteam.css, and every
+ * accent derives from the custom property `--l3-primary`. Because the Elementor
+ * container also carries `.rt-team-container` + `[data-layout="layout3"]`, that
+ * whole redesign already applies on the Elementor path — no duplication here.
+ *
+ * Pin `--l3-primary` to the reference blue #143ee5 so the Elementor Grid Layout 3
+ * shares ONE colour combo with the shortcode Layout 3 (which defaults to #143ee5
+ * via --l1-primary) — matching how Layout 4 was unified. This overrides the
+ * tlpteam.css `--l3-primary` (which resolves to #143ee5 on the shortcode path but
+ * would otherwise be the container default on Elementor).
+ *
+ * `.rt-elementor-container[data-layout="layout3"]` matches the same container as
+ * the tlpteam.css `--l3-primary` definition at equal specificity, and this file
+ * (tlp-el-team.css) loads after tlpteam.css, so this wins on the Elementor path.
+ */
 
-.rt-elementor-container .layout3 .tlp-content {
-	padding: 0;
-	background: none;
-}
-
-.rt-elementor-container .layout3 .tlp-content h3 {
-	margin-top: 0;
-}
-
-.rt-elementor-container .layout3 .tlp-content h3 a,
-.rt-elementor-container .layout3 .tlp-content .tlp-position a {
-	color: inherit;
-	-webkit-transition: none;
-	transition: none;
-}
-
-.rt-elementor-container .layout3 figure + .tlp-content {
-	padding-top: 15px;
+.rt-elementor-container[data-layout=layout3] {
+	--l3-primary: #143ee5;
 }
 
 /* ===========================
@@ -1807,14 +1893,6 @@ to a reusable layout.
 
 .rt-carousel-holder.standard-nav .swiper-nav .swiper-button-prev {
 	left: 15px;
-}
-
-}
-
-@media only screen and (max-width: 991px) {
-
-.rt-elementor-container .layout2 .single-team-area img {
-	width: 100%;
 }
 
 }

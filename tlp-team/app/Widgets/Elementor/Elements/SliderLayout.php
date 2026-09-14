@@ -133,6 +133,7 @@ class SliderLayout extends ElementorWidget {
 			$this->elPrefix . 'slider_style_section',
 			[
 				'colorScheme',
+				'wrapper',
 				'name',
 				'designation',
 				'department',

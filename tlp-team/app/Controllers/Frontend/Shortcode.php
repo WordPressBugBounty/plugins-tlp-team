@@ -36,6 +36,46 @@ class Shortcode {
 	 */
 	protected function init() {
 		add_shortcode( 'tlpteam', [ $this, 'team_shortcode' ] );
+
+		/**
+		 * team_shortcode() hooks register_scripts() onto `wp_footer` when a shortcode
+		 * runs, which covers the frontend. It cannot cover the Elementor editor: there
+		 * the document's widgets are rendered client side by separate AJAX requests
+		 * long after this page's `wp_footer` has fired, so no [tlpteam] has executed
+		 * here and the runtime, `ttp` and the popup markup were never printed. A
+		 * shortcode dropped on the canvas then sat on its pre-loader forever, because
+		 * the script that clears it and issues the AJAX had not loaded.
+		 *
+		 * Hook it up front in that mode instead. `wp_enqueue_scripts` is late enough
+		 * for Elementor to have resolved preview mode, which it sets on
+		 * `template_redirect`.
+		 */
+		add_action(
+			'wp_enqueue_scripts',
+			function () {
+				if ( self::isElementorEditorPreview() ) {
+					add_action( 'wp_footer', [ $this, 'register_scripts' ] );
+				}
+			}
+		);
+	}
+
+	/**
+	 * Is this request the Elementor editor's preview iframe?
+	 *
+	 * Deliberately not `Elementor\Plugin::$instance->editor->is_edit_mode()` — that is
+	 * the panel document, this is the iframe that actually renders the widgets.
+	 *
+	 * @return boolean
+	 */
+	public static function isElementorEditorPreview() {
+		if ( ! did_action( 'elementor/loaded' ) || ! class_exists( '\Elementor\Plugin' ) ) {
+			return false;
+		}
+
+		$elementor = \Elementor\Plugin::$instance;
+
+		return ! empty( $elementor->preview ) && $elementor->preview->is_preview_mode();
 	}
 
 	function register_scripts() {
@@ -51,7 +91,18 @@ class Shortcode {
 			}
 		}
 
-		if ( count( $this->scA ) ) {
+		/**
+		 * In the editor preview nothing has rendered yet (see init()), so $scA is empty
+		 * and there is no layout to inspect. Load the whole bundle — any layout may be
+		 * dropped onto the canvas next.
+		 */
+		$editorPreview = self::isElementorEditorPreview();
+
+		if ( $editorPreview ) {
+			$iso = true;
+		}
+
+		if ( count( $this->scA ) || $editorPreview ) {
 			if ( $iso ) {
 				array_push( $script, 'tlp-isotope-js' );
 			}
@@ -106,8 +157,53 @@ class Shortcode {
 			$html .= "<div class='md-overlay'></div>";
 
 			Fns::print_html( $html );
+
+			if ( $editorPreview ) {
+				$this->editorPreviewReInit();
+			}
 		}
 
+	}
+
+	/**
+	 * Re-run the shortcode runtime for widgets the editor renders after page load.
+	 *
+	 * Elementor injects a widget's markup by AJAX whenever it is added or edited, so a
+	 * freshly dropped [tlpteam] arrives after tlpteam.js has already run its one pass.
+	 * Without this its slider/isotope/popup never initialise and an AJAX layout keeps
+	 * spinning on its pre-loader until the whole preview is reloaded.
+	 *
+	 * initTlpTeam() skips containers it has already bound, so re-running it per widget
+	 * is safe.
+	 *
+	 * @return void
+	 */
+	private function editorPreviewReInit() {
+		?>
+		<script>
+			( function ( $ ) {
+				var reInit = function () {
+					if ( typeof window.initTlpTeam === 'function' ) {
+						window.initTlpTeam();
+					}
+				};
+
+				$( window ).on( 'elementor/frontend/init', function () {
+					if ( ! window.elementorFrontend || ! elementorFrontend.hooks ) {
+						return;
+					}
+
+					// `shortcode` is Elementor's own widget; `tlp-team` is ours.
+					[ 'shortcode', 'tlp-team' ].forEach( function ( widget ) {
+						elementorFrontend.hooks.addAction(
+							'frontend/element_ready/' + widget + '.default',
+							reInit
+						);
+					} );
+				} );
+			}( jQuery ) );
+		</script>
+		<?php
 	}
 
 	function team_shortcode( $atts ) {
@@ -244,7 +340,16 @@ class Shortcode {
 			$containerClass  = 'rt-team-container-' . $scID;
 			$containerClass .= $parentClass ? ' ' . $parentClass : null;
 			$containerClass .= $grayscale ? ' rt-grayscale' : null;
+			// The field-selection key is 'department', but every card template checks
+			// 'tax_department' (the key the Elementor path already emits). Mirror it here
+			// so the Department field renders on the shortcode path too.
+			if ( in_array( 'department', $visibility, true ) && ! in_array( 'tax_department', $visibility, true ) ) {
+				$visibility[] = 'tax_department';
+			}
 			$arg['items'] = $visibility;
+			// Layout 5 keeps an image cell in every row when the column is on, so a
+			// member with no photo does not shift the rest of the row out of line.
+			$arg['showImage']      = ! $fImg;
 			$arg['my_resume_text'] = $my_resume_text;
 			$arg['hire_me_text'] = $hire_me_text;
 			$arg['read_more_btn_text'] = $read_more_btn_text;
@@ -270,6 +375,7 @@ class Shortcode {
 					$html .= "<div class='rt-layout-filter-container rt-clear'><div class='rt-filter-wrap rt-clear'>";
 					if ( in_array( '_taxonomy_filter', $filters ) && $taxFilter ) {
 						$terms = Fns::rt_get_all_terms_by_taxonomy( $taxFilter );
+						$termCounts = Fns::rt_filter_term_counts( $taxFilter );
 
 						$allSelect      = ' selected';
 						$isTermSelected = false;
@@ -335,7 +441,7 @@ class Shortcode {
 								$html .= "<span class='term-button-item rt-filter-button-item {$allSelect}' data-term='all'>" . esc_html__(
 									'All',
 									'tlp-team'
-								) . '</span>';
+								) . Fns::rt_filter_count_badge( $termCounts, 'all' ) . '</span>';
 							}
 
 							if ( ! empty( $terms ) ) {
@@ -346,10 +452,10 @@ class Shortcode {
 									}
 									if ( is_array( $taxFilterTerms ) && ! empty( $taxFilterTerms ) ) {
 										if ( in_array( $id, $taxFilterTerms ) ) {
-											$html .= "<span class='term-button-item rt-filter-button-item {$termSelected}' data-term='{$id}'>{$term}</span>";
+											$html .= "<span class='term-button-item rt-filter-button-item {$termSelected}' data-term='{$id}'>{$term}" . Fns::rt_filter_count_badge( $termCounts, $id ) . '</span>';
 										}
 									} else {
-										$html .= "<span class='term-button-item rt-filter-button-item {$termSelected}' data-term='{$id}'>{$term}</span>";
+										$html .= "<span class='term-button-item rt-filter-button-item {$termSelected}' data-term='{$id}'>{$term}" . Fns::rt_filter_count_badge( $termCounts, $id ) . '</span>';
 									}
 								}
 							}
@@ -395,7 +501,7 @@ class Shortcode {
 					if ( in_array( '_search', $filters ) ) {
 						$html .= '<div class="rt-filter-item-wrap rt-search-filter-wrap">';
 						$html .= "<input type='text' class='rt-search-input' placeholder='Search...'>";
-						$html .= "<span class='rt-action'>&#128269;</span>";
+						$html .= "<span class='rt-action'><i class='rt-search-ico' aria-hidden='true'></i></span>";
 						$html .= "<span class='rt-loading'></span>";
 						$html .= '</div>';
 					}
@@ -545,12 +651,13 @@ class Shortcode {
 				// layout 5 table
 				if ( $layout == 'layout5' ) {
 					$html .= "<table class='table table-striped table-responsive {$round_img}'>";
+					$html .= Fns::layout5TableHead( $visibility, ! $fImg );
 				}
     
 				if ( $isSpecial ) {
-					$html .= "<div class='rt-special-wrapper'>";
-					$html .= "<div class='rt-col-sm-4'><div class='rt-row' id='special-selected-wrapper'></div></div>";
-					$html .= "<div class='rt-col-sm-8'>";
+					$html .= "<div class='rt-special-wrapper rt-sp1-stage'>";
+					$html .= "<div class='rt-col-sm-4 rt-sp1-aside'><div class='rt-row' id='special-selected-wrapper'></div></div>";
+					$html .= "<div class='rt-col-sm-8 rt-sp1-main'>";
 					$html .= "<div class='rt-row special-items-wrapper'>";
 				}
 
@@ -571,6 +678,14 @@ class Shortcode {
 						get_the_term_list(
 							$mID,
 							rttlp_team()->taxonomies['designation'],
+							null,
+							', '
+						)
+					);
+					$arg['tax_department'] = wp_strip_all_tags(
+						get_the_term_list(
+							$mID,
+							rttlp_team()->taxonomies['department'],
 							null,
 							', '
 						)
@@ -674,8 +789,8 @@ class Shortcode {
 						$posts_loading_type = 'pagination';
 					}
 
-					if ( $scMeta['ttp_limit'][0] ) {
-						$range     = $scMeta['ttp_posts_per_page'][0];
+					if ( ! empty( $scMeta['ttp_limit'][0] ) ) {
+						$range     = ! empty( $scMeta['ttp_posts_per_page'][0] ) ? $scMeta['ttp_posts_per_page'][0] : 0;
 						$foundPost = $teamQuery->found_posts;
 
 						if ( $range && $foundPost > $range ) {
@@ -700,7 +815,7 @@ class Shortcode {
 						$htmlUtility .= "<div class='rt-page-numbers'></div>";
 					} elseif ( $posts_loading_type == 'load_more' ) {
 						$htmlUtility .= "<div class='rt-loadmore-btn rt-loadmore-action rt-loadmore-style{$hide}'>
-							<span class='rt-loadmore-text'>" . esc_html__( 'Load More', 'tlp-team' ) . "</span>
+							<span class='rt-loadmore-text'>" . esc_html( $load_more_text ) . "</span>
 							<div class='rt-loadmore-loading rt-ball-scale-multiple rt-2x'><div></div><div></div><div></div></div>
 						</div>";
 					} elseif ( $posts_loading_type == 'load_on_scroll' ) {
@@ -757,7 +872,7 @@ class Shortcode {
 			'department_ids'     => isset( $meta['ttp_departments'] ) ? $meta['ttp_departments'] : [],
 			'designation_ids'    => isset( $meta['ttp_designations'] ) ? $meta['ttp_designations'] : [],
 			'relation'           => isset( $meta['ttp_taxonomy_relation'][0] ) ? $meta['ttp_taxonomy_relation'][0] : 'AND',
-			'iCol'               => ! empty( $meta['ttl_image_column'][0] ) ? absint( $meta['ttl_image_column'][0] ) : 4,
+			'iCol'               => ! empty( $meta['ttl_image_column'][0] ) ? absint( $meta['ttl_image_column'][0] ) : 6,
 			'gridType'           => ! empty( $meta['grid_style'][0] ) ? $meta['grid_style'][0] : 'even',
 			'margin'             => ! empty( $meta['margin_option'][0] ) ? $meta['margin_option'][0] : 'default',
 			'round_img'          => ! empty( $meta['image_style'][0] ) && $meta['image_style'][0] == 'round' ? esc_attr( ' round-img' ) : '',
@@ -775,6 +890,12 @@ class Shortcode {
 			'my_resume_text'     => isset( $meta['ttp_my_resume_text'][0] ) ? $meta['ttp_my_resume_text'][0] : esc_html__('My Resume','tlp-team'),
 			'hire_me_text'       => isset( $meta['ttp_hire_me_text'][0] ) ? $meta['ttp_hire_me_text'][0] : esc_html__('Hire Me','tlp-team'),
 			'read_more_btn_text' => isset( $meta['ttp_read_more_btn_text'][0] ) ? $meta['ttp_read_more_btn_text'][0] : esc_html__('Read More','tlp-team'),
+			// The Load more button text field (pro's HookFilter) was written to meta but never
+			// read back, so the button always said "Load More" whatever was typed. Elementor's
+			// own control has always been honoured -- this brings the shortcode in line.
+			'load_more_text'     => isset( $meta['ttp_load_more_button_text'][0] ) && '' !== trim( $meta['ttp_load_more_button_text'][0] )
+				? $meta['ttp_load_more_button_text'][0]
+				: esc_html__( 'Load More', 'tlp-team' ),
 			'defaultImgId'       => ! empty( $meta['default_preview_image'][0] ) ? absint( $meta['default_preview_image'][0] ) : null,
             'customImgSize'      => (!empty($meta['ttp_custom_image_size'][0]) && is_string($meta['ttp_custom_image_size'][0])) ? unserialize($meta['ttp_custom_image_size'][0]) : [],
             'visibility'         => ! empty( $meta['ttp_selected_field'] ) ? $meta['ttp_selected_field'] : [ 'name', 'designation', 'ttp_my_resume', 'ttp_hire_me', 'short_bio', 'social' ],

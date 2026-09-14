@@ -536,6 +536,14 @@ class FilterHooks {
 			'label'     => __( 'Primary Color', 'tlp-team' ),
 			'selectors' => [
 				'{{WRAPPER}}' => '--rttm-primary-color: {{VALUE}}',
+				/*
+				 * Layout 1 reads `--l1-primary`, which _lo-layout-1.scss now defaults to the
+				 * design blue rather than chaining off `--rttm-primary-color` (Pro pins that
+				 * to #007acc at :root). Write the layout's own variable here so Primary Color
+				 * still recolours the card when Pro is inactive -- Pro's colorControls, which
+				 * REPLACES this one, already carries the same arm.
+				 */
+				'{{WRAPPER}} .rt-elementor-container' => '--l1-primary: {{VALUE}}',
 			],
 		];
 

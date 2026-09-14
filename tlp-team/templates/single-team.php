@@ -46,7 +46,7 @@ while ( have_posts() ) :
 	$hire_me_url     = get_post_meta( $post->ID, 'ttp_hire_me', true );
 
 	$sLink           = $socialLink ? $socialLink : [];
-	$tlp_skill       = $tlpSkill ? unserialize( $tlpSkill ) : [];
+	$tlp_skill       = $tlpSkill ? maybe_unserialize( $tlpSkill ) : [];
 	$exp             = null;
 
 
@@ -236,6 +236,15 @@ while ( have_posts() ) :
 								case 'bluesky':
 									$icon_class = 'fa-brands fa-bluesky';
 									break;
+
+								// `github` is offered by Options::socialLink() and handled by
+								// Fns::get_formatted_social_link(), but this template keeps its
+								// own copy of the switch and had no case for it — so a member's
+								// GitHub link rendered on every layout and popup, and silently
+								// vanished on their detail page (no icon class, no anchor).
+								case 'github':
+									$icon_class = 'fab fa-github';
+									break;
 							}
 
 							if ( $lID != 'google-plus' && $icon_class ) {
@@ -246,25 +255,32 @@ while ( have_posts() ) :
 						$html .= '</div>';
 					}
 
+					/*
+					 * Resume / Hire Me sit directly under the social row, and above Latest
+					 * post(s). They used to be emitted after `.tlp-team` closed, which put
+					 * the whole latest-post list between the icons and the buttons and left
+					 * the two related calls-to-action stranded at the very bottom of the
+					 * column. Moving them inside keeps the block order: identity, contact,
+					 * skills, social, actions, then the post list.
+					 */
+					$resume  = $resume_url && in_array( 'resume_btn', $fields );
+					$hire_me = $hire_me_url && in_array( 'hire_me_btn', $fields );
+					if ( ( $resume && $resume_btn_text ) || ( $hire_me && $hire_btn_text ) ) {
+						$html .= '<div class="readmore-btn">';
+
+						if ( $resume && $resume_btn_text ) {
+							$html .= '<a class="rt-resume-btn" target="_self" title="' . esc_attr( $resume_btn_text ) . '" href="' . esc_url( $resume_url ) . '">' . esc_html( $resume_btn_text ) . '</a>';
+						}
+						if ( $hire_me && $hire_btn_text ) {
+							$html .= '<a class="rt-hire-btn" target="_self" title="' . esc_attr( $hire_btn_text ) . '" href="' . esc_url( $hire_me_url ) . '">' . esc_html( $hire_btn_text ) . '</a>';
+						}
+						$html .= '</div>';
+					}
+
 					if ( in_array( 'author_post', $fields ) ) {
 						$html .= Fns::memberDetailPosts( $post->ID );
 					}
 					$html .= '</div>';
-
-
-                    $resume  = $resume_url && in_array( 'resume_btn', $fields );
-                    $hire_me = $hire_me_url && in_array( 'hire_me_btn', $fields );
-                    if( ( $resume && $resume_btn_text ) || ( $hire_me && $hire_btn_text ) ) {
-                        $html .= '<div class="readmore-btn">';
-
-                        if( $resume && $resume_btn_text ){
-                            $html .= '<a class="rt-resume-btn" data-id="480" target="_self" title="'. esc_attr( $resume_btn_text ) .'" href="'. esc_url( $resume_url ) .'" class="rt-resume-btn">'. esc_html( $resume_btn_text ) .'</a>';
-                        }
-                        if( $hire_me && $hire_btn_text ){
-                            $html .= '<a class="rt-hire-btn" data-id="480" target="_self" title="'. esc_attr( $hire_btn_text ) .'" href="'. esc_url( $hire_me_url ) .'" class="rt-resume-btn">'. esc_html( $hire_btn_text ) .'</a>';
-                        }
-                        $html .= '</div>';
-                    }
 
 					Fns::print_html( $html, true );
 

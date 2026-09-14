@@ -129,15 +129,22 @@
           }
           IsotopeWrap = isIsotope.imagesLoaded(function () {
             preFunction();
-            IsotopeWrap.isotope({
+            // Grid Style — see the same fix in assets/js/tlpteam.js. Isotope
+            // defaults to masonry and a `masonry` option pins it there, so the
+            // "Even" choice used to render as masonry.
+            IsotopeWrap.isotope($.extend({
               itemSelector: '.isotope-item',
-              masonry: {
-                columnWidth: '.isotope-item'
-              },
               filter: function filter() {
                 return buttonFilter ? $(this).is(buttonFilter) : true;
               }
-            });
+            }, isIsotope.closest('.rt-row').hasClass('ttp-even') ? {
+              layoutMode: 'fitRows'
+            } : {
+              layoutMode: 'masonry',
+              masonry: {
+                columnWidth: '.isotope-item'
+              }
+            }));
             setTimeout(function () {
               IsotopeWrap.isotope();
               remove_placeholder_loading();

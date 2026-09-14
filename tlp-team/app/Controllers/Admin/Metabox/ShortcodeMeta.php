@@ -160,6 +160,7 @@ class ShortcodeMeta
                 'tlp-scrollbar',
                 'rt-tooltip',
                 'tlp-actual-height-js',
+                'rttm-iso-filter',
                 'tlp-sc-preview',
                 'tlp-team-admin-js',
             ]

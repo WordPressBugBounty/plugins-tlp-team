@@ -133,6 +133,7 @@ class GridLayout extends ElementorWidget {
 			$this->elPrefix . 'grid_style_section',
 			[
 				'colorScheme',
+				'wrapper',
 				'name',
 				'designation',
 				'department',

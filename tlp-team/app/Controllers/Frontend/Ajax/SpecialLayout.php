@@ -62,12 +62,25 @@ class SpecialLayout {
 				)
 			);
 			$short_bio   = get_post_meta( $memberId, 'short_bio', true );
-			$imgHtml     = Fns::getFeatureImageHtml( $memberId );
 			$scMeta      = $scID ? get_post_meta( $scID ) : [];
+
+			/*
+			 * Read straight from the shortcode, the way the grid does. Both calls below used to
+			 * be made with the member ID alone, so the spotlight panel ignored three shortcode
+			 * settings the thumbnails beside it honour: Default preview image (a member with no
+			 * photo fell through to getFeatureImageHtml()'s built-in demo.jpg placeholder),
+			 * Image size, and the custom size that goes with it -- the panel always served
+			 * 'medium'. Pro's Elementor twin (AjaxController) has always passed all three.
+			 */
+			$fImgSize      = ! empty( $scMeta['ttp_image_size'][0] ) ? $scMeta['ttp_image_size'][0] : 'medium';
+			$defaultImgId  = ! empty( $scMeta['default_preview_image'][0] ) ? absint( $scMeta['default_preview_image'][0] ) : null;
+			$customImgSize = ! empty( $scMeta['ttp_custom_image_size'][0] ) ? maybe_unserialize( $scMeta['ttp_custom_image_size'][0] ) : [];
+
+			$imgHtml     = Fns::getFeatureImageHtml( $memberId, $fImgSize, $defaultImgId, $customImgSize );
 			$imgHtml     = apply_filters( 'rttm_loop_img_html', $imgHtml, $memberId, $scMeta );
 
 			if ( $toggleId ) {
-				$toggle_image_src = Fns::getFeatureImageSrc( $toggleId );
+				$toggle_image_src = Fns::getFeatureImageSrc( $toggleId, $fImgSize, $defaultImgId, $customImgSize );
 			}
 
             $settings     = get_option( rttlp_team()->options['settings'] );
@@ -76,18 +89,33 @@ class SpecialLayout {
             $resume_url      = get_post_meta( $memberId, 'ttp_my_resume', true );
             $hire_me_url     = get_post_meta( $memberId, 'ttp_hire_me', true );
 
-			$fields    = get_post_meta( $scID, 'ttp_selected_field' );
-			$htmlName  = $htmlDesignation = $htmlShortBio = $htmlCInfo = $anchorClass = null;
-			$email     = get_post_meta( $memberId, 'email', true );
-			$web_url   = get_post_meta( $memberId, 'web_url', true );
-			$telephone = get_post_meta( $memberId, 'telephone', true );
-			$mobile    = get_post_meta( $memberId, 'mobile', true );
-			$fax       = get_post_meta( $memberId, 'fax', true );
-			$location  = get_post_meta( $memberId, 'location', true );
-			$link      = get_post_meta( $scID, 'ttp_detail_page_link', true );
-			$linkType  = get_post_meta( $scID, 'ttp_detail_page_link_type', true );
-			$linkType  = ! empty( $linkType ) ? $linkType : 'popup';
-			$pLink     = get_permalink( $memberId );
+			$read_more_btn_text = ! empty( $scMeta['ttp_read_more_btn_text'][0] )
+				? $scMeta['ttp_read_more_btn_text'][0]
+				: esc_html__( 'Read More', 'tlp-team' );
+			$target             = ! empty( $scMeta['ttp_link_target'][0] ) ? $scMeta['ttp_link_target'][0] : '_self';
+
+			$fields         = get_post_meta( $scID, 'ttp_selected_field' );
+			$htmlName       = $htmlDesignation = $htmlDepartment = $htmlShortBio = $htmlCInfo = $anchorClass = null;
+			$email          = get_post_meta( $memberId, 'email', true );
+			$web_url        = get_post_meta( $memberId, 'web_url', true );
+			$telephone      = get_post_meta( $memberId, 'telephone', true );
+			$mobile         = get_post_meta( $memberId, 'mobile', true );
+			$fax            = get_post_meta( $memberId, 'fax', true );
+			$location       = get_post_meta( $memberId, 'location', true );
+			$social         = get_post_meta( $memberId, 'social', true );
+			$sLink          = $social ? $social : [];
+			$tax_department = wp_strip_all_tags(
+				get_the_term_list(
+					$memberId,
+					rttlp_team()->taxonomies['department'],
+					null,
+					', '
+				)
+			);
+			$link           = get_post_meta( $scID, 'ttp_detail_page_link', true );
+			$linkType       = get_post_meta( $scID, 'ttp_detail_page_link_type', true );
+			$linkType       = ! empty( $linkType ) ? $linkType : 'popup';
+			$pLink          = get_permalink( $memberId );
 
 			if ( $link && $linkType == 'popup' ) {
 				$popupType = get_post_meta( $scID, 'ttp_popup_type', true );
@@ -117,54 +145,43 @@ class SpecialLayout {
 				}
 			}
 
+			if ( $tax_department && in_array( 'tax_department', $fields ) ) {
+				$htmlDepartment = '<div class="tlp-department">' . esc_html( $tax_department ) . '</div>';
+			}
+
 			if ( $short_bio && in_array( 'short_bio', $fields ) ) {
 				$htmlShortBio = '<div class="special-selected-short-bio short-bio"><p>' . Fns::htmlKses( $short_bio, 'basic' ) . '</p></div>';
 			}
 
-			if ( $email && in_array( 'email', $fields ) ) {
-				$htmlCInfo .= '<li class="tlp-email"><i class="far fa-envelope"></i> <a href="mailto:' . esc_attr( $email ) . '"><span>' . esc_html( $email ) . '</span></a> </li>';
+			// Contact rows + social icons — the same builders the Elementor path uses,
+			// so one stylesheet can serve both.
+			$htmlCInfo .= Fns::get_formatted_contact_info(
+				[
+					'email'     => $email,
+					'telephone' => $telephone,
+					'mobile'    => $mobile,
+					'fax'       => $fax,
+					'location'  => $location,
+					'web_url'   => $web_url,
+				],
+				$fields
+			);
+			$htmlCInfo .= Fns::get_formatted_social_link( $sLink, $fields );
+
+			// Buttons use the shared helpers so the button style controls hit them.
+			// Order for this layout is Resume, Hire Me, then Read More last.
+			$readmore_btn = Fns::get_formatted_readmore_text( $fields, $read_more_btn_text, $anchorClass, $memberId, $target, $name, $pLink );
+			$resume_btn   = Fns::get_formatted_resume( $fields, $resume_url, $resume_btn_text );
+			$hire_me_btn  = Fns::get_formatted_hire_me( $fields, $hire_me_url, $hire_btn_text );
+
+			if ( $readmore_btn || $resume_btn || $hire_me_btn ) {
+				$htmlCInfo .= '<div class="rt-team-container"><div class="readmore-btn">';
+				$htmlCInfo .= $resume_btn . $hire_me_btn . $readmore_btn;
+				$htmlCInfo .= '</div></div>';
 			}
 
-			if ( $telephone && in_array( 'telephone', $fields ) ) {
-				$htmlCInfo .= '<li class="tlp-phone"><i class="fa fa-phone"></i> <a href="tel:' . esc_attr( $telephone ) . '">' . esc_html( $telephone ) . '</a></li>';
-			}
-
-			if ( $fax && in_array( 'fax', $fields ) ) {
-				$htmlCInfo .= '<li class="tlp-fax"><i class="fa fa-fax"></i> <a href="fax:' . esc_attr( $fax ) . '"> <span>' . esc_html( $fax ) . '</span> </a> </li>';
-			}
-
-			if ( $mobile && in_array( 'mobile', $fields ) ) {
-				$htmlCInfo .= '<li class="tlp-mobile"><i class="fa fa-mobile"></i> <a href="tel:' . esc_attr( $mobile ) . '"><span>' . esc_html( $mobile ) . '</span></a> </li>';
-			}
-
-			if ( $location && in_array( 'location', $fields ) ) {
-				$htmlCInfo .= '<li class="tlp-location"><i class="fa fa-map-marker"></i> <span>' . esc_html( $location ) . '</span> </li>';
-			}
-
-			if ( $web_url && in_array( 'web_url', $fields ) ) {
-				$htmlCInfo .= '<li class="tlp-web-url"><i class="fa fa-globe"></i> <a href="' . esc_url( $web_url ) . '">' . esc_html( $web_url ) . '</a> </li>';
-			}
-
-            $resume  = $resume_url && in_array( 'resume_btn', $fields );
-            $hire_me = $hire_me_url && in_array( 'hire_me_btn', $fields );
-            if( ( $resume && $resume_btn_text ) || ( $hire_me && $hire_btn_text ) ) {
-                $htmlCInfo .= '<div class="rt-team-container">';
-                $htmlCInfo .= '<div class="readmore-btn">';
-                if( $resume && $resume_btn_text ){
-                    $htmlCInfo .= '<a class="rt-resume-btn" data-id="480" target="_self" title="'. esc_attr( $resume_btn_text ) .'" href="'. esc_url( $resume_url ) .'" class="rt-resume-btn">'. esc_html( $resume_btn_text ) .'</a>';
-                }
-                if( $hire_me && $hire_btn_text ){
-                    $htmlCInfo .= '<a class="rt-hire-btn" data-id="480" target="_self" title="'. esc_attr( $hire_btn_text ) .'" href="'. esc_url( $hire_me_url ) .'" class="rt-resume-btn">'. esc_html( $hire_btn_text ) .'</a>';
-                }
-                $htmlCInfo .= '</div>';
-                $htmlCInfo .= '</div>';
-            }
-
-
-
-			$htmlCInfo = $htmlCInfo ? '<div class="contact-info"><ul>' . $htmlCInfo . '</ul></div>' : null;
 			$html .= "<div class='special-selected-top-wrap'><div class='rt-col-xs-6 img'>" . $imgHtml . '</div>';
-			$html .= '<div class="rt-col-xs-6 ttp-label"> <div class="ttp-label-inner">' . $htmlName . $htmlDesignation . '</div></div></div>';
+			$html .= '<div class="rt-col-xs-6 ttp-label"> <div class="ttp-label-inner">' . $htmlName . $htmlDesignation . $htmlDepartment . '</div></div></div>';
 			$html .= '<div class="rt-col-sm-12">' . $htmlShortBio . $htmlCInfo . '</div>';
 			$error = false;
 		}

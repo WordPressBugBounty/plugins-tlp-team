@@ -78,9 +78,17 @@ class PostMeta {
 			'tlp-team-admin-js',
 			'ttp',
 			[
-				'ajaxurl' => admin_url( 'admin-ajax.php' ),
-				'nonceID' => Fns::nonceID(),
-				'nonce'   => wp_create_nonce( Fns::nonceText() ),
+				'ajaxurl'     => admin_url( 'admin-ajax.php' ),
+				'nonceID'     => Fns::nonceID(),
+				'nonce'       => wp_create_nonce( Fns::nonceText() ),
+				// The gallery's empty-state label. The markup for it is printed by pro
+				// only when the member has no images at all, so once the list has been
+				// emptied in the browser there is no node left to un-hide — settings.js
+				// re-creates it from this string rather than hardcoding English.
+				'noImageText' => __( 'No image found', 'tlp-team' ),
+				// Badge on gallery images that are only in the form so far — the meta rows
+				// are written on save, so until then nothing is attached to the member.
+				'unsavedText' => __( 'Unsaved', 'tlp-team' ),
 			]
 		);
 	}

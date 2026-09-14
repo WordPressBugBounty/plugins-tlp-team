@@ -432,6 +432,37 @@ class Fns {
 		return $html;
 	}
 
+	/**
+	 * The member's photo set, in display order: the featured image first (unless the
+	 * `remove_feature_image` field is on) followed by the gallery images.
+	 *
+	 * Extracted so the multi popup's own slider shows exactly the same photos, in the
+	 * same order, as `memberDetailGallery()` — they used to be two copies of this rule.
+	 *
+	 * @param int $post_id Team member ID.
+	 *
+	 * @return array Attachment IDs.
+	 */
+	public static function memberGalleryImageIds( $post_id = null ) {
+		if ( ! $post_id ) {
+			return [];
+		}
+
+		$settings  = get_option( rttlp_team()->options['settings'] );
+		$fields    = isset( $settings['detail_page_fields'] ) ? $settings['detail_page_fields'] : [];
+		$image_ids = get_post_meta( $post_id, 'tlp_team_gallery' );
+		$image_ids = is_array( $image_ids ) ? $image_ids : [];
+		$fID       = get_post_thumbnail_id( $post_id );
+
+		// The featured image only leads the gallery; with no gallery images at all it is
+		// still the member's single photo, so it is kept regardless of the field.
+		if ( $fID && ( ! $image_ids || ! in_array( 'remove_feature_image', $fields, true ) ) ) {
+			array_unshift( $image_ids, $fID );
+		}
+
+		return array_values( array_unique( array_filter( array_map( 'absint', $image_ids ) ) ) );
+	}
+
 	public static function memberDetailGallery( $post_id = null ) {
 		if ( ! $post_id ) {
 			return;
@@ -443,10 +474,7 @@ class Fns {
 		$image_ids    = get_post_meta( $post_id, 'tlp_team_gallery' );
 
 		if ( ! empty( $image_ids ) && is_array( $image_ids ) ) {
-			$fID = get_post_thumbnail_id( $post_id );
-			if ( $fID && ! in_array( 'remove_feature_image', $fields ) ) {
-				array_unshift( $image_ids, $fID );
-			}
+			$image_ids = self::memberGalleryImageIds( $post_id );
 
 			$sliderOption = self::swiper_options();
 
@@ -474,9 +502,18 @@ class Fns {
 				}
 			}
 			$html .= '</div>';
-			$html .= '<div class="swiper-arrow swiper-button-next"><i class="fa fa-chevron-right"></i></div>';
-			$html .= '<div class="swiper-arrow swiper-button-prev"><i class="fa fa-chevron-left"></i></div>';
-			$html .= '<div class="swiper-pagination"></div>';
+			// Only worth drawing when there is somewhere to slide to. This used to be
+			// unconditional, so a member with a single photo got a full set of arrows and
+			// a lone pagination bullet that did nothing — and, because the no-gallery
+			// branch below draws no controls at all, two members with one photo each
+			// looked different depending on whether that photo came from the gallery or
+			// the featured image. The multi and smart popups gate their own controls the
+			// same way.
+			if ( count( $image_ids ) > 1 ) {
+				$html .= '<div class="swiper-arrow swiper-button-next"><i class="fa fa-chevron-right"></i></div>';
+				$html .= '<div class="swiper-arrow swiper-button-prev"><i class="fa fa-chevron-left"></i></div>';
+				$html .= '<div class="swiper-pagination"></div>';
+			}
 			$html .= '</div>';
 		} else {
 			if ( has_post_thumbnail( $post_id ) ) {
@@ -489,9 +526,650 @@ class Fns {
 					}
 				}
                 $html .='</div>';
+			} else {
+				/*
+				 * No gallery and no featured image. The grid already substitutes the
+				 * shortcode's "Default preview image" here (Fns::getFeatureImageHtml via the
+				 * $defaultImgId argument); the detail page rendered nothing at all, so the
+				 * same member looked fine in the grid and imageless once opened.
+				 *
+				 * No caption: this is a placeholder, not the member's own photo, so the
+				 * attachment's caption would be describing the wrong thing.
+				 */
+				$default_id = self::singlePageDefaultImageId();
+
+				if ( $default_id ) {
+					$html .= '<div class="tlp-single-img-wrapper">';
+					$html .= wp_get_attachment_image( $default_id, 'large', false, [ 'alt' => get_the_title( $post_id ) ] );
+					$html .= '</div>';
+				}
 			}
 		}
         return apply_filters( 'tlp_team_member_detail_gallery', $html, $post_id, $image_ids );
+	}
+
+	/**
+	 * Body markup for the SINGLE detail popup — the two-column "detail popup" design:
+	 * photo gallery on the left, scrollable details on the right (role pill, name,
+	 * bio, contact list, then everything else), with a footer holding the social
+	 * chips, the Resume/Hire buttons and the member pager.
+	 *
+	 * Both paths render this one builder — free's Frontend\Ajax\SinglePopup and pro's
+	 * AjaxController::mdPopupSingle — so the two can never drift. Only the container
+	 * class differs, because the shortcode and Elementor stylesheets scope on it.
+	 *
+	 * Every field is still produced by the existing `get_formatted_*` helpers, so the
+	 * per-field Style controls (which target `.contact-info li`, `.social-icons a`,
+	 * `.short-bio`, `.tlp-team-skill`, `.readmore-btn a`, `h3`, `h4` …) keep working;
+	 * the redesign is structure + CSS, not new markup hooks.
+	 *
+	 * @param int   $post_id  Team member ID.
+	 * @param array $fields   Enabled detail-page fields.
+	 * @param array $settings Plugin settings (for the button labels).
+	 * @param bool  $is_el    True for the Elementor path.
+	 *
+	 * @return string
+	 */
+	public static function singlePopupMarkup( $post_id, $fields = [], $settings = [], $is_el = false ) {
+		$post = get_post( $post_id );
+
+		if ( ! $post ) {
+			return '';
+		}
+
+		$container = $is_el ? 'rt-elementor-container' : 'rt-team-container';
+
+		$name        = $post->post_title;
+		$designation = wp_strip_all_tags( get_the_term_list( $post_id, rttlp_team()->taxonomies['designation'], null, ', ' ) );
+		$experience  = get_post_meta( $post_id, 'experience_year', true );
+		$tag_line    = get_post_meta( $post_id, 'ttp_tag_line', true );
+		$short_bio   = get_post_meta( $post_id, 'short_bio', true );
+		$skill       = get_post_meta( $post_id, 'skill', true );
+		$skill       = $skill ? maybe_unserialize( $skill ) : [];
+		$sLink       = get_post_meta( $post_id, 'social', true );
+		$sLink       = $sLink ? $sLink : [];
+
+		$resume_url  = get_post_meta( $post_id, 'ttp_my_resume', true );
+		$hire_me_url = get_post_meta( $post_id, 'ttp_hire_me', true );
+		$resume_text = isset( $settings['resume_btn_text'] ) ? $settings['resume_btn_text'] : __( 'Resume', 'tlp-team' );
+		$hire_text   = isset( $settings['hire_me_text'] ) ? $settings['hire_me_text'] : __( 'Hire Me', 'tlp-team' );
+
+		$html = '<div class="rttm-pop ' . esc_attr( $container ) . '" data-member="' . absint( $post_id ) . '">';
+
+		// Covers the whole card until the runtime adds `is-ready`. The AJAX returns well
+		// before the photos decode, so without this the modal scales in empty and the
+		// content — then the image — snap in mid-animation.
+		$html .= '<span class="rttm-pop-spinner" aria-hidden="true"></span>';
+
+		// ---------- Gallery (left) ----------
+		// memberDetailGallery() emits the swiper when the member has gallery images and a
+		// plain `.tlp-single-img-wrapper` with the featured image when they do not — both
+		// shapes are sized by the stylesheet.
+		$html .= '<div class="rttm-pop-gallery">'
+			. self::memberDetailGallery( $post_id )
+			. '</div>';
+
+		// ---------- Details (right, scrollable) ----------
+		$html .= '<div class="rttm-pop-body">';
+		$html .= '<div class="md-header">';
+
+		// Designation and Department sit together as pills. `department` is enabled by
+		// default in Settings → Field Selection but the old popup never rendered it, so
+		// the setting silently did nothing — hence the explicit arm here.
+		$pills = '';
+
+		if ( $designation && in_array( 'designation', $fields, true ) ) {
+			$exp = ( $experience && in_array( 'experience_year', $fields, true ) )
+				? '<span class="experience">(' . esc_html( $experience ) . ')</span>'
+				: null;
+			$pills .= '<h4 class="title-experience rttm-pop-role">' . esc_html( $designation ) . self::htmlKses( $exp, 'basic' ) . '</h4>';
+		}
+
+		if ( in_array( 'department', $fields, true ) ) {
+			$department = wp_strip_all_tags( get_the_term_list( $post_id, rttlp_team()->taxonomies['department'], null, ', ' ) );
+			if ( $department ) {
+				$pills .= '<div class="tlp-department rttm-pop-dept">' . esc_html( $department ) . '</div>';
+			}
+		}
+
+		$html .= $pills ? '<div class="rttm-pop-pills">' . $pills . '</div>' : '';
+
+		$html .= '<h3 class="tlp-title rttm-pop-name">' . esc_html( $name ) . '</h3>';
+
+		if ( $tag_line && in_array( 'ttp_tag_line', $fields, true ) ) {
+			$html .= '<div class="tlp-tag-line">' . self::htmlKses( $tag_line, 'basic' ) . '</div>';
+		}
+
+		$html .= '</div>'; // .md-header
+
+		$html .= self::get_formatted_short_bio( $short_bio, $fields );
+
+		if ( $post->post_content && in_array( 'content', $fields, true ) ) {
+			$html .= '<div class="tlp-md-member-details">' . apply_filters( 'the_content', $post->post_content ) . '</div>';
+		}
+
+		$html .= self::get_formatted_contact_info(
+			[
+				'email'     => get_post_meta( $post_id, 'email', true ),
+				'telephone' => get_post_meta( $post_id, 'telephone', true ),
+				'mobile'    => get_post_meta( $post_id, 'mobile', true ),
+				'fax'       => get_post_meta( $post_id, 'fax', true ),
+				'location'  => get_post_meta( $post_id, 'location', true ),
+				'web_url'   => get_post_meta( $post_id, 'web_url', true ),
+			],
+			$fields
+		);
+
+		// Everything the reference design does not show is kept, below the contact list.
+		$extra = [
+			'ttp_qualifications'             => __( 'Qualifications : ', 'tlp-team' ),
+			'ttp_professional_memberships'   => __( 'Professional Memberships : ', 'tlp-team' ),
+			'ttp_area_of_expertise'          => __( 'Area of Expertise : ', 'tlp-team' ),
+		];
+
+		foreach ( $extra as $key => $label ) {
+			$value = get_post_meta( $post_id, $key, true );
+			if ( $value && in_array( $key, $fields, true ) ) {
+				$html .= '<div class="rt-extra-curriculum"><strong>' . esc_html( $label ) . '</strong>' . self::htmlKses( $value, 'basic' ) . '</div>';
+			}
+		}
+
+		$html .= self::get_formatted_skill( $skill, $fields );
+
+		// Settings → Field Selection is authoritative: every enabled field renders here
+		// and every disabled one does not.
+		if ( in_array( 'author_post', $fields, true ) ) {
+			$html .= self::memberDetailPosts( $post_id );
+		}
+
+		// ---------- Footer ----------
+		$social  = self::get_formatted_social_link( $sLink, $fields );
+		$resume  = ( $resume_url && in_array( 'resume_btn', $fields, true ) && $resume_text );
+		$hire_me = ( $hire_me_url && in_array( 'hire_me_btn', $fields, true ) && $hire_text );
+
+		$buttons = '';
+
+		// `readmore_btn` is offered in Settings → Field Selection for the detail page, so
+		// honour it here too: a link through to the member's own page. Without this the
+		// checkbox was simply inert in the popup.
+		if ( in_array( 'readmore_btn', $fields, true ) ) {
+			$readmore_text = isset( $settings['readmore_btn_text'] ) && $settings['readmore_btn_text']
+				? $settings['readmore_btn_text']
+				: __( 'Read More', 'tlp-team' );
+			$buttons      .= '<a class="rt-ream-me-btn rttm-pop-readmore" target="_self" title="' . esc_attr( $readmore_text ) . '" href="' . esc_url( get_permalink( $post_id ) ) . '">' . esc_html( $readmore_text ) . '</a>';
+		}
+
+		if ( $resume ) {
+			$buttons .= '<a class="rt-resume-btn" target="_self" title="' . esc_attr( $resume_text ) . '" href="' . esc_url( $resume_url ) . '">' . esc_html( $resume_text ) . '</a>';
+		}
+		if ( $hire_me ) {
+			$buttons .= '<a class="rt-hire-btn" target="_self" title="' . esc_attr( $hire_text ) . '" href="' . esc_url( $hire_me_url ) . '">' . esc_html( $hire_text ) . '</a>';
+		}
+
+		$html .= '<div class="rttm-pop-foot">';
+		$html .= $social ? $social : '';
+		$html .= $buttons ? '<div class="readmore-btn rttm-pop-actions">' . $buttons . '</div>' : '';
+		// Member pager. The runtime fills in / disables these from the trigger list in
+		// the container, so it renders even when there is only one member and is hidden
+		// by the JS in that case.
+		$html .= '<div class="rttm-pop-pager">'
+			. '<button type="button" class="rttm-pop-nav rttm-pop-prev" aria-label="' . esc_attr__( 'Previous member', 'tlp-team' ) . '"><i class="fa fa-arrow-left" aria-hidden="true"></i></button>'
+			. '<button type="button" class="rttm-pop-nav rttm-pop-next" aria-label="' . esc_attr__( 'Next member', 'tlp-team' ) . '"><i class="fa fa-arrow-right" aria-hidden="true"></i></button>'
+			. '</div>';
+		$html .= '</div>'; // .rttm-pop-foot
+
+		$html .= '</div>'; // .rttm-pop-body
+		$html .= '</div>'; // .rttm-pop
+
+		return apply_filters( 'rttm_single_popup_markup', $html, $post_id, $fields, $is_el );
+	}
+
+	/**
+	 * One member's panel inside the MULTIPLE popup — the fullscreen viewer.
+	 *
+	 * Shared by both AJAX handlers (free `Frontend\Ajax\MultiPopup` and pro
+	 * `AjaxController::multiPopup`) so the two paths cannot drift; only the container
+	 * class differs, because the shortcode and Elementor stylesheets scope on it.
+	 *
+	 * The viewer SHELL — top bar, stage, member thumbnail strip — is built by the
+	 * runtime, not here: it survives across members while this markup is swapped out on
+	 * every step, so it must not be part of the AJAX payload.
+	 *
+	 * The gallery is a plain cross-fade slider rather than `memberDetailGallery()`'s
+	 * swiper. Swiper has to measure its container, which is unreliable while the viewer
+	 * is still fading in, and the design wants its own arrow/dot treatment; the photo
+	 * list still comes from `memberGalleryImageIds()`, so both popups show the same
+	 * images in the same order.
+	 *
+	 * Field markup comes from the existing `get_formatted_*` helpers, so the per-field
+	 * Style controls (`.contact-info li`, `.social-icons a`, `.short-bio`,
+	 * `.tlp-team-skill`, `.readmore-btn a`, `h3`, `h4`) keep working.
+	 *
+	 * @param int   $post_id  Team member ID.
+	 * @param array $fields   Enabled detail-page fields.
+	 * @param array $settings Plugin settings (for the button labels).
+	 * @param bool  $is_el    True for the Elementor path.
+	 *
+	 * @return string
+	 */
+	public static function multiPopupMarkup( $post_id, $fields = [], $settings = [], $is_el = false ) {
+		$post = get_post( $post_id );
+
+		if ( ! $post ) {
+			return '';
+		}
+
+		$container = $is_el ? 'rt-elementor-container' : 'rt-team-container';
+
+		$name        = $post->post_title;
+		$designation = wp_strip_all_tags( get_the_term_list( $post_id, rttlp_team()->taxonomies['designation'], null, ', ' ) );
+		$experience  = get_post_meta( $post_id, 'experience_year', true );
+		$tag_line    = get_post_meta( $post_id, 'ttp_tag_line', true );
+		$short_bio   = get_post_meta( $post_id, 'short_bio', true );
+		$skill       = get_post_meta( $post_id, 'skill', true );
+		$skill       = $skill ? maybe_unserialize( $skill ) : [];
+		$sLink       = get_post_meta( $post_id, 'social', true );
+		$sLink       = $sLink ? $sLink : [];
+
+		$resume_url  = get_post_meta( $post_id, 'ttp_my_resume', true );
+		$hire_me_url = get_post_meta( $post_id, 'ttp_hire_me', true );
+		$resume_text = isset( $settings['resume_btn_text'] ) ? $settings['resume_btn_text'] : __( 'Resume', 'tlp-team' );
+		$hire_text   = isset( $settings['hire_me_text'] ) ? $settings['hire_me_text'] : __( 'Hire Me', 'tlp-team' );
+
+		$show_caption = ! empty( $settings['detail_image_caption'] );
+		$image_ids    = self::memberGalleryImageIds( $post_id );
+
+		/*
+		 * Same fallback the detail page uses: a member with no gallery and no featured image
+		 * showed the shortcode's "Default preview image" in the grid and nothing here.
+		 *
+		 * It comes from the Settings source rather than from the shortcode that opened the
+		 * popup, because the popup never learns which one that was -- both AJAX payloads carry
+		 * only the member id and the nonce, so threading a shortcode ID through would mean
+		 * changing all four runtimes and all four handlers.
+		 *
+		 * Captions are switched off with it: this is a placeholder, so the attachment's own
+		 * caption would be describing the wrong person. It is the only image in this branch,
+		 * so nothing else loses its caption.
+		 */
+		if ( ! $image_ids ) {
+			$default_id = self::singlePageDefaultImageId();
+
+			if ( $default_id ) {
+				$image_ids    = [ $default_id ];
+				$show_caption = false;
+			}
+		}
+
+		$classes = 'rttm-mpop-card ' . $container;
+		if ( ! $image_ids ) {
+			// Nothing to show on the left, so the details take the full stage width.
+			$classes .= ' rttm-mpop-card--nogallery';
+		}
+
+		$html = '<div class="' . esc_attr( $classes ) . '" data-member="' . absint( $post_id ) . '">';
+
+		// ---------- Gallery (left) ----------
+		if ( $image_ids ) {
+			$html .= '<div class="rttm-mpop-gallery">';
+			$html .= '<div class="rttm-mpop-frame">';
+
+			foreach ( $image_ids as $i => $id ) {
+				$img_alt = trim( wp_strip_all_tags( get_post_meta( $id, '_wp_attachment_image_alt', true ) ) );
+				$alt_tag = $img_alt ? $img_alt : get_the_title( $post_id );
+				$image   = wp_get_attachment_image( $id, 'large', false, [ 'alt' => $alt_tag ] );
+
+				if ( ! $image ) {
+					continue;
+				}
+
+				$html .= '<div class="rttm-mpop-slide' . ( 0 === $i ? ' is-active' : '' ) . '">';
+				$html .= $image;
+
+				if ( $show_caption ) {
+					$caption = wp_get_attachment_caption( $id );
+					if ( $caption ) {
+						$html .= '<figcaption class="wp-caption-text">' . wp_kses_post( $caption ) . '</figcaption>';
+					}
+				}
+
+				$html .= '</div>';
+			}
+
+			$html .= '</div>'; // .rttm-mpop-frame
+
+			// A single photo needs no controls.
+			if ( count( $image_ids ) > 1 ) {
+				$html .= '<button type="button" class="rttm-mpop-garrow prev" aria-label="' . esc_attr__( 'Previous photo', 'tlp-team' ) . '"><i class="fa fa-chevron-left" aria-hidden="true"></i></button>';
+				$html .= '<button type="button" class="rttm-mpop-garrow next" aria-label="' . esc_attr__( 'Next photo', 'tlp-team' ) . '"><i class="fa fa-chevron-right" aria-hidden="true"></i></button>';
+				$html .= '<div class="rttm-mpop-dots">';
+				foreach ( $image_ids as $i => $id ) {
+					$html .= '<button type="button" class="rttm-mpop-dot' . ( 0 === $i ? ' is-active' : '' ) . '" data-i="' . absint( $i ) . '" aria-label="'
+						/* translators: %d: photo number. */
+						. esc_attr( sprintf( __( 'Photo %d', 'tlp-team' ), $i + 1 ) ) . '"></button>';
+				}
+				$html .= '</div>';
+			}
+
+			$html .= '</div>'; // .rttm-mpop-gallery
+		}
+
+		// ---------- Details (right) ----------
+		$html .= '<div class="rttm-mpop-details">';
+
+		// Designation and Department sit together as pills, as on the single popup —
+		// `department` is enabled by default in Settings → Field Selection.
+		$pills = '';
+
+		if ( $designation && in_array( 'designation', $fields, true ) ) {
+			$exp = ( $experience && in_array( 'experience_year', $fields, true ) )
+				? '<span class="experience">(' . esc_html( $experience ) . ')</span>'
+				: null;
+			$pills .= '<h4 class="title-experience rttm-mpop-role">' . esc_html( $designation ) . self::htmlKses( $exp, 'basic' ) . '</h4>';
+		}
+
+		if ( in_array( 'department', $fields, true ) ) {
+			$department = wp_strip_all_tags( get_the_term_list( $post_id, rttlp_team()->taxonomies['department'], null, ', ' ) );
+			if ( $department ) {
+				$pills .= '<div class="tlp-department rttm-mpop-dept">' . esc_html( $department ) . '</div>';
+			}
+		}
+
+		$html .= $pills ? '<div class="rttm-mpop-pills">' . $pills . '</div>' : '';
+
+		if ( in_array( 'name', $fields, true ) ) {
+			$html .= '<h3 class="tlp-title rttm-mpop-name">' . esc_html( $name ) . '</h3>';
+		}
+
+		if ( $tag_line && in_array( 'ttp_tag_line', $fields, true ) ) {
+			$html .= '<div class="tlp-tag-line">' . self::htmlKses( $tag_line, 'basic' ) . '</div>';
+		}
+
+		$html .= self::get_formatted_short_bio( $short_bio, $fields );
+
+		if ( $post->post_content && in_array( 'content', $fields, true ) ) {
+			$html .= '<div class="tlp-md-member-details">' . apply_filters( 'the_content', $post->post_content ) . '</div>';
+		}
+
+		$html .= self::get_formatted_contact_info(
+			[
+				'email'     => get_post_meta( $post_id, 'email', true ),
+				'telephone' => get_post_meta( $post_id, 'telephone', true ),
+				'mobile'    => get_post_meta( $post_id, 'mobile', true ),
+				'fax'       => get_post_meta( $post_id, 'fax', true ),
+				'location'  => get_post_meta( $post_id, 'location', true ),
+				'web_url'   => get_post_meta( $post_id, 'web_url', true ),
+			],
+			$fields
+		);
+
+		// Everything the reference design does not show is kept, below the contact list.
+		$extra = [
+			'ttp_qualifications'           => __( 'Qualifications : ', 'tlp-team' ),
+			'ttp_professional_memberships' => __( 'Professional Memberships : ', 'tlp-team' ),
+			'ttp_area_of_expertise'        => __( 'Area of Expertise : ', 'tlp-team' ),
+		];
+
+		foreach ( $extra as $key => $label ) {
+			$value = get_post_meta( $post_id, $key, true );
+			if ( $value && in_array( $key, $fields, true ) ) {
+				$html .= '<div class="rt-extra-curriculum"><strong>' . esc_html( $label ) . '</strong>' . self::htmlKses( $value, 'basic' ) . '</div>';
+			}
+		}
+
+		$html .= self::get_formatted_skill( $skill, $fields );
+
+		if ( in_array( 'author_post', $fields, true ) ) {
+			$html .= self::memberDetailPosts( $post_id );
+		}
+
+		// ---------- Footer: socials + buttons ----------
+		$social  = self::get_formatted_social_link( $sLink, $fields );
+		$resume  = ( $resume_url && in_array( 'resume_btn', $fields, true ) && $resume_text );
+		$hire_me = ( $hire_me_url && in_array( 'hire_me_btn', $fields, true ) && $hire_text );
+
+		$buttons = '';
+
+		if ( in_array( 'readmore_btn', $fields, true ) ) {
+			$readmore_text = isset( $settings['readmore_btn_text'] ) && $settings['readmore_btn_text']
+				? $settings['readmore_btn_text']
+				: __( 'Read More', 'tlp-team' );
+			$buttons      .= '<a class="rt-ream-me-btn rttm-mpop-readmore" target="_self" title="' . esc_attr( $readmore_text ) . '" href="' . esc_url( get_permalink( $post_id ) ) . '">' . esc_html( $readmore_text ) . '</a>';
+		}
+
+		if ( $resume ) {
+			$buttons .= '<a class="rt-resume-btn" target="_self" title="' . esc_attr( $resume_text ) . '" href="' . esc_url( $resume_url ) . '">' . esc_html( $resume_text ) . '</a>';
+		}
+		if ( $hire_me ) {
+			$buttons .= '<a class="rt-hire-btn" target="_self" title="' . esc_attr( $hire_text ) . '" href="' . esc_url( $hire_me_url ) . '">' . esc_html( $hire_text ) . '</a>';
+		}
+
+		if ( $social || $buttons ) {
+			$html .= '<div class="rttm-mpop-foot">';
+			$html .= $social ? $social : '';
+			$html .= $buttons ? '<div class="readmore-btn rttm-mpop-actions">' . $buttons . '</div>' : '';
+			$html .= '</div>';
+		}
+
+		$html .= '</div>'; // .rttm-mpop-details
+		$html .= '</div>'; // .rttm-mpop-card
+
+		return apply_filters( 'rttm_multi_popup_markup', $html, $post_id, $fields, $is_el );
+	}
+
+	/**
+	 * One member's panel inside the SMART popup — the right-hand drawer.
+	 *
+	 * Shared by both AJAX handlers (free `Frontend\Ajax\SmartPopup` and pro
+	 * `AjaxController::smartPopup`) so the two paths cannot drift; only the container
+	 * class differs, because the shortcode and Elementor stylesheets scope on it.
+	 *
+	 * The drawer SHELL — backdrop, top bar, scrolling body — is built by the runtime and
+	 * survives across members, so it is deliberately not part of this payload. The
+	 * legacy wrappers `.rt-smart-modal-main-content`, `.team-images` and
+	 * `.member-details` are kept: user Style controls and the runtime both hook them.
+	 *
+	 * Like the multi popup this builds a plain cross-fade hero rather than
+	 * `memberDetailGallery()`'s swiper — swiper has to measure a container that is
+	 * still sliding in — but the photo list comes from `memberGalleryImageIds()`, so
+	 * every popup shows the same images in the same order.
+	 *
+	 * @param int   $post_id  Team member ID.
+	 * @param array $fields   Enabled detail-page fields.
+	 * @param array $settings Plugin settings (for the button labels).
+	 * @param bool  $is_el    True for the Elementor path.
+	 *
+	 * @return string
+	 */
+	public static function smartPopupMarkup( $post_id, $fields = [], $settings = [], $is_el = false ) {
+		$post = get_post( $post_id );
+
+		if ( ! $post ) {
+			return '';
+		}
+
+		$container = $is_el ? 'rt-elementor-container' : 'rt-team-container';
+
+		$name        = $post->post_title;
+		$designation = wp_strip_all_tags( get_the_term_list( $post_id, rttlp_team()->taxonomies['designation'], null, ', ' ) );
+		$experience  = get_post_meta( $post_id, 'experience_year', true );
+		$tag_line    = get_post_meta( $post_id, 'ttp_tag_line', true );
+		$short_bio   = get_post_meta( $post_id, 'short_bio', true );
+		$skill       = get_post_meta( $post_id, 'skill', true );
+		$skill       = $skill ? maybe_unserialize( $skill ) : [];
+		$sLink       = get_post_meta( $post_id, 'social', true );
+		$sLink       = $sLink ? $sLink : [];
+
+		$resume_url  = get_post_meta( $post_id, 'ttp_my_resume', true );
+		$hire_me_url = get_post_meta( $post_id, 'ttp_hire_me', true );
+		$resume_text = isset( $settings['resume_btn_text'] ) ? $settings['resume_btn_text'] : __( 'Resume', 'tlp-team' );
+		$hire_text   = isset( $settings['hire_me_text'] ) ? $settings['hire_me_text'] : __( 'Hire Me', 'tlp-team' );
+
+		$show_caption = ! empty( $settings['detail_image_caption'] );
+		$image_ids    = self::memberGalleryImageIds( $post_id );
+
+		/*
+		 * Same fallback the detail page uses: a member with no gallery and no featured image
+		 * showed the shortcode's "Default preview image" in the grid and nothing here.
+		 *
+		 * It comes from the Settings source rather than from the shortcode that opened the
+		 * popup, because the popup never learns which one that was -- both AJAX payloads carry
+		 * only the member id and the nonce, so threading a shortcode ID through would mean
+		 * changing all four runtimes and all four handlers.
+		 *
+		 * Captions are switched off with it: this is a placeholder, so the attachment's own
+		 * caption would be describing the wrong person. It is the only image in this branch,
+		 * so nothing else loses its caption.
+		 */
+		if ( ! $image_ids ) {
+			$default_id = self::singlePageDefaultImageId();
+
+			if ( $default_id ) {
+				$image_ids    = [ $default_id ];
+				$show_caption = false;
+			}
+		}
+
+		$html = '<div class="rt-smart-modal-main-content rttm-sp-panel ' . esc_attr( $container ) . '" data-member="' . absint( $post_id ) . '">';
+
+		// ---------- hero ----------
+		if ( $image_ids ) {
+			$html .= '<div class="team-images rttm-sp-hero">';
+
+			foreach ( $image_ids as $i => $id ) {
+				$img_alt = trim( wp_strip_all_tags( get_post_meta( $id, '_wp_attachment_image_alt', true ) ) );
+				$alt_tag = $img_alt ? $img_alt : get_the_title( $post_id );
+				$image   = wp_get_attachment_image( $id, 'large', false, [ 'alt' => $alt_tag ] );
+
+				if ( ! $image ) {
+					continue;
+				}
+
+				$html .= '<div class="rttm-sp-slide' . ( 0 === $i ? ' is-active' : '' ) . '">';
+				$html .= $image;
+
+				if ( $show_caption ) {
+					$caption = wp_get_attachment_caption( $id );
+					if ( $caption ) {
+						$html .= '<figcaption class="wp-caption-text">' . wp_kses_post( $caption ) . '</figcaption>';
+					}
+				}
+
+				$html .= '</div>';
+			}
+
+			// A single photo needs no controls.
+			if ( count( $image_ids ) > 1 ) {
+				$html .= '<button type="button" class="rttm-sp-garrow prev" aria-label="' . esc_attr__( 'Previous photo', 'tlp-team' ) . '"><i class="fa fa-chevron-left" aria-hidden="true"></i></button>';
+				$html .= '<button type="button" class="rttm-sp-garrow next" aria-label="' . esc_attr__( 'Next photo', 'tlp-team' ) . '"><i class="fa fa-chevron-right" aria-hidden="true"></i></button>';
+				$html .= '<div class="rttm-sp-dots">';
+				foreach ( $image_ids as $i => $id ) {
+					$html .= '<button type="button" class="rttm-sp-dot' . ( 0 === $i ? ' is-active' : '' ) . '" data-i="' . absint( $i ) . '" aria-label="'
+						/* translators: %d: photo number. */
+						. esc_attr( sprintf( __( 'Photo %d', 'tlp-team' ), $i + 1 ) ) . '"></button>';
+				}
+				$html .= '</div>';
+			}
+
+			$html .= '</div>'; // .rttm-sp-hero
+		}
+
+		// ---------- details ----------
+		$html .= '<div class="member-details rttm-sp-body">';
+
+		$pills = '';
+
+		if ( $designation && in_array( 'designation', $fields, true ) ) {
+			$exp = ( $experience && in_array( 'experience_year', $fields, true ) )
+				? '<span class="experience">(' . esc_html( $experience ) . ')</span>'
+				: null;
+			$pills .= '<h4 class="title-experience rttm-sp-role">' . esc_html( $designation ) . self::htmlKses( $exp, 'basic' ) . '</h4>';
+		}
+
+		if ( in_array( 'department', $fields, true ) ) {
+			$department = wp_strip_all_tags( get_the_term_list( $post_id, rttlp_team()->taxonomies['department'], null, ', ' ) );
+			if ( $department ) {
+				$pills .= '<div class="tlp-department rttm-sp-dept">' . esc_html( $department ) . '</div>';
+			}
+		}
+
+		$html .= $pills ? '<div class="rttm-sp-pills">' . $pills . '</div>' : '';
+
+		if ( in_array( 'name', $fields, true ) ) {
+			$html .= '<h3 class="tlp-title rttm-sp-name">' . esc_html( $name ) . '</h3>';
+		}
+
+		if ( $tag_line && in_array( 'ttp_tag_line', $fields, true ) ) {
+			$html .= '<div class="tlp-tag-line">' . self::htmlKses( $tag_line, 'basic' ) . '</div>';
+		}
+
+		$html .= self::get_formatted_short_bio( $short_bio, $fields );
+
+		if ( $post->post_content && in_array( 'content', $fields, true ) ) {
+			$html .= '<div class="tlp-md-member-details">' . apply_filters( 'the_content', $post->post_content ) . '</div>';
+		}
+
+		$html .= self::get_formatted_contact_info(
+			[
+				'email'     => get_post_meta( $post_id, 'email', true ),
+				'telephone' => get_post_meta( $post_id, 'telephone', true ),
+				'mobile'    => get_post_meta( $post_id, 'mobile', true ),
+				'fax'       => get_post_meta( $post_id, 'fax', true ),
+				'location'  => get_post_meta( $post_id, 'location', true ),
+				'web_url'   => get_post_meta( $post_id, 'web_url', true ),
+			],
+			$fields
+		);
+
+		$extra = [
+			'ttp_qualifications'           => __( 'Qualifications : ', 'tlp-team' ),
+			'ttp_professional_memberships' => __( 'Professional Memberships : ', 'tlp-team' ),
+			'ttp_area_of_expertise'        => __( 'Area of Expertise : ', 'tlp-team' ),
+		];
+
+		foreach ( $extra as $key => $label ) {
+			$value = get_post_meta( $post_id, $key, true );
+			if ( $value && in_array( $key, $fields, true ) ) {
+				$html .= '<div class="rt-extra-curriculum"><strong>' . esc_html( $label ) . '</strong>' . self::htmlKses( $value, 'basic' ) . '</div>';
+			}
+		}
+
+		$html .= self::get_formatted_skill( $skill, $fields );
+
+		if ( in_array( 'author_post', $fields, true ) ) {
+			$html .= self::memberDetailPosts( $post_id );
+		}
+
+		// ---------- footer: socials + buttons ----------
+		$social  = self::get_formatted_social_link( $sLink, $fields );
+		$resume  = ( $resume_url && in_array( 'resume_btn', $fields, true ) && $resume_text );
+		$hire_me = ( $hire_me_url && in_array( 'hire_me_btn', $fields, true ) && $hire_text );
+
+		$buttons = '';
+
+		if ( in_array( 'readmore_btn', $fields, true ) ) {
+			$readmore_text = isset( $settings['readmore_btn_text'] ) && $settings['readmore_btn_text']
+				? $settings['readmore_btn_text']
+				: __( 'Read More', 'tlp-team' );
+			$buttons      .= '<a class="rt-ream-me-btn rttm-sp-readmore" target="_self" title="' . esc_attr( $readmore_text ) . '" href="' . esc_url( get_permalink( $post_id ) ) . '">' . esc_html( $readmore_text ) . '</a>';
+		}
+
+		if ( $resume ) {
+			$buttons .= '<a class="rt-resume-btn" target="_self" title="' . esc_attr( $resume_text ) . '" href="' . esc_url( $resume_url ) . '">' . esc_html( $resume_text ) . '</a>';
+		}
+		if ( $hire_me ) {
+			$buttons .= '<a class="rt-hire-btn" target="_self" title="' . esc_attr( $hire_text ) . '" href="' . esc_url( $hire_me_url ) . '">' . esc_html( $hire_text ) . '</a>';
+		}
+
+		$html .= $buttons ? '<div class="readmore-btn rttm-sp-actions">' . $buttons . '</div>' : '';
+		// The reference rules the socials off with a divider; keep that even when the
+		// buttons above already ended the block.
+		$html .= $social ? '<div class="rttm-sp-foot">' . $social . '</div>' : '';
+
+		$html .= '</div>'; // .rttm-sp-body
+		$html .= '</div>'; // .rttm-sp-panel
+
+		return apply_filters( 'rttm_smart_popup_markup', $html, $post_id, $fields, $is_el );
 	}
 
 	public static function memberDetailPosts( $post_id = null ) {
@@ -500,6 +1178,11 @@ class Fns {
 		}
 		$output   = null;
 		$authorId = get_post_field( 'post_author', $post_id );
+		// Initialised up front: a member with no author (post_author 0 -- importers and
+		// programmatic creation both produce it) skipped the branch below and left this
+		// undefined, so `is_array()` raised a warning straight onto the detail page.
+		$authors_posts = [];
+
 		if ( $authorId ) {
 			$authors_posts = get_posts(
 				[
@@ -576,6 +1259,71 @@ class Fns {
 		}
 
 		return $terms;
+	}
+
+	/**
+	 * Member counts for the filter pills' count badges.
+	 *
+	 * `rt_get_all_terms_by_taxonomy()` returns `[ id => name ]` and throws the term
+	 * objects away, and three callers rely on that shape — so the counts are fetched
+	 * separately rather than changing it.
+	 *
+	 * `$term->count` is the number of published posts in the term. These taxonomies
+	 * are registered to the team post type alone, so that is the member count. The
+	 * `all` entry is the total published members, matching the reference design where
+	 * the badges describe the whole directory and do not change as you filter.
+	 *
+	 * @param string|null $taxonomy Taxonomy slug.
+	 *
+	 * @return array<string|int, int> `all` plus term_id => count.
+	 */
+	public static function rt_filter_term_counts( $taxonomy = null ) {
+		$counts = [ 'all' => 0 ];
+
+		$totals = wp_count_posts( rttlp_team()->post_type );
+		if ( isset( $totals->publish ) ) {
+			$counts['all'] = (int) $totals->publish;
+		}
+
+		if ( ! $taxonomy ) {
+			return $counts;
+		}
+
+		$terms = get_terms(
+			[
+				'taxonomy'   => $taxonomy,
+				'hide_empty' => false,
+			]
+		);
+
+		if ( is_array( $terms ) && ! is_wp_error( $terms ) ) {
+			foreach ( $terms as $term ) {
+				if ( isset( $term->term_id ) ) {
+					$counts[ $term->term_id ] = (int) $term->count;
+				}
+			}
+		}
+
+		return $counts;
+	}
+
+	/**
+	 * One markup helper for the pill count badge, so the three hand-synced filter
+	 * renderers (Shortcode, admin Preview, pro's ElementorFilters) cannot drift.
+	 *
+	 * @param array           $counts Map from self::rt_filter_term_counts().
+	 * @param string|int|null $key    `all` or a term id.
+	 *
+	 * @return string
+	 */
+	public static function rt_filter_count_badge( $counts, $key ) {
+		if ( ! is_array( $counts ) || ! isset( $counts[ $key ] ) ) {
+			return '';
+		}
+
+		return '<span class="rt-filter-count">'
+			. esc_html( number_format_i18n( (int) $counts[ $key ] ) )
+			. '</span>';
 	}
 
 	/* Convert hexdec color string to rgb(a) string */
@@ -822,13 +1570,22 @@ class Fns {
 
 
 	public static function get_ttp_short_description( $short_bio, $character_limit, $after_desc ) {
+		$text = '';
+
+		/*
+		 * No character limit means the bio is used whole — HTML and all, since nothing
+		 * needs stripping to count characters. This used to `return $short_bio` outright,
+		 * which skipped the "After Short Description" append below: the option was simply
+		 * dead unless a limit happened to be set, even though its own description says
+		 * "Add something after short description" and says nothing about truncation.
+		 */
 		if ( empty( $character_limit ) ) {
-			return $short_bio;
+			$text = $short_bio;
+
+			return self::append_after_short_desc( $text, $after_desc );
 		}
 
 		$character_limit ++;
-
-		$text = '';
 
 		if ( mb_strlen( $short_bio ) > $character_limit ) {
 			$subex   = mb_substr( wp_strip_all_tags( $short_bio ), 0, $character_limit );
@@ -843,8 +1600,40 @@ class Fns {
 		} else {
 			$text .= $short_bio;
 		}
-		$text = $text . $after_desc;
-		return $text;
+
+		return self::append_after_short_desc( $text, $after_desc );
+	}
+
+	/**
+	 * Append the "After Short Description" text to a bio.
+	 *
+	 * Wrapped in `.rttm-after-bio` so it can be told apart from the bio itself. It used
+	 * to be concatenated raw — no element, no class — so it ran straight on from the
+	 * truncated sentence ("…a galley of type Read more") and there was no hook to style
+	 * it with; readers could not tell where the member's own words ended.
+	 *
+	 * `span` + `class` survive `allowedHtml( 'basic' )`, which is what every caller runs
+	 * the bio through, and the Elementor path has already escaped the value by the time
+	 * it reaches here, so the markup is added around escaped text.
+	 *
+	 * Nothing is appended to an empty bio: there is no short description for it to come
+	 * after, and a lone chip floating where the text should be reads as a glitch.
+	 *
+	 * @param string $text       The (possibly truncated) bio.
+	 * @param string $after_desc The configured text to append.
+	 *
+	 * @return string
+	 */
+	private static function append_after_short_desc( $text, $after_desc ) {
+		if ( '' === trim( wp_strip_all_tags( (string) $text ) ) ) {
+			return $text;
+		}
+
+		if ( '' === trim( (string) $after_desc ) ) {
+			return $text;
+		}
+
+		return $text . ' <span class="rttm-after-bio">' . $after_desc . '</span>';
 	}
 
 
@@ -939,7 +1728,75 @@ class Fns {
 		return $html;
 	}
 
-	public static function get_formatted_social_link( $sLink, $fields ) {
+	/**
+	 * Builds the header row for the Layout 5 table.
+	 *
+	 * Layout 5 is the one table layout, and it renders a column per enabled
+	 * field. The headings below are emitted in the same order that
+	 * `templates/layouts/layout5.php` emits its cells — keep the two in step or
+	 * the header stops lining up with the body.
+	 *
+	 * Callers are the three places that *open* a Layout 5 table: the shortcode,
+	 * the admin preview and the Elementor grid renderer. The AJAX load-more
+	 * handlers deliberately do not call it — they append further rows to a table
+	 * that already has a header.
+	 *
+	 * @param array $items     Enabled field keys.
+	 * @param bool  $showImage Whether the image column is being rendered.
+	 * @return string
+	 */
+	public static function layout5TableHead( $items, $showImage = true ) {
+		$columns = [
+			'name'        => esc_html__( 'Member', 'tlp-team' ),
+			'designation' => esc_html__( 'Role', 'tlp-team' ),
+			'email'       => esc_html__( 'Email', 'tlp-team' ),
+			'telephone'   => esc_html__( 'Phone', 'tlp-team' ),
+			'mobile'      => esc_html__( 'Mobile', 'tlp-team' ),
+			'fax'         => esc_html__( 'Fax', 'tlp-team' ),
+			'location'    => esc_html__( 'Location', 'tlp-team' ),
+			'web_url'     => esc_html__( 'Website', 'tlp-team' ),
+			'social'      => esc_html__( 'Social', 'tlp-team' ),
+		];
+
+		$items = is_array( $items ) ? $items : [];
+		$cells = '';
+		$named = in_array( 'name', $items, true );
+
+		/*
+		 * Photo and name are two body columns but one heading: "Member" spans the
+		 * pair, so the label gets the width of both while the cells underneath keep
+		 * the tight photo-to-name gap the design has.
+		 */
+		if ( $showImage && $named ) {
+			$cells .= '<th class="rt-l5-th rt-l5-th-member" colspan="2">' . $columns['name'] . '</th>';
+			unset( $columns['name'] );
+		} elseif ( $showImage ) {
+			$cells .= '<th class="rt-l5-th rt-l5-th-avatar"></th>';
+		}
+
+		foreach ( $columns as $key => $label ) {
+			if ( in_array( $key, $items, true ) ) {
+				$cells .= '<th class="rt-l5-th rt-l5-th-' . esc_attr( str_replace( '_', '-', $key ) ) . '">' . $label . '</th>';
+			}
+		}
+
+		if ( ! $cells ) {
+			return '';
+		}
+
+		return '<thead><tr>' . $cells . '</tr></thead>';
+	}
+
+	/**
+	 * Builds the social icon list.
+	 *
+	 * @param array $sLink         Saved social links.
+	 * @param array $fields        Enabled field keys.
+	 * @param array $iconOverrides Optional per-network Font Awesome class overrides,
+	 *                             keyed by network id (e.g. [ 'linkedin' => 'fab fa-linkedin-in' ]).
+	 * @return string
+	 */
+	public static function get_formatted_social_link( $sLink, $fields, $iconOverrides = [] ) {
 		$html = null;
 
 		if ( ! empty( $sLink ) && is_array( $sLink ) && in_array( 'social', $fields, true ) ) {
@@ -1012,6 +1869,18 @@ class Fns {
                         break;
 				}
 
+				/*
+				 * Per-network glyph overrides, keyed by network id. Layouts whose social
+				 * links are drawn as chips pass their own variants — e.g. Layout 5 asks
+				 * for `fa-linkedin-in` (bare "in" lettermark) instead of the default
+				 * `fa-linkedin`, which is the filled brand SQUARE and reads as a solid
+				 * block next to `fa-facebook-f` and `fa-x-twitter`. Scoped per call so
+				 * no other layout's icon set changes.
+				 */
+				if ( ! empty( $iconOverrides[ $lID ] ) ) {
+					$icon_class = $iconOverrides[ $lID ];
+				}
+
 				if ( 'google-plus' !== $lID && $icon_class ) {
 					$html .= '<a href="' . $lURL . '" title="' . esc_attr( $lID ) . '" target="_blank"><i class="' . esc_attr( $icon_class ) . '"></i></a>';
 				}
@@ -1036,6 +1905,7 @@ class Fns {
             $readmore_btn   = ! empty( $scMeta['readmore_btn_style'][0] ) ? unserialize( $scMeta['readmore_btn_style'][0] ) : null;
 			$button         = ! empty( $scMeta['ttp_button_style'][0] ) ? unserialize( $scMeta['ttp_button_style'][0] ) : null;
 			$popupBg        = ! empty( $scMeta['ttp_popup_bg_color'][0] ) ? $scMeta['ttp_popup_bg_color'][0] : null;
+			$popupTextColor = ! empty( $scMeta['ttp_popup_text_color'][0] ) ? $scMeta['ttp_popup_text_color'][0] : null;
 			$name           = ! empty( $scMeta['name'][0] ) ? unserialize( $scMeta['name'][0] ) : null;
 			$designation    = ! empty( $scMeta['designation'][0] ) ? unserialize( $scMeta['designation'][0] ) : null;
 			$short_bio      = ! empty( $scMeta['short_bio'][0] ) ? unserialize( $scMeta['short_bio'][0] ) : null;
@@ -1048,6 +1918,7 @@ class Fns {
 			$skill          = ! empty( $scMeta['skill'][0] ) ? unserialize( $scMeta['skill'][0] ) : null;
 			$social_icon    = ! empty( $scMeta['social'][0] ) ? unserialize( $scMeta['social'][0] ) : null;
 			$social_icon_bg = ! empty( $scMeta['social_icon_bg'][0] ) ? $scMeta['social_icon_bg'][0] : null;
+			$social_hover_bg = ! empty( $scMeta['social_icon_hover_bg'][0] ) ? $scMeta['social_icon_hover_bg'][0] : null;
 			$content_bg     = ! empty( $scMeta['ttp_content_bg_color'][0] ) ? $scMeta['ttp_content_bg_color'][0] : null;
 			$mObg           = ! empty( $scMeta['overlay_rgba_bg'][0] ) ? unserialize( $scMeta['overlay_rgba_bg'][0] ) : null;
 			$itemP          = ! empty( $scMeta['overlay_padding'][0] ) ? intval( $scMeta['overlay_padding'][0] ) : null;
@@ -1061,6 +1932,7 @@ class Fns {
             $readmore_btn   = ! empty( $scMeta['readmore_btn_style'] ) ? $scMeta['readmore_btn_style'] : null;
 			$button         = ! empty( $scMeta['ttp_button_style'] ) ? $scMeta['ttp_button_style'] : null;
 			$popupBg        = ! empty( $scMeta['ttp_popup_bg_color'] ) ? $scMeta['ttp_popup_bg_color'] : null;
+			$popupTextColor = ! empty( $scMeta['ttp_popup_text_color'] ) ? $scMeta['ttp_popup_text_color'] : null;
 			$name           = ! empty( $scMeta['name'] ) ? $scMeta['name'] : null;
 			$designation    = ! empty( $scMeta['designation'] ) ? $scMeta['designation'] : null;
 			$short_bio      = ! empty( $scMeta['short_bio'] ) ? $scMeta['short_bio'] : null;
@@ -1074,6 +1946,7 @@ class Fns {
 			$social_icon    = ! empty( $scMeta['social'] ) ? $scMeta['social'] : null;
             $content_bg     = ! empty( $scMeta['ttp_content_bg_color'] ) ? $scMeta['ttp_content_bg_color'] : null;
 			$social_icon_bg = ! empty( $scMeta['social_icon_bg'] ) ? $scMeta['social_icon_bg'] : null;
+			$social_hover_bg = ! empty( $scMeta['social_icon_hover_bg'] ) ? $scMeta['social_icon_hover_bg'] : null;
 			$mObg           = ! empty( $scMeta['overlay_rgba_bg'] ) ? $scMeta['overlay_rgba_bg'] : null;
 			$itemP          = ! empty( $scMeta['overlay_padding'] ) ? intval( $scMeta['overlay_padding'] ) : null;
 			$gutter         = ! empty( $scMeta['ttp_gutter'] ) ? absint( $scMeta['ttp_gutter'] ) : null;
@@ -1081,14 +1954,55 @@ class Fns {
 		}
 
 		if ( $primaryColor ) {
+			// Publish the accent as a custom property so Grid Layout 1 derives its
+			// whole palette (role, icon chips, socials, buttons, pagination) from it
+			// in the live preview, exactly as templates/sc-css.php does on the front
+			// end. Without this the preview coloured only a few hard-coded elements
+			// (e.g. the active pagination button) and left the rest at the default.
+			$css .= "#{$layoutID}{--l1-primary:{$primaryColor};}";
+			// Isotope 2 reads --iso2-primary for the role text and dash, the contact icon
+			// tiles, the skill bars, the social chip hover, the buttons and the card's
+			// hover border. Mirrors templates/sc-css.php; keep the two in step.
+			$css .= "#{$layoutID} .isotope2{--iso2-primary:{$primaryColor};}";
+			// Isotope 3 — role pill, department pill, social chip hover and Read More button.
+			$css .= "#{$layoutID} .isotope3{--iso3-primary:{$primaryColor};}";
+			// Special Layout 01 reads its whole accent palette (name plate + notch,
+			// contact/social chips, buttons, active thumbnail ring) from this one.
+			$css .= "#{$layoutID} .special01{--rt-sp1-primary:{$primaryColor};}";
+			// Layout 5's table reads this for the role text, the contact icon chips and
+			// the social chips + their hover fill.
+			$css .= "#{$layoutID} .layout5{--l5-primary:{$primaryColor};}";
+			// Layout 7 (and carousel 2, which shares its card) reads this for the
+			// hover overlay, the social glyph on hover and the pill buttons.
+			$css .= "#{$layoutID} .layout7,#{$layoutID} .isotope4{--l7-primary:{$primaryColor};}";
+			// Layout 8 (and carousel 3 and isotope 5, which share its card) reads this
+			// for the floating name label, the social glyph and the pill buttons.
+			// carousel3's slides carry the `layout8` class, so the first arm covers
+			// them; isotope5 keeps its own class and needs its own arm.
+			$css .= "#{$layoutID} .layout8,#{$layoutID} .isotope5{--l8-primary:{$primaryColor};}";
+			// Layout 9 (and carousel 4, which shares its card) reads this for the
+			// name pill, the social glyph on hover and the pill buttons.
+			// isotope6 shares layout9's card and keeps its own per-path key, so it
+			// needs its own arm (carousel4's slides carry `layout9` already).
+			$css .= "#{$layoutID} .layout9,#{$layoutID} .isotope6{--l9-primary:{$primaryColor};}";
 			$css .= "#{$layoutID} .single-team-area .overlay a.detail-popup,
 					#{$layoutID} .contact-info ul li i{";
 			$css .= 'color:' . $primaryColor . ';';
 			$css .= '}';
+			/*
+			 * Layout 6 opts out: its contact chips sit on the brand panel, which this same
+			 * control paints with $primaryColor below, so the arm above would render them
+			 * invisible against their own background. tlpteam.css carries the identical
+			 * correction for the front end, but it cannot reach here -- the arm above is
+			 * ID-scoped (1,1,3) and no class selector out-ranks that.
+			 */
+			$css .= "#{$layoutID} .layout6 .tlp-info-block .contact-info ul li i{color:#fff;}";
+			// Note: `#{$layoutID} .layout1 .tlp-content` is intentionally NOT in the
+			// background list below — Layout 1's name strip stays white and the
+			// accent flows through --l1-primary instead.
 			$css .= "#{$layoutID} .single-team-area .skill-prog .fill,
 			         .tlp-team #{$layoutID} .tlp-content,
 					.tlp-tooltip + .tooltip > .tooltip-inner,
-					#{$layoutID} .layout1 .tlp-content,
 					#{$layoutID} .layout11 .single-team-area .tlp-title,
 					#{$layoutID} .carousel7 .single-team-area .team-name,
 					#{$layoutID} .layout14 .rt-grid-item .tlp-overlay,
@@ -1099,15 +2013,12 @@ class Fns {
 					#{$layoutID} .skill-prog .fill,
 					#{$layoutID}.rt-team-container .layout16 .single-team-area .social-icons,
 					#{$layoutID}.rt-team-container .layout16 .single-team-area:hover:before,
-					#{$layoutID} .special-selected-top-wrap .ttp-label,
-					#rt-smart-modal-container.rt-modal-{$scID} .rt-smart-modal-header,
-					#{$layoutID} .layout17 .single-team-area:hover .tlp-content,
 					#{$layoutID} .layout6 .tlp-info-block, #{$layoutID} .carousel9 .single-team-area .tlp-overlay{";
 			$css .= 'background:' . $primaryColor . ';';
 			$css .= '}';
-			$css .= "#{$layoutID} .layout15 .single-team-area:before,
-						#{$layoutID} .isotope10 .single-team-area:before,
-						#{$layoutID} .carousel11 .single-team-area:before{";
+			$css .= "#{$layoutID} .layout15 .single-team-area .ttp-member-title,
+						#{$layoutID} .isotope10 .single-team-area .ttp-member-title,
+						#{$layoutID} .carousel11 .single-team-area .ttp-member-title{";
 			$css .= 'background:' . self::TLPhex2rgba( $primaryColor, 0.8 );
 			$css .= '}';
 			$css .= "#rt-smart-modal-container.loading.rt-modal-{$scID} .rt-spinner,
@@ -1413,6 +2324,26 @@ class Fns {
 					#tlp-modal.tlp-modal-{$scID} .md-content > .tlp-md-content-holder .tlp-md-content{";
 			$css .= 'background-color:' . $popupBg . ';';
 			$css .= '}';
+			/*
+			 * Every redesigned popup paints the surfaces it owns — the single popup's
+			 * card, the multi viewer's stage and thumbnail strip, the smart drawer —
+			 * from --rttm-pop-surface, so the token recolours all of them together.
+			 * The arms above only reach the outer shell, which on the single popup sits
+			 * BEHIND the card and is invisible. The gradient bars are deliberately NOT
+			 * included: they follow Primary Color, exactly as the Elementor path splits
+			 * PopUp Header Background from PopUp Background.
+			 */
+			$css .= "#tlp-modal.tlp-modal-{$scID},
+					#tlp-popup-wrap.tlp-popup-wrap-{$scID},
+					#rt-smart-modal-container.rt-modal-{$scID}{--rttm-pop-surface:{$popupBg};}";
+		}
+
+		/* popup text color — twin of the sc-css.php block */
+		if ( $popupTextColor ) {
+			$css .= "#tlp-modal.tlp-modal-{$scID},
+					#tlp-popup-wrap.tlp-popup-wrap-{$scID},
+					#rt-smart-modal-container.rt-modal-{$scID}{--rttm-pop-text:{$popupTextColor};--rttm-pop-heading:{$popupTextColor};--rttm-pop-muted:{$popupTextColor};}";
+			$css .= "#rt-smart-modal-container.rt-modal-{$scID} .member-details,#tlp-modal.tlp-modal-{$scID} .md-content{color:{$popupTextColor};}";
 		}
 
 		// Name
@@ -1424,13 +2355,18 @@ class Fns {
 			$cCss .= ! empty( $name['size'] ) ? 'font-size:' . $name['size'] . 'px;' : null;
 			$cCss .= ! empty( $name['weight'] ) ? 'font-weight:' . $name['weight'] . ';' : null;
 			if ( $cCss ) {
-				$css .= "#{$layoutID} h3,
+				$css .= "#{$layoutID} .layout9 .tlp-label-name,
+					#{$layoutID} h3,
 						#{$layoutID} h3 a,
 						#{$layoutID} .overlay h3 a,
 						#{$layoutID} .single-team-area .tlp-content h3 a{ {$cCss} }";
 			}
 			if ( ! empty( $name['hover_color'] ) ) {
-				$css .= "#{$layoutID} h3:hover,
+				// isotope2 needs its own arm — its card recolours the name when the CARD is
+				// hovered, not the heading, so the `h3 a:hover` arms never fire there. Mirrors
+				// the same addition in templates/sc-css.php; keep the two in step.
+				$css .= "#{$layoutID} .isotope2 .team-member:hover h3 a,
+						#{$layoutID} h3:hover,
 						#{$layoutID} h3 a:hover,
 						#{$layoutID} .overlay h3 a:hover,
 						#{$layoutID} .single-team-area .tlp-content h3 a:hover{ color: {$name['hover_color']}; }";
@@ -1444,7 +2380,7 @@ class Fns {
 			$cCss .= ! empty( $designation['size'] ) ? 'font-size:' . $designation['size'] . 'px;' : null;
 			$cCss .= ! empty( $designation['weight'] ) ? 'font-weight:' . $designation['weight'] . ';' : null;
 
-			$css .= "#{$layoutID} .tlp-position,
+			$css .= "#{$layoutID} .layout9 .tlp-label-role,#{$layoutID} .tlp-position,
 					#{$layoutID} .tlp-position a,
 					#{$layoutID} .overlay .tlp-position,
 					#{$layoutID} .tlp-layout-isotope .overlay .tlp-position{ {$cCss} }";
@@ -1485,7 +2421,8 @@ class Fns {
 			$cCss .= ! empty( $web_url['size'] ) ? 'font-size:' . $web_url['size'] . 'px;' : null;
 			$cCss .= ! empty( $web_url['weight'] ) ? 'font-weight:' . $web_url['weight'] . ';' : null;
             $cCss .= ! empty( $web_url['align'] ) ? 'text-align:' . $web_url['align'] . ';' : null;
-			$css  .= "#{$layoutID} .tlp-url{{$cCss}}";
+			// .tlp-website (the <li> block) added so text-align applies — see sc-css.php.
+			$css  .= "#{$layoutID} .tlp-url,#{$layoutID} .tlp-website{{$cCss}}";
 		}
 
 		// Telephone
@@ -1539,13 +2476,29 @@ class Fns {
 		// Social Icon
 		if ( ! empty( $social_icon ) ) {
 			$cCss  = null;
-			$cCss .= ! empty( $social_icon['color'] ) ? 'color:' . $social_icon['color'] . ';' : null;
 			$cCss .= ! empty( $social_icon['size'] ) ? 'font-size:' . $social_icon['size'] . 'px;' : null;
 			$cCss .= ! empty( $social_icon['weight'] ) ? 'font-weight:' . $social_icon['weight'] . ';' : null;
 
-			$css .= "#{$layoutID} .overlay .social-icons a,
+			if ( $cCss ) {
+				$css .= "#{$layoutID} .overlay .social-icons a,
 					#{$layoutID} .tlp-social,
 					#{$layoutID} .social-icons a{ {$cCss} }";
+			}
+
+			// Colour is scoped to the resting state, exactly as templates/sc-css.php now does —
+			// keep the two in step. Here the arms are ID-based, so they out-specify a layout's
+			// own `… .social-icons a:hover{color:…}` (0,4,1) even without `!important`, and the
+			// preview showed the same invisible glyph the front end did on the layouts that flip
+			// their chip to #fff on hover. The `:where()` arm is (0,2,1): above the theme's
+			// generic `a:hover`, below any layout that states a hover colour.
+			if ( ! empty( $social_icon['color'] ) ) {
+				$css .= "#{$layoutID} .overlay .social-icons a:not(:hover):not(:focus),
+					#{$layoutID} .tlp-social:not(:hover):not(:focus),
+					#{$layoutID} .social-icons a:not(:hover):not(:focus){color:{$social_icon['color']};}";
+				$css .= ":where(#{$layoutID}) .social-icons a:hover,
+					:where(#{$layoutID}) .social-icons a:focus,
+					:where(#{$layoutID}) .tlp-social:hover{color:{$social_icon['color']};}";
+			}
 			if ( ! empty( $social_icon['align'] ) ) {
 				$css .= "#{$layoutID} .social-icons,#{$layoutID} .tlp-social, #{$layoutID} .overlay .social-icons { text-align: {$social_icon['align']}; }";
 			}
@@ -1556,9 +2509,19 @@ class Fns {
 			$css .= "#{$layoutID} .social-icons a{background:{$social_icon_bg};}";
 		}
 
+		// Shortcode twin of Elementor's "Social → Hover → Background Color". `!important` for
+		// the same reason as in templates/sc-css.php: a redesigned card's own chip hover rule
+		// out-specifies this one. Keep the two in step.
+		if ( ! empty( $social_hover_bg ) ) {
+			$css .= "#{$layoutID} .social-icons a:hover{background:{$social_hover_bg} !important;}";
+		}
+
         // Content Bg
         if ( $content_bg ) {
-            $css .= "#{$layoutID}  .layout17 .single-team-area .tlp-content,#{$layoutID}  .layout1 .single-team-area,#{$layoutID} .layout16 .single-team-area,#{$layoutID} .layout3 .single-team-area,#{$layoutID} .layout10 .tlp-team-item,#{$layoutID}  .layout18 .single-team-area .tlp-content,#{$layoutID} .layout18 .single-team-area .tlp-content:after{background:{$content_bg};}";
+            // isotope2's card surface is `.rt-iso2-card`, layout8/isotope5's is
+            // `.single-team-area` — both mirror the arms in templates/sc-css.php;
+            // keep the two in step.
+            $css .= "#{$layoutID}  .layout17 .single-team-area .tlp-content,#{$layoutID}  .layout1 .single-team-area,#{$layoutID} .layout16 .single-team-area,#{$layoutID} .layout3 .single-team-area,#{$layoutID} .layout10 .tlp-team-item,#{$layoutID} .isotope2 .rt-iso2-card,#{$layoutID} .layout8 .single-team-area,#{$layoutID} .isotope5 .single-team-area,#{$layoutID}  .layout18 .single-team-area .tlp-content,#{$layoutID} .layout18 .single-team-area .tlp-content:after{background:{$content_bg};}";
         }
 
 		// Overlay
@@ -1570,11 +2533,11 @@ class Fns {
 						#{$layoutID} .layout7 figcaption:hover,
 						#{$layoutID} .isotope8 .tlp-overlay,
 						#{$layoutID} .layout13 .tlp-overlay,
-						#{$layoutID} .layout8 .tlp-overlay .tlp-title,
+						#{$layoutID} .layout8 .tlp-title,
+						#{$layoutID} .isotope5 .tlp-title,
 						#{$layoutID} .isotope1 .rt-grid-item:hover .overlay,
 						#{$layoutID} .isotope4 figcaption:hover,
-						#{$layoutID} .layout11 .single-team-area .tlp-title,
-						#{$layoutID} .isotope5 .tlp-overlay .tlp-title {";
+						#{$layoutID} .layout11 .single-team-area .tlp-title {";
 				$css .= 'background:' . self::TLPhex2rgba(
 					$mObg['color'],
 					( $mObg['opacity'] ? $mObg['opacity'] : .8 )
@@ -1585,18 +2548,79 @@ class Fns {
 
 		// Overlay item padding
 		if ( $itemP ) {
+			// layout8 / isotope5 pad `.tlp-overlay` like layout9: their name lives in
+			// `.tlp-title` OUTSIDE the overlay, so the generic `:hover h3` arm aimed at
+			// the wrong element — and lost to `.rt-team-container h3 { padding:0
+			// !important }` anyway. Mirrors templates/sc-css.php; keep the two in step.
+			//
+			// layout7 / isotope4 carry no `:hover`: their figcaption is in flow and sets the
+			// card height, so padding it only on hover grew the card and shook the page.
 			$css .= "#{$layoutID} .single-team-area .overlay .overlay-element,
 					#{$layoutID} .single-team-area:hover h3,
 					#{$layoutID} .isotope3 .single-team-area:hover h3,
-					#{$layoutID} .layout7 figcaption:hover,
-					#{$layoutID} .isotope4 figcaption:hover,
-					#{$layoutID} .layout9 .tlp-overlay{";
+					#{$layoutID} .layout7 figcaption,
+					#{$layoutID} .isotope4 figcaption,
+					#{$layoutID} .layout8 .tlp-overlay,
+					#{$layoutID} .isotope5 .tlp-overlay,
+					#{$layoutID} .layout9 .tlp-overlay,
+					#{$layoutID} .isotope6 .tlp-overlay,
+					#{$layoutID} .layout10 .tlp-overlay,
+					#{$layoutID} .isotope7 .tlp-overlay{";
 			$css .= 'padding-top:' . $itemP . '%; ';
 			$css .= '}';
 		}
 		$css .= '</style>';
 
 		return $css;
+	}
+
+	/**
+	 * Shortcode whose Styling tab drives the single team page's Resume / Hire Me buttons.
+	 *
+	 * That page is not a shortcode, so nothing scoped to `.rt-team-container-{id}` reaches
+	 * it. Exactly one shortcode is allowed to emit its button rules a second time under the
+	 * page's own `.tlp-single-container` class -- every shortcode doing it would tie on
+	 * specificity and leave the winner to whichever block sits last in team-sc.css, i.e. the
+	 * shortcode saved most recently. Settings > Detail page field selection > Button style
+	 * source names the one that wins.
+	 *
+	 * @return int Shortcode ID, or 0 for "use the plugin default look".
+	 */
+	/**
+	 * Attachment ID standing in for a member with no photo on the single team page.
+	 *
+	 * "Default preview image" is a per-shortcode field, and the detail page is not a
+	 * shortcode, so Settings > Detail page field selection > Default preview image source
+	 * names the one to borrow it from -- the same arrangement as
+	 * self::singlePageStyleSourceId() and for the same reason.
+	 *
+	 * @return int Attachment ID, or 0 for "show no image".
+	 */
+	public static function singlePageDefaultImageId() {
+		// Pro-only setting: without Pro the detail page keeps its current behaviour.
+		if ( ! rttlp_team()->has_pro() ) {
+			return 0;
+		}
+
+		$settings = get_option( rttlp_team()->options['settings'] );
+		$source   = ! empty( $settings['detail_default_image_source'] ) ? absint( $settings['detail_default_image_source'] ) : 0;
+
+		if ( ! $source ) {
+			return 0;
+		}
+
+		return absint( get_post_meta( $source, 'default_preview_image', true ) );
+	}
+
+	public static function singlePageStyleSourceId() {
+		// Pro-only setting: without Pro the single page keeps the built-in button look.
+		if ( ! rttlp_team()->has_pro() ) {
+			return 0;
+		}
+
+		$settings = get_option( rttlp_team()->options['settings'] );
+
+		return ! empty( $settings['detail_button_style_source'] ) ? absint( $settings['detail_button_style_source'] ) : 0;
 	}
 
 	public static function generatorShortcodeCss( $scID ) {
@@ -1609,28 +2633,32 @@ class Fns {
 		$upload_dir     = wp_upload_dir();
 		$upload_basedir = $upload_dir['basedir'];
 		$cssFile        = $upload_basedir . '/tlp-team/team-sc.css';
-		if ( $css = self::render( 'sc-css', compact( 'scID' ), true ) ) {
 
-			$css = sprintf( '/*sc-%2$d-start*/%1$s/*sc-%2$d-end*/', $css, $scID );
+		$css = self::render( 'sc-css', compact( 'scID' ), true );
 
-			if ( file_exists( $cssFile ) && ( $oldCss = $wp_filesystem->get_contents( $cssFile ) ) ) {
-				if ( strpos( $oldCss, '/*sc-' . $scID . '-start' ) !== false ) {
-                    if (!empty($oldCss)) {
-                        $oldCss = preg_replace('/\/\*sc-' . $scID . '-start[\s\S]+?sc-' . $scID . '-end\*\//', '', $oldCss);
-                        $oldCss = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", '', $oldCss);
-                    } else {
-                        $oldCss = '';
-                    }
-				}
-				$css = $oldCss . $css;
-			} elseif ( ! file_exists( $cssFile ) ) {
-				$upload_basedir_trailingslashit = trailingslashit( $upload_basedir );
-				$wp_filesystem->mkdir( $upload_basedir_trailingslashit . 'tlp-team' );
+		/*
+		 * Wrap this shortcode's rules in its own fence. An empty $css is kept as
+		 * an empty string on purpose rather than bailing out: the block below
+		 * still has to strip the PREVIOUS fence. Bailing here meant that clearing
+		 * every field on the Styling tab left the old rules live on the front end
+		 * forever, because the file was never rewritten.
+		 */
+		$css = $css ? sprintf( '/*sc-%2$d-start*/%1$s/*sc-%2$d-end*/', $css, $scID ) : '';
+
+		if ( file_exists( $cssFile ) && ( $oldCss = $wp_filesystem->get_contents( $cssFile ) ) ) {
+			if ( strpos( $oldCss, '/*sc-' . $scID . '-start' ) !== false ) {
+				$oldCss = preg_replace( '/\/\*sc-' . $scID . '-start[\s\S]+?sc-' . $scID . '-end\*\//', '', $oldCss );
+				$oldCss = preg_replace( "/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", '', $oldCss );
 			}
-			if ( ! $wp_filesystem->put_contents( $cssFile, $css ) ) {
-                /*  phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log */
-				error_log( print_r( 'Team: Error Generated css file ', true ) );
-			}
+			$css = $oldCss . $css;
+		} elseif ( ! file_exists( $cssFile ) ) {
+			$upload_basedir_trailingslashit = trailingslashit( $upload_basedir );
+			$wp_filesystem->mkdir( $upload_basedir_trailingslashit . 'tlp-team' );
+		}
+
+		if ( ! $wp_filesystem->put_contents( $cssFile, $css ) ) {
+			/*  phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log */
+			error_log( print_r( 'Team: Error Generated css file ', true ) );
 		}
 	}
 
@@ -1827,6 +2855,10 @@ class Fns {
 
 			case 'border':
 				$type = \Elementor\Group_Control_Border::get_type();
+				break;
+
+			case 'box-shadow':
+				$type = \Elementor\Group_Control_Box_Shadow::get_type();
 				break;
 		}
 

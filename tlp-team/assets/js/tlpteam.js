@@ -4,6 +4,15 @@
 	var elementThumbInstances = [];
 	window.initTlpTeam = function () {
 		$(".rt-team-container").each(function (index) {
+			// The Elementor editor re-renders a widget on every edit, so this can run
+			// many times over containers that are already wired up. Bind each one once,
+			// otherwise every re-render stacks another set of handlers (and another
+			// Swiper) on the same markup. On the frontend this runs once anyway.
+			if ($(this).data("tlpTeamInit")) {
+				return;
+			}
+			$(this).data("tlpTeamInit", true);
+
 			var container = $(this),
 				str = container.attr("data-layout"),
 				popupBg = container.attr("data-popup-bg"),
@@ -39,7 +48,13 @@
 				paramsRequest = {},
 				mIsotopeWrap = '',
 				IsotopeWrap = '',
-				isMasonry = $('.rt-row.rt-content-loader.tpg-masonry', container),
+				// `ttp-masonry`, not `tpg-masonry` (that is The Post Grid's prefix, and no
+				// markup here ever carries it). While this looked for the wrong class it
+				// was always empty, so every `isMasonry.length` branch below was dead:
+				// AJAX-loaded items were appended without ever being handed to Isotope,
+				// so they kept `position: relative` and stacked on top of the absolutely
+				// positioned cards already on the page.
+				isMasonry = $('.rt-row.rt-content-loader.ttp-masonry', container),
 				isIsotope = $(".tlp-team-isotope", container),
 				IsoButton = $(".ttp-isotope-buttons", container),
 				IsoDropDownFilter = $("select.isotope-dropdown-filter", container),
@@ -221,29 +236,87 @@
 								}
 								if (append) {
 									if (isIsotope.length) {
-										IsotopeWrap.append(data.data)
-											.isotope('appended', data.data)
-											.isotope('reloadItems')
-											.isotope('updateSortData')
-											.isotope();
+										// Parse ONCE — append(html) and isotope('appended', html)
+										// each parse the string separately, so Isotope was
+										// registering a detached copy of the new cards.
+										var $isoAppended = $(data.data);
+
+										// No reloadItems()/updateSortData(): they rebuild every Item
+										// and discard the positions `appended` just assigned, so the
+										// arrange that followed animated each new card in from the
+										// grid's origin. They are only for sort/filter data.
+										//
+										// Put the markup in the DOM but hand it to Isotope only once
+										// the images are in — registering earlier measures cards
+										// that have not finished loading, so they land at the wrong
+										// y and then visibly slide when the arrange corrects them.
+										// transitionDuration 0 keeps that correction from animating.
+										IsotopeWrap.append($isoAppended);
 										IsotopeWrap.imagesLoaded(function () {
 											preFunction();
+											IsotopeWrap.isotope({ transitionDuration: 0 });
+											IsotopeWrap.isotope('appended', $isoAppended);
 											IsotopeWrap.isotope();
+											IsotopeWrap.isotope({ transitionDuration: '0.4s' });
+
+											// preFunction() -> HeightResize() pins every
+											// .even-grid-item to the tallest card, from its OWN
+											// async imagesLoaded pass on the row. That lands after
+											// the arrange above, so if the cards just loaded are
+											// taller than the ones already there, the rows stay
+											// spaced by the old height and the new row overlaps the
+											// one above it. Registering on the same row queues this
+											// settle behind HeightResize's write.
+											contentLoader.imagesLoaded(function () {
+												IsotopeWrap.isotope({ transitionDuration: 0 });
+												IsotopeWrap.isotope();
+												IsotopeWrap.isotope({ transitionDuration: '0.4s' });
+											});
 										});
 									} else if (isMasonry.length) {
-										mIsotopeWrap.append(data.data).isotope('appended', data.data).isotope('updateSortData').isotope('reloadItems');
+										// Parse the markup ONCE. `append(html)` and
+										// `isotope('appended', html)` each parse the string
+										// separately, so Isotope would end up tracking a second,
+										// detached copy instead of the cards actually on screen.
+										var $appended = $(data.data);
+
+										// No reloadItems()/updateSortData() here. `appended`
+										// already places the new cards instantly, in their slot;
+										// reloadItems() rebuilds every Item and throws those
+										// positions away, so the relayout below animated each new
+										// card in from the grid's top-left corner. Those two are
+										// only needed when sort/filter data changes.
+										mIsotopeWrap.append($appended).isotope('appended', $appended);
 										mIsotopeWrap.imagesLoaded(function () {
-											mIsotopeWrap.isotope();
+											mIsotopeWrap.isotope('layout');
 										});
+									} else if (isSpecial.length) {
+										// Special paginates the thumbnail grid only - the stage
+										// and the feature panel have to survive the swap.
+										container.find('.special-items-wrapper').append(data.data);
+										syncSpecialActive();
 									} else {
 										contentLoader.append(data.data);
 									}
 								} else {
 									if (isMasonry.length) {
+										// Filter / sort / search / AJAX pagination replace the
+										// whole row. reloadItems() is REQUIRED here (the exact
+										// opposite of the append case above): Isotope still holds
+										// Item objects for the elements html() just destroyed, so
+										// laying out without it positions detached nodes, sets the
+										// container to height 0 and leaves the new cards in normal
+										// flow spilling over whatever follows on the page.
+										// `.isotope()` with no args re-runs arrange, which is what
+										// actually measures and places items — `isotope('layout')`
+										// alone leaves item.size undefined and collapses the row.
 										mIsotopeWrap.html(data.data);
 										mIsotopeWrap.imagesLoaded(function () {
-											mIsotopeWrap.isotope();
+											mIsotopeWrap.isotope('reloadItems').isotope();
 										});
+									} else if (isSpecial.length) {
+										container.find('.special-items-wrapper').html(data.data);
+										syncSpecialActive();
 									} else {
 										contentLoader.html(data.data);
 									}
@@ -268,15 +341,18 @@
 						$page_numbers.pagination('enable');
 					}
 				},
-				specialLayoutEqualHeight = function () {
-					var target = $('.special-selected-top-wrap > .img');
-					target.imagesLoaded(function () {
-						var imgHeight = target.outerHeight();
-						$('.special-selected-top-wrap .ttp-label, .special-selected-bottom-wrap').height(imgHeight);
-					});
+				syncSpecialActive = function () {
+					var activeId = container.find('#special-selected-wrapper').attr('data-id'),
+						cells = container.find('.special-items-wrapper .rt-grid-item');
+					cells.removeClass('selected');
+					if (activeId) {
+						cells.filter('[data-id="' + activeId + '"]').addClass('selected');
+					}
 				},
 				scrollToTopMember = function () {
-					if ($(window).width() < 768) {
+										// below 992 the stage stacks with the details BELOW the thumbnails,
+					// so bring the freshly loaded profile into view after a tap
+					if ($(window).width() < 992) {
 						$('html, body').animate({
 							scrollTop: $('#special-selected-wrapper').offset().top - 35
 						}, 200);
@@ -341,13 +417,19 @@
 					}
 					IsotopeWrap = isIsotope.imagesLoaded(function () {
 						preFunction();
-						IsotopeWrap.isotope({
+						// Grid Style. Isotope defaults to masonry AND passing a `masonry`
+						// option pins it there, so the hardcoded option below used to make
+						// "Even" render as masonry on every isotope layout. `ttp-even` is
+						// written on the row by the renderer; its absence means masonry
+						// (the shortcode path adds no class at all in that case).
+						IsotopeWrap.isotope($.extend({
 							itemSelector: '.isotope-item',
-							masonry: { columnWidth: '.isotope-item' },
 							filter: function () {
 								return buttonFilter ? $(this).is(buttonFilter) : true;
 							}
-						});
+						}, isIsotope.closest('.rt-row').hasClass('ttp-even')
+							? { layoutMode: 'fitRows' }
+							: { layoutMode: 'masonry', masonry: { columnWidth: '.isotope-item' } }));
 						setTimeout(function () {
 							IsotopeWrap.isotope();
 							remove_placeholder_loading();
@@ -363,42 +445,19 @@
 					});
 
 				} else if (isSpecial.length) {
-					var selected = container.find('.special-items-wrapper .rt-grid-item.selected'),
-						selectedId = selected.attr('data-id');
-					selected.remove();
+					// Every member stays in the grid; clicking one promotes it to the
+					// active thumbnail and loads that profile into the feature panel.
 					target = container.find('#special-selected-wrapper');
-					if (selectedId) {
-						$.ajax({
-							url: ttp.ajaxurl,
-							type: 'POST',
-							data: { memberId: selectedId, scID: scID, action: 'rtGetSpecialLayoutData',tlp_nonce:ttp.nonce },
-							cache: false,
-							beforeSend: function () {
-								placeholder_loading();
-							},
-							success: function (data) {
-								if (!data.error) {
-									target.html(data.data);
-									target.attr('data-id', selectedId);
-									specialLayoutEqualHeight();
-									remove_placeholder_loading();
-								}
-							},
-							error: function () {
-								remove_placeholder_loading();
-							}
-						}
-						);
-					}
 
-					$(document).on('click', '.single-team-item.image-wrapper', function () {
-						var self = $(this),
-							id = self.attr('data-id'),
-							toggleId = target.attr('data-id');
+					var loadSpecialMember = function (id) {
+						if (!id) {
+							remove_placeholder_loading();
+							return;
+						}
 						$.ajax({
 							url: ttp.ajaxurl,
 							type: 'POST',
-							data: { memberId: id, toggleId: toggleId, scID: scID, action: 'rtGetSpecialLayoutData',tlp_nonce:ttp.nonce },
+							data: { memberId: id, scID: scID, action: 'rtGetSpecialLayoutData', tlp_nonce: ttp.nonce },
 							cache: false,
 							beforeSend: function () {
 								placeholder_loading();
@@ -407,23 +466,35 @@
 								if (!data.error) {
 									target.attr('data-id', id);
 									target.html(data.data);
-									self.attr('data-id', toggleId);
-									self.parent().attr('data-id', toggleId);
-									self.html("<img class='img-responsive rt-profile-img' src='" + data.toggle_image_src + "' />");
-									specialLayoutEqualHeight();
-									remove_placeholder_loading();
-									scrollToTopMember();
 								}
+								remove_placeholder_loading();
 							},
 							error: function () {
 								remove_placeholder_loading();
 							}
-						}
-						);
-					});
+						});
+					};
 
-					$(window).on('resize', function () {
-						specialLayoutEqualHeight();
+					var activeCell = container.find('.special-items-wrapper .rt-grid-item.selected').first();
+					if (!activeCell.length) {
+						activeCell = container.find('.special-items-wrapper .rt-grid-item').first().addClass('selected');
+					}
+					loadSpecialMember(activeCell.attr('data-id'));
+
+					container.on('click', '.special-items-wrapper .single-team-item.image-wrapper', function (e) {
+						e.preventDefault();
+						var self = $(this),
+							cell = self.closest('.rt-grid-item'),
+							id = self.attr('data-id');
+
+						if (!id || cell.hasClass('selected')) {
+							return;
+						}
+
+						container.find('.special-items-wrapper .rt-grid-item.selected').removeClass('selected');
+						cell.addClass('selected');
+						loadSpecialMember(id);
+						scrollToTopMember();
 					});
 
 				} else if (container.find('.rt-row.rt-content-loader.ttp-masonry').length) {
@@ -432,7 +503,15 @@
 						preFunction();
 						mIsotopeWrap.isotope({
 							itemSelector: '.masonry-grid-item',
-							masonry: { columnWidth: '.masonry-grid-item' }
+							masonry: { columnWidth: '.masonry-grid-item' },
+							// Fade only. Isotope reveals appended items from
+							// `scale(0.001)` by default, which makes a card loaded by
+							// "Load more" balloon out of the centre of its slot on top of
+							// the fadeIn the cards already do for themselves. Overriding
+							// both styles drops the scale and leaves the card to simply
+							// appear where it belongs.
+							hiddenStyle: { opacity: 0 },
+							visibleStyle: { opacity: 1 }
 						});
 						remove_placeholder_loading();
 					});
@@ -525,11 +604,25 @@
 			});
 
 			// md Popup
-			$(document).on('click', '.ttp-single-md-popup', function (e) {
-				e.preventDefault();
-				var id = $(this).attr("data-id");
-				var data = "action=tlp_md_popup_single&id=" + id+"&tlp_nonce="+ttp.nonce;
-				var modalWrapper = ".tlp-modal-" + scID;
+			// The redesigned single popup can page between MEMBERS, so the open call is
+			// a named function and the member order is read from the triggers already in
+			// this container (deduped — a card usually has several triggers: the photo,
+			// the name and the Read More link).
+			var singleMemberIds = [];
+
+			function ttpCollectSingleMembers() {
+				singleMemberIds = [];
+				container.find('.ttp-single-md-popup[data-id]').each(function () {
+					var mid = String($(this).attr('data-id'));
+					if (mid && singleMemberIds.indexOf(mid) === -1) {
+						singleMemberIds.push(mid);
+					}
+				});
+			}
+
+			function ttpOpenSinglePopup(id, isStep) {
+				id = String(id);
+				var data = "action=tlp_md_popup_single&id=" + id + "&tlp_nonce=" + ttp.nonce;
 
 				$.ajax({
 					type: "post",
@@ -537,263 +630,295 @@
 					data: data,
 					beforeSend: function () {
 						mdModalWrap.addClass("tlp-modal-" + scID);
-						// mdModalWrap.addClass("tlp-modal-" + randId);
 						mdModalWrap.addClass('md-show');
+						// Paging between members must NOT tear the card out: `.tlp-md-loading` is
+					// absolutely positioned, so replacing the holder with it leaves the shell
+					// with no in-flow content and the modal collapses to height 0 (measured:
+					// 583 -> 0 -> 538 across one click). Keep the outgoing card, drop
+					// `is-ready` so the existing CSS fades it to the spinner, and pin the
+					// height so it cannot collapse while the next member loads.
+					var $pop = mdModalWrap.find('.rttm-pop');
+					if (isStep && $pop.length) {
+						ttpPopLockHeight();
+						$pop.removeClass('is-ready');
+					} else {
 						mdModalWrap.find('.tlp-md-content-holder').html('<div class="tlp-md-loading">Loading...</div>');
-						var modalWrapper = ".tlp-modal-" + scID;
-						// var modalWrapper = ".tlp-modal-" + randId;
-						$(modalWrapper + " .md-content").css("background-color", popupBg);
-						// $(modalWrapper + " .tlp-md-content").css("background-color", popupBg);
+					}
+						// The visible card is `.rttm-pop` INSIDE .md-content, so painting the
+						// holder put the colour behind an opaque surface and the control
+						// appeared to do nothing. Set the surface token on the shell instead
+						// — every surface the popup owns reads it.
+						if (popupBg) {
+							mdModalWrap[0].style.setProperty('--rttm-pop-surface', popupBg);
+						}
+						// Carry the opening container's Primary Color onto the shared modal so
+						// the popup's pills, icon chips, skill bars and buttons use the same
+						// accent as the cards instead of the design's fallback blue.
+						var rttmPrim = (getComputedStyle(container[0]).getPropertyValue('--l1-primary') || '').trim();
+						if (rttmPrim) {
+							mdModalWrap[0].style.setProperty('--rttm-pop-primary', rttmPrim);
+						} else {
+							mdModalWrap[0].style.removeProperty('--rttm-pop-primary');
+						}
 
 					},
 					success: function (data) {
 						mdModalWrap.find('.tlp-md-content-holder').html(data.data);
-					},
-					complete: function () {
-						// $(modalWrapper + " .md-content > .tlp-md-content-holder .tlp-md-content").css("background-color", popupBg);
+						// The modal is shared by every shortcode on the page, so the member
+						// list travels ON it rather than in a per-container closure.
+						mdModalWrap.data('rttmMember', id);
+						mdModalWrap.data('rttmMembers', singleMemberIds);
+						ttpSyncPager();
+						ttpRefreshGallery();
+						ttpPopReady(ttpPopReleaseHeight);
 					},
 					error: function (e) {
 						console.log(e);
 					}
 				});
+			}
+
+			// Hide the pager when there is nothing to page to; otherwise it is a wrap-around
+			// so neither button is ever disabled.
+			// Reveal the card as ONE piece, only once its photos have decoded. The AJAX
+			// lands ~60ms after the open animation starts, so without this the modal
+			// scales in empty and the content then the image snap in mid-flight.
+			// The 8s guard means a blocked image can never leave the card hidden.
+			function ttpPopShell() {
+				return mdModalWrap.find('.md-content').first();
+			}
+
+			// Pin the shell to its current height so the swap cannot collapse the modal.
+			function ttpPopLockHeight() {
+				var $el = ttpPopShell();
+				if ($el.length) {
+					$el.css('height', $el.outerHeight() + 'px');
+				}
+			}
+
+			// Ease from the pinned height to whatever the new member needs, then hand the
+			// box back to auto so nothing is left inline-styled.
+			function ttpPopReleaseHeight() {
+				var $el = ttpPopShell();
+				if (!$el.length || !$el[0].style.height) {
+					return;
+				}
+				var from = $el[0].style.height;
+				$el.css('height', '');
+				var to = $el.outerHeight();
+				$el.css('height', from);
+				void $el[0].offsetWidth;
+				$el.css({ transition: 'height .35s cubic-bezier(.4, 0, .2, 1)', height: to + 'px' });
+				setTimeout(function () {
+					$el.css({ transition: '', height: '' });
+				}, 400);
+			}
+
+			function ttpPopReady(onReady) {
+				var pop = mdModalWrap.find('.rttm-pop');
+				if (!pop.length) {
+					return;
+				}
+				pop.removeClass('is-ready');
+
+				var imgs = pop.find('.rttm-pop-gallery img').get(),
+					pending = imgs.length,
+					reveal = function () {
+						// Force a style flush, then flip on the next frame. Adding the class
+						// in the same frame as the insert lets the browser collapse the
+						// before/after states into one, so the cross-fade never runs and the
+						// card just appears — which is what made the open look snappy/janky.
+						void pop[0].offsetWidth;
+						window.requestAnimationFrame(function () {
+							pop.addClass('is-ready');
+							if (typeof onReady === 'function') {
+								onReady();
+							}
+						});
+					};
+
+				if (!pending) {
+					reveal();
+					return;
+				}
+
+				var settle = function () {
+					pending -= 1;
+					if (pending <= 0) {
+						reveal();
+					}
+				};
+
+				$.each(imgs, function (i, img) {
+					if (img.complete && img.naturalWidth) {
+						settle();
+					} else {
+						$(img).one('load error', settle);
+					}
+				});
+
+				setTimeout(reveal, 8000);
+			}
+
+			// Swiper measures the gallery while the modal is still mid open-transition
+			// (scaled down), so slide widths come out wrong and two part-slides show.
+			// Re-measure once the transition has settled.
+			function ttpRefreshGallery() {
+				setTimeout(function () {
+					mdModalWrap.find('.rttm-pop-gallery .swiper').each(function () {
+						if (this.swiper) {
+							this.swiper.update();
+						}
+					});
+				}, 450);
+			}
+
+			function ttpSyncPager() {
+				var pager = mdModalWrap.find('.rttm-pop-pager');
+				if (!pager.length) {
+					return;
+				}
+				if (singleMemberIds.length < 2) {
+					pager.hide();
+				} else {
+					pager.show();
+				}
+			}
+
+			function ttpStepMember(step) {
+				var ids = mdModalWrap.data('rttmMembers') || [];
+				var open = mdModalWrap.data('rttmOpen');
+				if (ids.length < 2 || typeof open !== 'function') {
+					return;
+				}
+				var cur = String(mdModalWrap.data('rttmMember') || '');
+				var i = ids.indexOf(cur);
+				if (i === -1) {
+					i = 0;
+				}
+				open(ids[(i + step + ids.length) % ids.length], true);
+			}
+
+			$(document).on('click', '.ttp-single-md-popup', function (e) {
+				// This handler is bound once PER CONTAINER, so on a page with more than
+				// one shortcode every copy fires. Only the container that actually owns
+				// the clicked trigger may respond — otherwise the last copy to run wins
+				// and overwrites the member list with its own (often empty) one.
+				if (!container.has(this).length) {
+					return;
+				}
+				e.preventDefault();
+				ttpCollectSingleMembers();
+				// Hand the pager THIS container's opener, so paging keeps using the
+				// scID / popup background of the shortcode that was actually clicked.
+				mdModalWrap.data('rttmOpen', ttpOpenSinglePopup);
+				ttpOpenSinglePopup($(this).attr("data-id"));
 				return false;
 			});
 
-			// Smart Popup
+			// Bind the pager ONCE. `#tlp-modal` is a single shared element, so binding
+			// inside this per-container loop would fire the handler once per shortcode
+			// on the page and race between their member lists.
+			if (!mdModalWrap.data('rttmPagerBound')) {
+				mdModalWrap.data('rttmPagerBound', true);
+				mdModalWrap.on('click', '.rttm-pop-prev', function (e) {
+					e.preventDefault();
+					ttpStepMember(-1);
+				});
+				mdModalWrap.on('click', '.rttm-pop-next', function (e) {
+					e.preventDefault();
+					ttpStepMember(1);
+				});
+			}
+
+			// ---------- smart popup ----------
+			// A right-hand drawer over a blurred backdrop. The shell is built once per
+			// open and survives every member step; only `.rt-smart-modal-main-content` is
+			// swapped. The state the stepper needs travels ON the shell via .data(), so
+			// the delegated handlers bound at build time keep working after each swap.
 			$(document).on('click', '.ttp-smart-popup', function (e) {
 				e.preventDefault();
-				var self = $(this),
-					id = $(this).attr("data-id"),
-					container = self.parents('.rt-team-container'),
-					containerId = container.attr("data-sc-id"),
-					contentLoader = $('.rt-row.rt-content-loader', container),
-					smartModal = {
-						currentId: id,
-						ids: getItemsArray(contentLoader) || [],
-						wrap: '',
-						wrapper: "<div id='rt-smart-modal-container' class='rt-modal-" + containerId + "'><div class='rt-smart-modal-main'>" +
-							"<div class='rt-smart-modal-header'>" +
-							"<span class='rt-smart-modal-nav'>" +
-							"<a href='#' class='rt-smart-nav-left rt-smart-nav-item'><i class='fa fa-angle-left' aria-hidden='true'></i></a>" +
-							"<a href='#' class='rt-smart-nav-right rt-smart-nav-item'><i class='fa fa-angle-right' aria-hidden='true'></i></a>" +
-							"</span>" +
-							"<a href='#' class='rt-smart-modal-close'><i class='fa fa-times'> </i></a>" +
-							"</div>" +
-							"<div class='rt-smart-modal' style='background:"+ popupBg +"'><div class='rt-smart-modal-main-content-wrapper'></div></div>" +
-							"</div></div>",
-						setWrap: function () {
-							this.wrap = $('body > #rt-smart-modal-container');
-							return this;
-						},
-						addModal: function () {
-							$('html').addClass('rt-smart-modal-on');
-							this.setWrap();
-							if (!this.wrap.length) {
-								$('body').append(this.wrapper);
-								this.setWrap();
-							}
-							if (!this.wrap.hasClass('ready')) {
-								this.wrap.append("<span class='rt-spinner'></span>");
-							}
-							this.wrap.addClass('open');
-						},
-						removeModal: function () {
-							$('html').removeClass('rt-smart-modal-on');
-							this.wrap.removeClass('open loading ready').find('.rt-smart-modal-main-content-wrapper').html('');
-						},
-						addLoading: function () {
-							this.wrap.addClass('loading').find('.rt-smart-modal-main-content-wrapper').html('<span class="rt-spinner"></span>');
-							return this;
-						},
-						removeLoading: function () {
-							this.wrap.removeClass('loading').find('.rt-spinner').remove();
-							return this;
-						},
-						addData: function (data) {
-							this.wrap.find('.rt-smart-modal-main-content-wrapper').html(data);
-							return this;
-						},
-						setNextID: function () {
-							var index = this.ids.indexOf(this.currentId);
-							index++;
-							if (index >= this.ids.length)
-								index = 0;
-							this.currentId = this.ids[index];
-						},
-						setPrevId: function () {
-							var index = this.ids.indexOf(this.currentId);
-							index--;
-							if (index < 0)
-								index = this.ids.length - 1;
-							this.currentId = this.ids[index];
-						},
-						renderScript: function () {
-							$('.tlp-tooltip', this.wrap).rtTooltip();
-							$('.tlp-team-skill', this.wrap).find('.fill').css('width', '0%');
-							$('.tlp-team-skill .fill', this.wrap).each(function () {
-								var k = 0, f = $(this), p = f.attr('data-progress-animation'), w = f.width();
-								if (w == 0) {
-									p = p.substring(0, p.length - 1);
-									var go = function () {
-										return k >= p || k >= 100 ? (false) : (k += 1, f.css('width', k + '%'), setTimeout(go, 20))
-									};
-									go();
-								}
-							});
-							rtSliderInit(jQuery);
-							// this.wrap.find('.rt-smart-modal-main-content-wrapper').mCustomScrollbar();
-							this.wrap.find('.rt-smart-modal-main-content').mCustomScrollbar();
-							this.wrap.find('.rt-smart-modal-main-content').css('opacity', 1);
-						},
-						rightClick: function () {
-							this.setNextID();
-							this.requestData();
-						},
-						leftClick: function () {
-							this.setPrevId();
-							this.requestData();
-						},
-						requestData: function () {
-							var data = {
-								action: 'tlp_team_smart_popup',
-								id: this.currentId
-							},
-								modal = this;
-							data[ttp.nonceID] = ttp.nonce;
-							$.ajax({
-								type: "post",
-								url: ttp.ajaxurl,
-								data: data,
-								beforeSend: function () {
-									modal.addModal();
-									modal.addLoading();
-								},
-								success: function (response) {
-									modal.removeLoading();
-									modal.addData(response.data);
-									modal.wrap.addClass('ready');
-									modal.renderScript();
-								},
-								error: function (e) {
-									console.log(e);
-								}
-							});
-						}
-					};
-				smartModal.requestData();
-				smartModal.wrap.find('.rt-smart-modal-close').on('click', function (e) {
-					e.preventDefault();
-					smartModal.removeModal();
-					return false;
-				});
 
-				smartModal.wrap.find('.rt-smart-nav-right').on('click', function (e) {
-					e.preventDefault();
-					smartModal.rightClick();
+				var self = $(this);
+
+				// Bound inside the per-container .each(), so on a page with two widgets
+				// both copies run; without this the last one wins and opens the drawer
+				// with the wrong member list.
+				if (!container.has(this).length) {
 					return false;
-				});
-				smartModal.wrap.find('.rt-smart-nav-left').on('click', function (e) {
-					e.preventDefault();
-					smartModal.leftClick();
-					return false;
-				});
+				}
+
+				var current = String(self.attr('data-id')),
+					contentLoader = $('.rt-row.rt-content-loader', container),
+					itemArray = $.map(getItemsArray(contentLoader), function (v) { return String(v); }),
+					$wrap = ttpSpBuild(scID);
+
+				$wrap.data('rttmList', itemArray);
+
+				// The drawer paints every surface it owns from --rttm-pop-surface, so the
+				// token covers the panel and the scrolling body together. The gradient bar
+				// is deliberately left alone — it follows Primary Color, exactly as the
+				// Elementor path keeps PopUp Header Background separate from PopUp
+				// Background.
+				if (popupBg) {
+					$wrap[0].style.setProperty('--rttm-pop-surface', popupBg);
+				}
+
+				// Carry the opening container's Primary Color onto the drawer — the shell
+				// lives outside the widget wrapper, so no per-widget selector reaches it.
+				var rttmPrim = (getComputedStyle(container[0]).getPropertyValue('--l1-primary') || '').trim();
+				if (rttmPrim) {
+					$wrap[0].style.setProperty('--rttm-pop-primary', rttmPrim);
+				} else {
+					$wrap[0].style.removeProperty('--rttm-pop-primary');
+				}
+
+				ttpSpLoad($wrap, current, false);
 
 				return false;
 			});
 
+			// ---------- multiple popup ----------
+			// One shared viewer element; the state it needs to step between members
+			// travels ON it via .data(), so the delegated handlers built with the shell
+			// keep working after every panel swap.
 			$(document).on('click', '.ttp-multi-popup', function () {
-				var self = $(this),
-					current = self.attr("data-id"),
+				var self = $(this);
+
+				// `.ttp-multi-popup` is bound inside the per-container .each(), so on a
+				// page with two widgets both copies run; without this the last one wins
+				// and opens the viewer with the wrong member list.
+				if (!container.has(this).length) {
+					return;
+				}
+
+				var current = String(self.attr('data-id')),
 					contentLoader = self.parents('.rt-team-container').children('.rt-row.rt-content-loader'),
-					itemArray = getItemsArray(contentLoader),
-					data = "action=tlp_multi_popup_single&id=" + current+"&tlp_nonce="+ttp.nonce,
-					popupWrap, popupContainer;
+					itemArray = $.map(getItemsArray(contentLoader), function (v) { return String(v); }),
+					$wrap = ttpMpopBuild();
 
-				$.ajax({
-					type: "post",
-					url: ttp.ajaxurl,
-					data: data,
-					beforeSend: function () {
-						initPopupTeamPro();
-						setLevelTeamPro(current, itemArray);
-						popupWrap = $("#tlp-popup-wrap");
-						popupWrap.addClass("tlp-popup-wrap-" + scID);
-						// popupWrap.addClass("tlp-popup-wrap-" + randId);
-						popupContainer = $(".tlp-popup-content", popupWrap);
-						var modalWrapper = ".tlp-popup-wrap-" + scID;
-						// var modalWrapper = ".tlp-popup-wrap-" + randId;
-						$(modalWrapper + " .tlp-popup-navigation-wrap").css("background-color", popupBg);
-					},
-					success: function (data) {
-						popupContainer.html(data.data);
-					},
-					error: function (e) {
-						console.log(e);
-						popupContainer.html("<p>Loading error!!!</p>");
-					}
-				});
+				$wrap.addClass('tlp-popup-wrap-' + scID);
+				$wrap.data('rttmList', itemArray);
+				$wrap.data('rttmContainer', container);
 
-				popupWrap.find('.tlp-popup-next').on('click', function () {
-					rightClick();
-				});
-				popupWrap.find('.tlp-popup-prev').on('click', function () {
-					leftClick();
-				});
-				popupWrap.find('.tlp-popup-close').on('click', function () {
-					ttpAnimation();
-				});
-
-				$(window).bind('keydown', function (event) {
-					if (event.keyCode === 27) { // Esc
-						ttpAnimation();
-					} else if (event.keyCode === 37) { // left arrow
-						leftClick();
-					} else if (event.keyCode === 39) { // right arrow
-						rightClick();
-					}
-				});
-
-				function rightClick() {
-					var nextId = nextItem(current, itemArray);
-					current = nextId;
-					var data = ttp.nonceID + "=" + ttp.nonce + "&action=tlp_multi_popup_single&id=" + current;
-					$.ajax({
-						type: "post",
-						url: ttp.ajaxurl,
-						data: data,
-						beforeSend: function () {
-							setLevelTeamPro(current, itemArray);
-							popupContainer.html('<div class="tlp-popup-loading"></div>');
-						},
-						success: function (data) {
-							popupContainer.html(data.data);
-						},
-						error: function (e) {
-							console.log(e);
-						}
-					});
+				// This used to paint only the top BAR, so the viewer's stage — the surface
+				// the control is named for — stayed white. The token covers the stage and
+				// the thumbnail strip; the bar follows Primary Color.
+				if (popupBg) {
+					$wrap[0].style.setProperty('--rttm-pop-surface', popupBg);
 				}
 
-				function leftClick() {
-					var prevId = prevItem(current, itemArray);
-					current = prevId;
-					var data = ttp.nonceID + "=" + ttp.nonce + "&action=tlp_multi_popup_single&id=" + current;
-					$.ajax({
-						type: "post",
-						url: ttp.ajaxurl,
-						data: data,
-						beforeSend: function () {
-							setLevelTeamPro(current, itemArray);
-							popupContainer.html('<div class="tlp-popup-loading"></div>');
-						},
-						success: function (data) {
-							popupContainer.html(data.data);
-						},
-						error: function (e) {
-							console.log(e);
-						}
-					});
+				// Carry the opening container's Primary Color onto the viewer, exactly as
+				// the single popup does — the shell lives outside the widget wrapper, so
+				// no per-widget selector can reach it.
+				var rttmPrim = (getComputedStyle(container[0]).getPropertyValue('--l1-primary') || '').trim();
+				if (rttmPrim) {
+					$wrap[0].style.setProperty('--rttm-pop-primary', rttmPrim);
+				} else {
+					$wrap[0].style.removeProperty('--rttm-pop-primary');
 				}
+
+				ttpMpopLoad($wrap, current, 0);
 
 				return false;
 			});
@@ -845,67 +970,462 @@
         }
     }
 
-	function ttpAnimation() {
-		var $pHolder = jQuery('#tlp-popup-wrap');
-		$pHolder.animate({
-			marginLeft: parseInt($pHolder.css('marginLeft'), 10) == 0 ?
-				$pHolder.outerWidth() : 0,
-		}).promise().done(function () {
-			if (parseInt($pHolder.css('marginLeft')) > 0) {
-				$pHolder.remove();
+	/* ---------- smart popup: the right-hand drawer ----------
+	   The shell keeps every legacy hook class (.rt-smart-modal-main,
+	   .rt-smart-modal-header, .rt-smart-modal-nav, .rt-smart-nav-item,
+	   .rt-smart-modal-close, .rt-smart-modal, .rt-smart-modal-main-content-wrapper)
+	   because user Style controls are wired to them — see
+	   ElementorFilters::colorControls() "PopUp Colors" and the smart-modal arms in
+	   Fns::layoutStyleGenerator() and templates/sc-css.php. */
+
+	function ttpSpClose() {
+		var $wrap = $('#rt-smart-modal-container');
+		if (!$wrap.length) {
+			return;
+		}
+		$('html').removeClass('rt-smart-modal-on');
+		$wrap.removeClass('open');
+		setTimeout(function () {
+			$wrap.remove();
+		}, 450);
+	}
+
+	function ttpSpBuild(scID) {
+		$('#rt-smart-modal-container').remove();
+
+		var html =
+			'<div id="rt-smart-modal-container" class="rt-modal-' + scID + ' rttm-sp">' +
+			'<div class="rt-smart-modal-main">' +
+			'<div class="rt-smart-modal-header">' +
+			'<span class="rt-smart-modal-nav">' +
+			'<a href="#" class="rt-smart-nav-left rt-smart-nav-item" aria-label="Previous member"><i class="fa fa-chevron-left" aria-hidden="true"></i></a>' +
+			'<a href="#" class="rt-smart-nav-right rt-smart-nav-item" aria-label="Next member"><i class="fa fa-chevron-right" aria-hidden="true"></i></a>' +
+			'</span>' +
+			'<a href="#" class="rt-smart-modal-close" aria-label="Close"><i class="fa fa-times" aria-hidden="true"></i></a>' +
+			'</div>' +
+			'<div class="rt-smart-modal"><div class="rt-smart-modal-main-content-wrapper"></div></div>' +
+			'</div>' +
+			'</div>';
+
+		$('body').append(html);
+		$('html').addClass('rt-smart-modal-on');
+
+		var $wrap = $('#rt-smart-modal-container');
+
+		// Adding the reveal class in the same frame as the insert collapses both states
+		// and the drawer just appears; force a style flush first.
+		void $wrap[0].offsetWidth;
+		requestAnimationFrame(function () {
+			$wrap.addClass('open');
+		});
+
+		$wrap.on('click', '.rt-smart-modal-close', function (e) {
+			e.preventDefault();
+			ttpSpClose();
+			return false;
+		});
+		$wrap.on('click', '.rt-smart-nav-right', function (e) {
+			e.preventDefault();
+			ttpSpStep($wrap, 1);
+			return false;
+		});
+		$wrap.on('click', '.rt-smart-nav-left', function (e) {
+			e.preventDefault();
+			ttpSpStep($wrap, -1);
+			return false;
+		});
+		$wrap.on('click', '.rttm-sp-garrow', function () {
+			ttpSpShot($wrap, $(this).hasClass('next') ? 1 : -1, false);
+			return false;
+		});
+		$wrap.on('click', '.rttm-sp-dot', function () {
+			ttpSpShot($wrap, parseInt($(this).attr('data-i'), 10), true);
+			return false;
+		});
+		// clicking the dimmed backdrop closes; clicks inside the drawer must not
+		$wrap.on('click', function (e) {
+			if (e.target === this) {
+				ttpSpClose();
+			}
+		});
+
+		return $wrap;
+	}
+
+	/* hero slider — a plain cross-fade, so nothing has to measure a drawer that is
+	   still sliding in */
+	function ttpSpShot($wrap, value, absolute) {
+		var $slides = $wrap.find('.rttm-sp-slide'),
+			$dots = $wrap.find('.rttm-sp-dot');
+
+		if (!$slides.length) {
+			return;
+		}
+
+		var cur = $slides.index($slides.filter('.is-active'));
+		if (cur < 0) {
+			cur = 0;
+		}
+
+		var i = absolute ? value : cur + value;
+		i = ((i % $slides.length) + $slides.length) % $slides.length;
+
+		$slides.removeClass('is-active').eq(i).addClass('is-active');
+		$dots.removeClass('is-active').eq(i).addClass('is-active');
+	}
+
+	function ttpSpStep($wrap, delta) {
+		var list = $wrap.data('rttmList') || [],
+			cur = String($wrap.data('rttmCurrent'));
+
+		if (list.length < 2) {
+			return;
+		}
+
+		var i = $.inArray(cur, list);
+		if (i < 0) {
+			i = 0;
+		}
+		i = (i + delta + list.length) % list.length;
+
+		ttpSpLoad($wrap, list[i], true);
+	}
+
+	/* Loads one member. `swap` is false on first open (spinner) and true when stepping,
+	   which fades the outgoing panel out and the new one back in. */
+	function ttpSpLoad($wrap, id, swap) {
+		var $body = $wrap.find('.rt-smart-modal'),
+			$holder = $wrap.find('.rt-smart-modal-main-content-wrapper'),
+			$old = $holder.find('.rttm-sp-panel'),
+			list = $wrap.data('rttmList') || [];
+
+		$wrap.data('rttmCurrent', String(id));
+		// hide the stepper when there is only one member to step to
+		$wrap.find('.rt-smart-modal-nav').css('display', list.length > 1 ? '' : 'none');
+
+		var data = {
+			action: 'tlp_team_smart_popup',
+			id: id
+		};
+		data[ttp.nonceID] = ttp.nonce;
+
+		var fire = function () {
+			$.ajax({
+				type: 'post',
+				url: ttp.ajaxurl,
+				data: data,
+				beforeSend: function () {
+					if (!swap) {
+						$wrap.addClass('loading');
+						$holder.html('<span class="rt-spinner"></span>');
+					}
+				},
+				success: function (response) {
+					$wrap.removeClass('loading').addClass('ready');
+					$holder.html(response.data);
+					$body.scrollTop(0);
+
+					var $panel = $holder.find('.rttm-sp-panel');
+					if (swap && $panel.length) {
+						$panel.addClass('is-swapping');
+						void $panel[0].offsetWidth;
+						requestAnimationFrame(function () {
+							$panel.removeClass('is-swapping');
+						});
+					}
+
+					ttpSpSkills($wrap);
+				},
+				error: function (e) {
+					console.log(e);
+					$wrap.removeClass('loading');
+					$holder.html('<p>Loading error!!!</p>');
+				}
+			});
+		};
+
+		if (swap && $old.length) {
+			$old.addClass('is-swapping');
+			setTimeout(fire, 200);
+		} else {
+			fire();
+		}
+	}
+
+	/* the skill bars animate from 0 to their data-progress-animation width */
+	function ttpSpSkills($wrap) {
+		$('.tlp-tooltip', $wrap).rtTooltip();
+		$('.tlp-team-skill', $wrap).find('.fill').css('width', '0%');
+		$('.tlp-team-skill .fill', $wrap).each(function () {
+			var k = 0,
+				f = $(this),
+				p = f.attr('data-progress-animation'),
+				w = f.width();
+			if (w == 0 && p) {
+				p = p.substring(0, p.length - 1);
+				var go = function () {
+					return k >= p || k >= 100 ? false : ((k += 1), f.css('width', k + '%'), setTimeout(go, 20));
+				};
+				go();
 			}
 		});
 	}
 
-	function initPopupTeamPro() {
-		var html = '<div id="tlp-popup-wrap" class="tlp-popup-wrap tlp-popup-singlePage-sticky tlp-popup-singlePage">' +
-			'<div class="tlp-popup-content">' +
-			'<div class="tlp-popup-loading"></div>' +
+	/* Bound ONCE — the old code re-bound its close/nav handlers on every card click. */
+	$(document).on('keydown.rttmSp', function (event) {
+		var $wrap = $('#rt-smart-modal-container.open');
+
+		if (!$wrap.length) {
+			return;
+		}
+
+		if (event.keyCode === 27) {
+			ttpSpClose();
+		} else if (event.keyCode === 37) {
+			ttpSpStep($wrap, -1);
+		} else if (event.keyCode === 39) {
+			ttpSpStep($wrap, 1);
+		}
+	});
+
+	/* ---------- multiple popup: the fullscreen viewer ----------
+	   The shell is built once per open and survives every member step; only the panel
+	   inside `.tlp-popup-content` is swapped. Every legacy hook class is kept on it
+	   (.tlp-popup-navigation-wrap, .tlp-popup-navigation, .tlp-popup-prev/-close/-next,
+	   .tlp-popup-content and the counter) because user Style controls are wired to
+	   them — see ElementorFilters::colorControls() "PopUp Colors" and the popup
+	   background block in Fns::layoutStyleGenerator(). */
+
+	function ttpMpopClose() {
+		var $wrap = $('#tlp-popup-wrap');
+		if (!$wrap.length) {
+			return;
+		}
+		$wrap.removeClass('is-open');
+		setTimeout(function () {
+			$wrap.remove();
+		}, 350);
+	}
+
+	function ttpMpopBuild() {
+		$('#tlp-popup-wrap').remove();
+
+		var html =
+			'<div id="tlp-popup-wrap" class="tlp-popup-wrap rttm-mpop">' +
+			'<div class="tlp-popup-navigation-wrap rttm-mpop-bar">' +
+			'<div class="tlp-popup-singlePage-counter rttm-mpop-counter"><b class="ccurrent"></b> <span class="rttm-mpop-of">' + ttp.lan.of + '</span> <span class="ctotal"></span></div>' +
+			'<div class="tlp-popup-navigation rttm-mpop-controls">' +
+			'<button type="button" class="tlp-popup-prev rttm-mpop-ctrl" title="Previous (Left arrow key)" data-action="prev" aria-label="Previous member"><i class="fas fa-chevron-left"></i></button>' +
+			'<button type="button" class="tlp-popup-close rttm-mpop-ctrl is-close" title="Close (Esc key)" data-action="close" aria-label="Close"><i class="fas fa-times"></i></button>' +
+			'<button type="button" class="tlp-popup-next rttm-mpop-ctrl" title="Next (Right arrow key)" data-action="next" aria-label="Next member"><i class="fas fa-chevron-right"></i></button>' +
 			'</div>' +
-			'<div class="tlp-popup-navigation-wrap">' +
-			'<div class="tlp-popup-navigation">' +
-			'<div class="tlp-popup-prev" title="Previous (Left arrow key)" data-action="prev"> <i class="fas fa-angle-left"></i></div>' +
-			'<div class="tlp-popup-close" title="Close (Esc arrow key)" data-action="close"> <i class="fas fa-times"></i> </div>' +
-			'<div class="tlp-popup-next" title="Next (Right arrow key)" data-action="next"> <i class="fas fa-angle-right"></i> </div>' +
-			'<div class="tlp-popup-singlePage-counter"><span class="ccurrent"></span> ' + ttp.lan.of + ' <span class="ctotal"></span></div>' +
+			'<div class="rttm-mpop-spacer"></div>' +
+			'<div class="rttm-mpop-progress"></div>' +
 			'</div>' +
-			'</div>' +
+			'<div class="tlp-popup-content rttm-mpop-stage"><div class="rttm-mpop-loading"></div></div>' +
+			'<div class="rttm-mpop-strip"></div>' +
 			'</div>';
-		$("body").append(html);
-		var $pHolder = $('#tlp-popup-wrap');
-		$pHolder.css('display', 'block');
-		var navHeight = $pHolder.find('.tlp-popup-navigation-wrap').height();
-		$pHolder.find('.tlp-popup-content').css('padding-top', navHeight + "px");
-		ttpAnimation();
+
+		$('body').append(html);
+
+		var $wrap = $('#tlp-popup-wrap');
+
+		// Adding the reveal class in the same frame as the insert collapses both states
+		// and the viewer just appears; force a style flush first.
+		void $wrap[0].offsetWidth;
+		requestAnimationFrame(function () {
+			$wrap.addClass('is-open');
+		});
+
+		$wrap.on('click', '.tlp-popup-close', function () {
+			ttpMpopClose();
+			return false;
+		});
+		$wrap.on('click', '.tlp-popup-prev', function () {
+			ttpMpopStep($wrap, -1);
+			return false;
+		});
+		$wrap.on('click', '.tlp-popup-next', function () {
+			ttpMpopStep($wrap, 1);
+			return false;
+		});
+		$wrap.on('click', '.rttm-mpop-thumb', function () {
+			var id = String($(this).attr('data-id')),
+				list = $wrap.data('rttmList') || [],
+				cur = String($wrap.data('rttmCurrent'));
+			if (id === cur) {
+				return false;
+			}
+			ttpMpopLoad($wrap, id, $.inArray(id, list) > $.inArray(cur, list) ? 1 : -1);
+			return false;
+		});
+		$wrap.on('click', '.rttm-mpop-garrow', function () {
+			ttpMpopShot($wrap, $(this).hasClass('next') ? 1 : -1, false);
+			return false;
+		});
+		$wrap.on('click', '.rttm-mpop-dot', function () {
+			ttpMpopShot($wrap, parseInt($(this).attr('data-i'), 10), true);
+			return false;
+		});
+
+		return $wrap;
 	}
 
-	function nextItem(current, list) {
-		var index = list.indexOf(current);
-		index++;
-		if (index >= list.length)
-			index = 0;
-		return list[index];
-	}
-
-	function prevItem(current, list) {
-		var index = list.indexOf(current);
-		index--;
-		if (index < 0)
-			index = list.length - 1;
-		return list[index];
-	}
-
-	function setLevelTeamPro(current, list) {
-		var index = list.indexOf(current) + 1,
+	/* counter, progress bar, and hiding the stepper when there is only one member */
+	function ttpMpopLevel($wrap, current, list) {
+		var index = $.inArray(String(current), list) + 1,
 			count = list.length;
-		$(".ccurrent").text(index);
-		$(".ctotal").text(count);
+
+		$wrap.find('.ccurrent').text(index || 1);
+		$wrap.find('.ctotal').text(count);
+		$wrap.find('.rttm-mpop-progress').css('width', count ? ((index || 1) / count) * 100 + '%' : 0);
+		$wrap.find('.tlp-popup-prev, .tlp-popup-next').css('display', count > 1 ? '' : 'none');
 	}
 
-	function navResize() {
-		var $pHolder = jQuery('#tlp-popup-wrap');
-		$pHolder.css('display', 'block');
+	/* The strip mirrors exactly the members the viewer can step through — the visible
+	   cards getItemsArray() counts — so the thumbnails come from the opening
+	   container's own cards rather than a second query. */
+	function ttpMpopStrip($wrap, container, list, current) {
+		var $strip = $wrap.find('.rttm-mpop-strip');
+
+		if (!$strip.length) {
+			return;
+		}
+
+		if (!container || list.length < 2) {
+			$strip.empty();
+			return;
+		}
+
+		if ($strip.data('rttmFor') !== list.join(',')) {
+			var html = '';
+			$.each(list, function (i, id) {
+				var $img = container.find('.rt-grid-item[data-id="' + id + '"]').first().find('img').first(),
+					src = $img.attr('src') || '',
+					alt = ($img.attr('alt') || '').replace(/"/g, '');
+				html +=
+					'<button type="button" class="rttm-mpop-thumb" data-id="' + id + '" aria-label="' + alt + '">' +
+					(src ? '<img src="' + src + '" alt="' + alt + '" />' : '') +
+					'</button>';
+			});
+			$strip.html(html).data('rttmFor', list.join(','));
+		}
+
+		$strip.find('.rttm-mpop-thumb').each(function () {
+			$(this).toggleClass('is-active', String($(this).attr('data-id')) === String(current));
+		});
 	}
+
+	/* photo slider inside the panel — a plain cross-fade, so nothing has to measure a
+	   container that is still fading in */
+	function ttpMpopShot($wrap, value, absolute) {
+		var $slides = $wrap.find('.rttm-mpop-slide'),
+			$dots = $wrap.find('.rttm-mpop-dot');
+
+		if (!$slides.length) {
+			return;
+		}
+
+		var cur = $slides.index($slides.filter('.is-active'));
+		if (cur < 0) {
+			cur = 0;
+		}
+
+		var i = absolute ? value : cur + value;
+		i = ((i % $slides.length) + $slides.length) % $slides.length;
+
+		$slides.removeClass('is-active').eq(i).addClass('is-active');
+		$dots.removeClass('is-active').eq(i).addClass('is-active');
+	}
+
+	function ttpMpopStep($wrap, delta) {
+		var list = $wrap.data('rttmList') || [],
+			cur = String($wrap.data('rttmCurrent'));
+
+		if (list.length < 2) {
+			return;
+		}
+
+		var i = $.inArray(cur, list);
+		if (i < 0) {
+			i = 0;
+		}
+		i = (i + delta + list.length) % list.length;
+
+		ttpMpopLoad($wrap, list[i], delta);
+	}
+
+	/* Loads one member. `dir` is 0 on first open and ±1 when stepping, which drives the
+	   slide-out / slide-back-in: the outgoing panel leaves in the direction of travel
+	   and the incoming one arrives from the opposite side. */
+	function ttpMpopLoad($wrap, id, dir) {
+		var $stage = $wrap.find('.rttm-mpop-stage'),
+			$old = $stage.find('.rttm-mpop-card'),
+			list = $wrap.data('rttmList') || [];
+
+		$wrap.data('rttmCurrent', String(id));
+		ttpMpopLevel($wrap, id, list);
+		ttpMpopStrip($wrap, $wrap.data('rttmContainer'), list, id);
+
+		var fire = function () {
+			$.ajax({
+				type: 'post',
+				url: ttp.ajaxurl,
+				data: ttp.nonceID + '=' + ttp.nonce + '&action=tlp_multi_popup_single&id=' + id,
+				success: function (data) {
+					$stage.html(data.data);
+
+					var $card = $stage.find('.rttm-mpop-card');
+					if (dir && $card.length) {
+						$card[0].style.setProperty('--rttm-mpop-swap', dir > 0 ? '24px' : '-24px');
+						$card.addClass('is-swapping');
+						void $card[0].offsetWidth;
+						requestAnimationFrame(function () {
+							$card.removeClass('is-swapping');
+						});
+					}
+
+					tlpSingleTeamScript();
+				},
+				error: function (e) {
+					console.log(e);
+					$stage.html('<p>Loading error!!!</p>');
+				}
+			});
+		};
+
+		if (dir && $old.length) {
+			$old[0].style.setProperty('--rttm-mpop-swap', dir > 0 ? '-24px' : '24px');
+			$old.addClass('is-swapping');
+			setTimeout(fire, 220);
+		} else {
+			$stage.html('<div class="rttm-mpop-loading"></div>');
+			fire();
+		}
+	}
+
+	/* Bound ONCE. The old code bound this inside the card click handler, so every card
+	   ever clicked added another listener and a single arrow press stepped several
+	   times. */
+	$(document).on('keydown.rttmMpop', function (event) {
+		var $wrap = $('#tlp-popup-wrap.is-open');
+
+		if (!$wrap.length) {
+			return;
+		}
+
+		if (event.keyCode === 27) {
+			ttpMpopClose();
+		} else if (event.keyCode === 37) {
+			ttpMpopStep($wrap, -1);
+		} else if (event.keyCode === 39) {
+			ttpMpopStep($wrap, 1);
+		}
+	});
+
+	/* the viewer sizes itself from the viewport; the old slide-in panel needed a
+	   display:block nudge on resize, this one must never be forced visible. */
+	function navResize() {}
 
 	$(window).on('load resize', function () {
 		navResize();
@@ -1076,9 +1596,9 @@ function mdPopUpSkillAnimation() {
 		scrollbarPosition: 'outside'
 	});
 	jQuery('#tlp-modal .tlp-tooltip').rtTooltip();
-	jQuery('#tlp-modal .tlp-md-content .tlp-team-skill').find('.fill').css('width', '0%');
+	jQuery('#tlp-modal .tlp-team-skill').find('.fill').css('width', '0%');
 
-	jQuery('#tlp-modal .tlp-md-content .tlp-team-skill').each(function () {
+	jQuery('#tlp-modal .tlp-team-skill').each(function () {
 		jQuery(this).find('.fill').each(function () {
 			var k = 0, f = jQuery(this), p = f.attr('data-progress-animation'), w = f.width();
 			if (w == 0) {
@@ -1094,8 +1614,8 @@ function mdPopUpSkillAnimation() {
 
 function tlpSingleTeamScript() {
 	jQuery('#tlp-popup-wrap .tlp-tooltip').rtTooltip();
-	jQuery('#tlp-popup-wrap .tlp-popup-content .tlp-team-skill').find('.fill').css('width', '0%');
-	jQuery('#tlp-popup-wrap .tlp-popup-content .tlp-team-skill .fill').each(function () {
+	jQuery('#tlp-popup-wrap .tlp-team-skill').find('.fill').css('width', '0%');
+	jQuery('#tlp-popup-wrap .tlp-team-skill .fill').each(function () {
 		var k = 0, f = jQuery(this), p = f.attr('data-progress-animation'), w = f.width();
 		if (w == 0) {
 			p = p.substring(0, p.length - 1);

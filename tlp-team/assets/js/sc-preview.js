@@ -3,6 +3,18 @@
     $(function () {
 
         renderTlpTeamPreview();
+
+        // List layout (layout2) defaults to 2 desktop columns — mirrors the
+        // Elementor widget's RenderHelpers::defaultColumns(). Bound before the
+        // generic change handler below so the preview re-renders with the new value,
+        // and only fires on a user layout change, so an existing shortcode's custom
+        // column count is preserved on load.
+        $("#tlp_team_sc_settings_meta").on('change', 'input[name="layout"]', function () {
+            if ($(this).val() === 'layout2') {
+                $('select[name="ttp_column[desktop]"]').val('2');
+            }
+        });
+
         $("#tlp_team_sc_settings_meta").on('change', 'select,input', function () {
             renderTlpTeamPreview();
         });
@@ -75,6 +87,12 @@
                     if (!data.error) {
                         $("#tlp-team-preview-container").html(data.data);
                         renderLayout();
+                        // The redesigned isotope filter bar's count badges + sliding glider are
+                        // added by iso-filter.js, which normally runs on window load/ready — but
+                        // this preview HTML is injected via AJAX afterwards, so trigger it here.
+                        if (window.rttmIsoFilter && window.rttmIsoFilter.init) {
+                            window.rttmIsoFilter.init();
+                        }
                     }
                 });
             }
@@ -117,7 +135,12 @@
                 paramsRequest = {},
                 mIsotopeWrap = '',
                 IsotopeWrap = '',
-                isMasonry = $('.rt-row.rt-content-loader.tpg-masonry', container),
+                // `ttp-masonry`, not `tpg-masonry` (that is The Post Grid's prefix, and no
+                // markup here ever carries it). See the same fix in tlpteam.js: while this
+                // looked for the wrong class every `isMasonry.length` branch below was
+                // dead, so AJAX-loaded items were never handed to Isotope and overlapped
+                // the cards already on the page.
+                isMasonry = $('.rt-row.rt-content-loader.ttp-masonry', container),
                 isIsotope = $(".tlp-team-isotope", container),
                 IsoButton = $(".ttp-isotope-buttons", container),
                 IsoDropDownFilter = $("select.isotope-dropdown-filter", container),
@@ -290,28 +313,62 @@
                                 }
                                 if (append) {
                                     if (isIsotope.length) {
-                                        IsotopeWrap.append(data.data)
-                                            .isotope('appended', data.data)
-                                            .isotope('reloadItems')
-                                            .isotope('updateSortData')
-                                            .isotope();
+                                        // Parse ONCE — append(html) and isotope('appended', html)
+                                        // each parse the string separately, so Isotope was
+                                        // registering a detached copy of the new cards. And no
+                                        // reloadItems()/updateSortData(): they rebuild every Item
+                                        // and discard the positions `appended` just assigned, so
+                                        // the arrange animated the new cards in from the grid's
+                                        // origin. See the matching fix in tlpteam.js.
+                                        var $isoAppended = $(data.data);
+
+                                        // Register with Isotope only once the images are in, so
+                                        // the cards are measured at their real size and placed
+                                        // right first time instead of sliding when a follow-up
+                                        // arrange corrects them.
+                                        IsotopeWrap.append($isoAppended);
                                         IsotopeWrap.imagesLoaded(function () {
                                             preFunction();
+                                            IsotopeWrap.isotope({transitionDuration: 0});
+                                            IsotopeWrap.isotope('appended', $isoAppended);
                                             IsotopeWrap.isotope();
+                                            IsotopeWrap.isotope({transitionDuration: '0.4s'});
+
+                                            // preFunction() -> HeightResize() pins every
+                                            // .even-grid-item to the tallest card from its OWN
+                                            // async imagesLoaded pass on the row, landing after the
+                                            // arrange above. Without this settle the rows stay
+                                            // spaced by the old card height and each row overlaps
+                                            // the one above. Registering on the same row queues it
+                                            // behind that write.
+                                            contentLoader.imagesLoaded(function () {
+                                                IsotopeWrap.isotope({transitionDuration: 0});
+                                                IsotopeWrap.isotope();
+                                                IsotopeWrap.isotope({transitionDuration: '0.4s'});
+                                            });
                                         });
                                     } else if (isMasonry.length) {
-                                        mIsotopeWrap.append(data.data).isotope('appended', data.data).isotope('updateSortData').isotope('reloadItems');
+                                        // Parse ONCE — append(html) and isotope('appended', html)
+                                        // each parse the string separately, so Isotope would track
+                                        // a detached copy. And no reloadItems() here: it rebuilds
+                                        // every Item and discards the positions `appended` just
+                                        // assigned, which made new cards fly in from the grid's
+                                        // top-left. See the matching fix in tlpteam.js.
+                                        var $appended = $(data.data);
+                                        mIsotopeWrap.append($appended).isotope('appended', $appended);
                                         mIsotopeWrap.imagesLoaded(function () {
-                                            mIsotopeWrap.isotope();
+                                            mIsotopeWrap.isotope('layout');
                                         });
                                     } else {
                                         contentLoader.append(data.data);
                                     }
                                 } else {
                                     if (isMasonry.length) {
+                                        // reloadItems() is REQUIRED here — html() destroyed the
+                                        // elements Isotope still holds Items for. See tlpteam.js.
                                         mIsotopeWrap.html(data.data);
                                         mIsotopeWrap.imagesLoaded(function () {
-                                            mIsotopeWrap.isotope();
+                                            mIsotopeWrap.isotope('reloadItems').isotope();
                                         });
                                     } else {
                                         contentLoader.html(data.data);
@@ -396,13 +453,17 @@
                     }
                     IsotopeWrap = isIsotope.imagesLoaded(function () {
                         preFunction();
-                        IsotopeWrap.isotope({
+                        // Grid Style — same fix as the frontend runtime (assets/js/tlpteam.js).
+                        // Without it the admin preview always showed masonry, so "Even" looked
+                        // broken in the shortcode editor as well as on the front end.
+                        IsotopeWrap.isotope($.extend({
                             itemSelector: '.isotope-item',
-                            masonry: {columnWidth: '.isotope-item'},
                             filter: function () {
                                 return buttonFilter ? $(this).is(buttonFilter) : true;
                             }
-                        });
+                        }, isIsotope.closest('.rt-row').hasClass('ttp-even')
+                            ? {layoutMode: 'fitRows'}
+                            : {layoutMode: 'masonry', masonry: {columnWidth: '.isotope-item'}}));
                         setTimeout(function () {
                             IsotopeWrap.isotope();
                             remove_placeholder_loading();
@@ -423,7 +484,12 @@
                         preFunction();
                         mIsotopeWrap.isotope({
                             itemSelector: '.masonry-grid-item',
-                            masonry: {columnWidth: '.masonry-grid-item'}
+                            masonry: {columnWidth: '.masonry-grid-item'},
+                            // Fade only — Isotope's default reveal is scale(0.001), which
+                            // balloons an AJAX-loaded card out of its own centre on top of
+                            // the fadeIn the cards already do. Matches tlpteam.js.
+                            hiddenStyle: {opacity: 0},
+                            visibleStyle: {opacity: 1}
                         });
                         remove_placeholder_loading();
                     });

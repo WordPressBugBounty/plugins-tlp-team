@@ -2,9 +2,9 @@
 Contributors: techlabpro1, mamunnu
 Donate link:
 Tags: team, team showcase, team slider, team plugin, team members
-Stable tag: 5.0.16
+Stable tag: 6.0.0
 Requires at least: 5.0
-Tested up to: 7.0
+Tested up to: 7.1
 Requires PHP: 7.4
 License: GPL-2.0-or-later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -264,6 +264,32 @@ If you like The Team Plugin, then consider checking out our other WordPress Plug
 08. Round Image Layout
 
 == Changelog ==
+
+= 6.0.0  ( September 06, 2026 ) =
+* Added: Complete design overhaul — every grid, list, slider, carousel, isotope and special layout has been redesigned.
+* Added: Redesigned single, multiple and smart member popups.
+* Added: Font Awesome compatibility support.
+* Added: Member gallery now supports selecting and uploading multiple images at once.
+* Added: A named shortcode can now drive the styling of the Resume and Hire Me buttons on the single team page.
+* Added: Default Preview Image fallback on the single team page and in the multiple and smart popups.
+* Improved: Isotope filter interface and unified pagination styling across layouts.
+* Improved: "Latest post(s)" on the member detail page redesigned to match the member popup.
+* Improved: Resume and Hire Me buttons on the member detail page now sit directly below the social icons, instead of after the latest posts list.
+* Updated: Tested up to the latest WordPress version.
+* Fixed: The "No image found" message did not come back after removing every gallery image.
+* Fixed: Sliders collapsed to 1px height when auto height was enabled.
+* Fixed: Isotope layouts did not work correctly with Load More.
+* Fixed: Masonry AJAX layout, and skill bar spacing on Layouts 1 and 3.
+* Fixed: Layout 4 produced ragged card heights when Grid Style was set to Even.
+* Fixed: Layout 6 had unreadable contact icons, mis-coloured social chips and buttons with no spacing between them.
+* Fixed: Layout 7 cards appeared clickable when they were not.
+* Fixed: Layout 16 had ragged card heights, a doubled vertical gap, and incorrect button spacing and borders.
+* Fixed: Department field was missing on slider cards.
+* Fixed: "Load more button text" from the shortcode was not being used.
+* Fixed: Special Layout 1's spotlight panel ignored the shortcode's image settings.
+* Fixed: Elementor Layout 1 style controls produced no output.
+* Fixed: Elementor margin control labels and the border radius target.
+* Fixed: Popup default values and dynamic popup styling.
 
 
 = 5.0.16  ( May 24, 2026 ) =

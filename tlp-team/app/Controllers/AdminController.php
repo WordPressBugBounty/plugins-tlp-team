@@ -46,6 +46,7 @@ class AdminController extends Controller {
 	 */
 	private function notices() {
 		$this->admin[] = Admin\Notices\Update::class;
+		$this->admin[] = Admin\Notices\ProCompatibility::class;
 		//$this->admin[] = Admin\Notices\Review::class;
 		if (! rttlp_team()->has_pro() ){
 			$this->admin[] = Admin\Notices\BlackFriday::class;
@@ -60,6 +61,7 @@ class AdminController extends Controller {
 	 * @return object
 	 */
 	private function settings() {
+		$this->admin[] = Admin\Upgrade::class;
 		$this->admin[] = Admin\Settings::class;
 		$this->admin[] = Admin\TaxSorting::class;
 		$this->admin[] = Admin\AdminColumns::class;

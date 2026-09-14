@@ -262,7 +262,7 @@ class Options {
 				'label'       => esc_html__( 'Image column', 'tlp-team' ),
 				'class'       => 'tlp-select',
 				'holderClass' => 'ttp-hidden',
-				'default'     => 4,
+				'default'     => 6,
 				'options'     => self::scColumns(),
 				'description' => esc_html__( 'Content column will calculate automatically', 'tlp-team' ),
 			],
@@ -798,7 +798,75 @@ class Options {
 				'option'      => 1,
 				'value'       => ! empty( $settings['detail_allow_comments'] ) ? 1 : false,
 			],
+
+			/*
+			 * Which shortcode's Styling tab drives the single page's Resume / Hire Me buttons.
+			 *
+			 * The single team page is not a shortcode, so nothing scoped to
+			 * `.rt-team-container-{id}` reaches it. templates/sc-css.php can emit the two
+			 * button rules a second time under the page's own `.tlp-single-container`, but
+			 * only ONE shortcode may do that: they all tie on specificity and team-sc.css is
+			 * appended per shortcode, so with no named source the winner would be whichever
+			 * shortcode happened to be saved last. This picks it explicitly.
+			 */
+			'detail_button_style_source' => [
+				'type'        => 'select',
+				'label'       => esc_html__( 'Button style source', 'tlp-team' ),
+				'class'       => 'tlp-select',
+				'is_pro'      => true,
+				'options'     => self::singlePageStyleSourceList(),
+				'value'       => ! empty( $settings['detail_button_style_source'] ) ? $settings['detail_button_style_source'] : '',
+				'description' => esc_html__( 'The single team page has no Styling tab of its own. Choose the shortcode whose Resume / Hire Me button styling it should follow. Keep "Plugin default" to use the built-in button look.', 'tlp-team' ),
+			],
+
+			/*
+			 * Which shortcode's "Default preview image" stands in for a member with no photo.
+			 *
+			 * Same shape as the button source above, and for the same reason: the image is set
+			 * per shortcode, the single team page is not a shortcode, and picking one is the
+			 * only answer a user can predict. Until this is set, a member with neither a
+			 * featured image nor a gallery renders no image at all on the detail page.
+			 */
+			'detail_default_image_source' => [
+				'type'        => 'select',
+				'label'       => esc_html__( 'Default preview image source', 'tlp-team' ),
+				'class'       => 'tlp-select',
+				'is_pro'      => true,
+				'options'     => self::singlePageStyleSourceList( esc_html__( 'None', 'tlp-team' ) ),
+				'value'       => ! empty( $settings['detail_default_image_source'] ) ? $settings['detail_default_image_source'] : '',
+				'description' => esc_html__( 'Choose the shortcode whose "Default preview image" the single team page should fall back to when a member has no featured image. Keep "None" to show no image at all.', 'tlp-team' ),
+			],
 		];
+	}
+
+	/**
+	 * Shortcodes offered as the single page's button style source.
+	 *
+	 * @return array Shortcode ID => label, with an empty first entry meaning "no source".
+	 */
+	public static function singlePageStyleSourceList( $none_label = '' ) {
+		$list = [ '' => $none_label ? $none_label : esc_html__( 'Plugin default', 'tlp-team' ) ];
+
+		$shortcodes = get_posts(
+			[
+				'post_type'              => rttlp_team()->shortCodePT,
+				'post_status'            => 'publish',
+				'posts_per_page'         => -1,
+				'orderby'                => 'title',
+				'order'                  => 'ASC',
+				'no_found_rows'          => true,
+				'update_post_term_cache' => false,
+			]
+		);
+
+		foreach ( $shortcodes as $shortcode ) {
+			$title = $shortcode->post_title ? $shortcode->post_title : esc_html__( 'Untitled', 'tlp-team' );
+
+			/* translators: 1: shortcode title, 2: shortcode ID. */
+			$list[ $shortcode->ID ] = sprintf( esc_html__( '%1$s (#%2$d)', 'tlp-team' ), $title, $shortcode->ID );
+		}
+
+		return $list;
 	}
 
 	public static function rtTeamLicenceField() {
