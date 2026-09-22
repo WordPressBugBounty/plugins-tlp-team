@@ -2,7 +2,7 @@
 Contributors: techlabpro1, mamunnu
 Donate link:
 Tags: team, team showcase, team slider, team plugin, team members
-Stable tag: 6.0.0
+Stable tag: 6.0.1
 Requires at least: 5.0
 Tested up to: 7.1
 Requires PHP: 7.4
@@ -250,6 +250,9 @@ If you like The Team Plugin, then consider checking out our other WordPress Plug
 = What social profiles can I add? =
 * You can add links to LinkedIn, Facebook, Twitter/X, Instagram, and other social networks. Team members' social icons appear on their profile cards, making it easy for visitors to connect.
 
+= Where do I report security bugs found in this plugin? =
+* Please report security bugs found in the source code of the undefined plugin through the [Patchstack Vulnerability Disclosure  Program](https://patchstack.com/database/vdp/9e5fb8d9-a4fa-4988-b9d5-d1861e441eca). The Patchstack team will assist you with verification, CVE assignment, and notify the developers of this plugin.
+
 
 
 == Screenshots ==
@@ -264,6 +267,9 @@ If you like The Team Plugin, then consider checking out our other WordPress Plug
 08. Round Image Layout
 
 == Changelog ==
+
+= 6.0.1  ( September 22, 2026 ) =
+* Fixed: Minor bug fixes.
 
 = 6.0.0  ( September 06, 2026 ) =
 * Added: Complete design overhaul — every grid, list, slider, carousel, isotope and special layout has been redesigned.

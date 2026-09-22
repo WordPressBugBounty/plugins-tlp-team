@@ -41,6 +41,11 @@ class BlackFriday {
 	 * @return void|string
 	 */
 	public function bf_notice() {
+		// Only administrators see (and can dismiss) this notice, so display and the
+		// dismiss handler agree; non-admins never get a notice they cannot clear.
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
 		if ( get_option( 'rtteam_ny_2025' ) != '1' ) {
 			if ( ! isset( $GLOBALS['rt_team_ny_2025_notice'] ) ) {
 				$GLOBALS['rt_team_ny_2025_notice'] = 'rtteam_ny_2025';
@@ -152,6 +157,10 @@ class BlackFriday {
 			'wp_ajax_rtteam_dismiss_admin_notice',
 			function () {
 				check_ajax_referer( 'rtteam-dismissible-notice', 'nonce' );
+
+				if ( ! current_user_can( 'manage_options' ) ) {
+					wp_send_json_error( [ 'success' => false ], 403 );
+				}
 
 				update_option( 'rtteam_ny_2025', '1' );
 				wp_die();

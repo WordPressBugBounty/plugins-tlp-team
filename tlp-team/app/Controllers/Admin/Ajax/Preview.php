@@ -850,7 +850,7 @@ class Preview {
 		$cOpt = ! empty( $meta_value ['ttp_carousel_options'] ) ? $meta_value ['ttp_carousel_options'] : [];
 
 		$fImg          = ! empty( $meta_value ['ttp_image'][0] ) ? true : false;
-		$customImgSize = ! empty( $meta_value ['ttp_custom_image_size'][0] ) ? unserialize( $meta_value ['ttp_custom_image_size'][0] ) : [];
+		$customImgSize = ! empty( $meta_value ['ttp_custom_image_size'][0] ) ? maybe_unserialize( $meta_value ['ttp_custom_image_size'][0] ) : [];
 		$defaultImgId  = ! empty( $meta_value ['default_preview_image'][0] ) ? absint( $meta_value ['default_preview_image'][0] ) : null;
 		$fImgSize      = isset( $meta_value ['ttp_image_size'][0] ) ? $meta_value ['ttp_image_size'][0] : 'medium';
 		$round_img     = ! empty( $meta_value ['image_style'][0] ) && $meta_value ['image_style'][0] == 'round' ? esc_attr( ' round-img' ) : '';

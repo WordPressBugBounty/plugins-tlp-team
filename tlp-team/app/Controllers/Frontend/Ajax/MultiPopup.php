@@ -57,7 +57,7 @@ class MultiPopup {
 			global $post;
 			$post = get_post( $post_id );
 
-			if ( $post && $post->post_type == rttlp_team()->post_type ) {
+			if ( Fns::isMemberViewable( $post ) ) {
 				setup_postdata( $post );
 
 				$settings = get_option( rttlp_team()->options['settings'] );

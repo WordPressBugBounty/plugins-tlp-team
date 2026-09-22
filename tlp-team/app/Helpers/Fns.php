@@ -60,6 +60,45 @@ class Fns {
     }
 
 	/**
+	 * Whether a team member may be shown to the current visitor.
+	 *
+	 * Every public AJAX endpoint takes a raw post ID, and the nonce they check is
+	 * printed to every visitor, so it proves request origin only. This is the
+	 * access check: published members are public; draft / pending / private /
+	 * future members are visible only to users who could read them in wp-admin.
+	 *
+	 * @param int|\WP_Post $post Team member ID or post.
+	 *
+	 * @return bool
+	 */
+	public static function isMemberViewable( $post ) {
+		$post = get_post( $post );
+
+		if ( ! $post || rttlp_team()->post_type !== $post->post_type ) {
+			return false;
+		}
+
+		return 'publish' === $post->post_status || current_user_can( 'read_post', $post->ID );
+	}
+
+	/**
+	 * Validate a shortcode-config ID coming from a request.
+	 *
+	 * The public AJAX endpoints take a raw `scID` and read its post meta. Without
+	 * this check any post ID could be probed for the plugin's config meta. Returns
+	 * the ID only when it is a real `team-sc` post, otherwise 0.
+	 *
+	 * @param mixed $id Requested shortcode ID.
+	 *
+	 * @return int
+	 */
+	public static function validShortcodeId( $id ) {
+		$id = absint( $id );
+
+		return ( $id && rttlp_team()->shortCodePT === get_post_type( $id ) ) ? $id : 0;
+	}
+
+	/**
 	 * Nonce text.
 	 *
 	 * @return string
@@ -573,7 +612,8 @@ class Fns {
 	public static function singlePopupMarkup( $post_id, $fields = [], $settings = [], $is_el = false ) {
 		$post = get_post( $post_id );
 
-		if ( ! $post ) {
+		// Re-checked here so no caller can leak a non-public member by omitting the gate.
+		if ( ! $post || ! self::isMemberViewable( $post ) ) {
 			return '';
 		}
 
@@ -755,7 +795,8 @@ class Fns {
 	public static function multiPopupMarkup( $post_id, $fields = [], $settings = [], $is_el = false ) {
 		$post = get_post( $post_id );
 
-		if ( ! $post ) {
+		// Re-checked here so no caller can leak a non-public member by omitting the gate.
+		if ( ! $post || ! self::isMemberViewable( $post ) ) {
 			return '';
 		}
 
@@ -984,7 +1025,8 @@ class Fns {
 	public static function smartPopupMarkup( $post_id, $fields = [], $settings = [], $is_el = false ) {
 		$post = get_post( $post_id );
 
-		if ( ! $post ) {
+		// Re-checked here so no caller can leak a non-public member by omitting the gate.
+		if ( ! $post || ! self::isMemberViewable( $post ) ) {
 			return '';
 		}
 
@@ -1900,27 +1942,27 @@ class Fns {
 		if ( $scID ) {
 
 			$primaryColor   = ( isset( $scMeta['primary_color'][0] ) ? $scMeta['primary_color'][0] : null );
-            $hireme_btn     = ! empty( $scMeta['hireme_btn_style'][0] ) ? unserialize( $scMeta['hireme_btn_style'][0] ) : null;
-            $resume_btn     = ! empty( $scMeta['resume_btn_style'][0] ) ? unserialize( $scMeta['resume_btn_style'][0] ) : null;
-            $readmore_btn   = ! empty( $scMeta['readmore_btn_style'][0] ) ? unserialize( $scMeta['readmore_btn_style'][0] ) : null;
-			$button         = ! empty( $scMeta['ttp_button_style'][0] ) ? unserialize( $scMeta['ttp_button_style'][0] ) : null;
+            $hireme_btn     = ! empty( $scMeta['hireme_btn_style'][0] ) ? maybe_unserialize( $scMeta['hireme_btn_style'][0] ) : null;
+            $resume_btn     = ! empty( $scMeta['resume_btn_style'][0] ) ? maybe_unserialize( $scMeta['resume_btn_style'][0] ) : null;
+            $readmore_btn   = ! empty( $scMeta['readmore_btn_style'][0] ) ? maybe_unserialize( $scMeta['readmore_btn_style'][0] ) : null;
+			$button         = ! empty( $scMeta['ttp_button_style'][0] ) ? maybe_unserialize( $scMeta['ttp_button_style'][0] ) : null;
 			$popupBg        = ! empty( $scMeta['ttp_popup_bg_color'][0] ) ? $scMeta['ttp_popup_bg_color'][0] : null;
 			$popupTextColor = ! empty( $scMeta['ttp_popup_text_color'][0] ) ? $scMeta['ttp_popup_text_color'][0] : null;
-			$name           = ! empty( $scMeta['name'][0] ) ? unserialize( $scMeta['name'][0] ) : null;
-			$designation    = ! empty( $scMeta['designation'][0] ) ? unserialize( $scMeta['designation'][0] ) : null;
-			$short_bio      = ! empty( $scMeta['short_bio'][0] ) ? unserialize( $scMeta['short_bio'][0] ) : null;
-			$email          = ! empty( $scMeta['email'][0] ) ? unserialize( $scMeta['email'][0] ) : null;
-			$web_url        = ! empty( $scMeta['web_url'][0] ) ? unserialize( $scMeta['web_url'][0] ) : null;
-			$telephone      = ! empty( $scMeta['telephone'][0] ) ? unserialize( $scMeta['telephone'][0] ) : null;
-			$mobile         = ! empty( $scMeta['mobile'][0] ) ? unserialize( $scMeta['mobile'][0] ) : null;
-			$fax            = ! empty( $scMeta['fax'][0] ) ? unserialize( $scMeta['fax'][0] ) : null;
-			$location       = ! empty( $scMeta['location'][0] ) ? unserialize( $scMeta['location'][0] ) : null;
-			$skill          = ! empty( $scMeta['skill'][0] ) ? unserialize( $scMeta['skill'][0] ) : null;
-			$social_icon    = ! empty( $scMeta['social'][0] ) ? unserialize( $scMeta['social'][0] ) : null;
+			$name           = ! empty( $scMeta['name'][0] ) ? maybe_unserialize( $scMeta['name'][0] ) : null;
+			$designation    = ! empty( $scMeta['designation'][0] ) ? maybe_unserialize( $scMeta['designation'][0] ) : null;
+			$short_bio      = ! empty( $scMeta['short_bio'][0] ) ? maybe_unserialize( $scMeta['short_bio'][0] ) : null;
+			$email          = ! empty( $scMeta['email'][0] ) ? maybe_unserialize( $scMeta['email'][0] ) : null;
+			$web_url        = ! empty( $scMeta['web_url'][0] ) ? maybe_unserialize( $scMeta['web_url'][0] ) : null;
+			$telephone      = ! empty( $scMeta['telephone'][0] ) ? maybe_unserialize( $scMeta['telephone'][0] ) : null;
+			$mobile         = ! empty( $scMeta['mobile'][0] ) ? maybe_unserialize( $scMeta['mobile'][0] ) : null;
+			$fax            = ! empty( $scMeta['fax'][0] ) ? maybe_unserialize( $scMeta['fax'][0] ) : null;
+			$location       = ! empty( $scMeta['location'][0] ) ? maybe_unserialize( $scMeta['location'][0] ) : null;
+			$skill          = ! empty( $scMeta['skill'][0] ) ? maybe_unserialize( $scMeta['skill'][0] ) : null;
+			$social_icon    = ! empty( $scMeta['social'][0] ) ? maybe_unserialize( $scMeta['social'][0] ) : null;
 			$social_icon_bg = ! empty( $scMeta['social_icon_bg'][0] ) ? $scMeta['social_icon_bg'][0] : null;
 			$social_hover_bg = ! empty( $scMeta['social_icon_hover_bg'][0] ) ? $scMeta['social_icon_hover_bg'][0] : null;
 			$content_bg     = ! empty( $scMeta['ttp_content_bg_color'][0] ) ? $scMeta['ttp_content_bg_color'][0] : null;
-			$mObg           = ! empty( $scMeta['overlay_rgba_bg'][0] ) ? unserialize( $scMeta['overlay_rgba_bg'][0] ) : null;
+			$mObg           = ! empty( $scMeta['overlay_rgba_bg'][0] ) ? maybe_unserialize( $scMeta['overlay_rgba_bg'][0] ) : null;
 			$itemP          = ! empty( $scMeta['overlay_padding'][0] ) ? intval( $scMeta['overlay_padding'][0] ) : null;
 			$gutter         = ! empty( $scMeta['ttp_gutter'][0] ) ? absint( $scMeta['ttp_gutter'][0] ) : null;
 

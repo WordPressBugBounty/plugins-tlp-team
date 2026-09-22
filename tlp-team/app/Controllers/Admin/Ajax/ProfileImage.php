@@ -47,7 +47,7 @@ class ProfileImage {
             ] );
         }
 
-		if ( $id && $post_id && wp_verify_nonce( Fns::getNonce(), Fns::nonceText()) ) {
+		if ( $id && $post_id && current_user_can( 'edit_post', $post_id ) && wp_verify_nonce( Fns::getNonce(), Fns::nonceText()) ) {
 			if ( delete_post_meta( $post_id, 'tlp_team_gallery', $id ) ) {
 				$error = false;
 				$msg   = __( 'Successfully deleted', 'tlp-team' );

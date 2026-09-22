@@ -8,7 +8,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language-Team: RadiusTheme\n"
 "Last-Translator: RadiusTheme\n"
-"POT-Creation-Date: 2026-09-07 07:49+0000\n"
+"POT-Creation-Date: 2026-09-22 08:44+0000\n"
 "Report-Msgid-Bugs-To: https://radiustheme.com/tlp-team-for-wordpress/\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
@@ -21,7 +21,7 @@ msgstr ""
 msgid "Thank you for installing Team Plugin"
 msgstr ""
 
-#: resources/settings-header.php:23, app/Controllers/PostTypesController.php:93, app/Controllers/PostTypesController.php:115, app/Controllers/PostTypesController.php:117, app/Controllers/Admin/Notices/Update.php:50
+#: resources/settings-header.php:23, app/Controllers/PostTypesController.php:93, app/Controllers/PostTypesController.php:115, app/Controllers/PostTypesController.php:117, app/Controllers/Admin/Notices/Update.php:56
 msgid "Team"
 msgstr ""
 
@@ -69,15 +69,15 @@ msgstr ""
 msgid "No taxonomy selected"
 msgstr ""
 
-#: templates/single-team.php:125, app/Helpers/Fns.php:665, app/Helpers/Fns.php:908, app/Helpers/Fns.php:1125
+#: templates/single-team.php:125, app/Helpers/Fns.php:705, app/Helpers/Fns.php:949, app/Helpers/Fns.php:1167
 msgid "Qualifications : "
 msgstr ""
 
-#: templates/single-team.php:129, app/Helpers/Fns.php:666, app/Helpers/Fns.php:909, app/Helpers/Fns.php:1126
+#: templates/single-team.php:129, app/Helpers/Fns.php:706, app/Helpers/Fns.php:950, app/Helpers/Fns.php:1168
 msgid "Professional Memberships : "
 msgstr ""
 
-#: templates/single-team.php:133, app/Helpers/Fns.php:667, app/Helpers/Fns.php:910, app/Helpers/Fns.php:1127
+#: templates/single-team.php:133, app/Helpers/Fns.php:707, app/Helpers/Fns.php:951, app/Helpers/Fns.php:1169
 msgid "Area of Expertise : "
 msgstr ""
 
@@ -89,7 +89,7 @@ msgstr ""
 msgid "Go Premium for More Features"
 msgstr ""
 
-#: app/Controllers/PostTypesController.php:94, app/Controllers/PostTypesController.php:116, app/Controllers/PostTypesController.php:118, app/Helpers/Fns.php:1750
+#: app/Controllers/PostTypesController.php:94, app/Controllers/PostTypesController.php:116, app/Controllers/PostTypesController.php:118, app/Helpers/Fns.php:1792
 msgid "Member"
 msgstr ""
 
@@ -290,140 +290,140 @@ msgid "Search Departments"
 msgstr ""
 
 #. translators: %s is the file name
-#: app/Helpers/Fns.php:141
+#: app/Helpers/Fns.php:180
 msgid "%s file not found"
 msgstr ""
 
-#: app/Helpers/Fns.php:594, app/Helpers/Fns.php:776, app/Helpers/Fns.php:1005
+#: app/Helpers/Fns.php:634, app/Helpers/Fns.php:817, app/Helpers/Fns.php:1047
 msgid "Resume"
 msgstr ""
 
-#: app/Helpers/Fns.php:595, app/Helpers/Fns.php:777, app/Helpers/Fns.php:1006, app/Controllers/Frontend/Shortcode.php:891, app/Controllers/Admin/Ajax/Preview.php:276, app/Controllers/Frontend/Ajax/LoadMore.php:93, app/Controllers/Frontend/Ajax/LoadMore.php:94
+#: app/Helpers/Fns.php:635, app/Helpers/Fns.php:818, app/Helpers/Fns.php:1048, app/Controllers/Frontend/Shortcode.php:891, app/Controllers/Admin/Ajax/Preview.php:276, app/Controllers/Frontend/Ajax/LoadMore.php:93, app/Controllers/Frontend/Ajax/LoadMore.php:94
 msgid "Hire Me"
 msgstr ""
 
-#: app/Helpers/Fns.php:698, app/Helpers/Fns.php:936, app/Helpers/Fns.php:1153, app/Controllers/Frontend/Shortcode.php:892, app/Controllers/Admin/Ajax/Preview.php:279, app/Controllers/Frontend/Ajax/LoadMore.php:95, app/Controllers/Frontend/Ajax/SpecialLayout.php:94
+#: app/Helpers/Fns.php:738, app/Helpers/Fns.php:977, app/Helpers/Fns.php:1195, app/Controllers/Frontend/Shortcode.php:892, app/Controllers/Admin/Ajax/Preview.php:279, app/Controllers/Frontend/Ajax/LoadMore.php:95, app/Controllers/Frontend/Ajax/SpecialLayout.php:94
 msgid "Read More"
 msgstr ""
 
-#: app/Helpers/Fns.php:716
+#: app/Helpers/Fns.php:756
 msgid "Previous member"
 msgstr ""
 
-#: app/Helpers/Fns.php:717
+#: app/Helpers/Fns.php:757
 msgid "Next member"
 msgstr ""
 
-#: app/Helpers/Fns.php:843, app/Helpers/Fns.php:1063
+#: app/Helpers/Fns.php:884, app/Helpers/Fns.php:1105
 msgid "Previous photo"
 msgstr ""
 
-#: app/Helpers/Fns.php:844, app/Helpers/Fns.php:1064
+#: app/Helpers/Fns.php:885, app/Helpers/Fns.php:1106
 msgid "Next photo"
 msgstr ""
 
 #. translators: %d: photo number.
-#: app/Helpers/Fns.php:849, app/Helpers/Fns.php:1069
+#: app/Helpers/Fns.php:890, app/Helpers/Fns.php:1111
 msgid "Photo %d"
 msgstr ""
 
-#: app/Helpers/Fns.php:1198
+#: app/Helpers/Fns.php:1240
 msgid "Latest post(s)"
 msgstr ""
 
-#: app/Helpers/Fns.php:1396
+#: app/Helpers/Fns.php:1438
 msgid "Custom image size"
 msgstr ""
 
-#: app/Helpers/Fns.php:1536
+#: app/Helpers/Fns.php:1578
 msgid "Default Image"
 msgstr ""
 
-#: app/Helpers/Fns.php:1751
+#: app/Helpers/Fns.php:1793
 msgid "Role"
 msgstr ""
 
-#: app/Helpers/Fns.php:1752, app/Helpers/Options.php:78, app/Helpers/Options.php:132, app/Helpers/Options.php:167, app/Controllers/Admin/AdminColumns.php:36
+#: app/Helpers/Fns.php:1794, app/Helpers/Options.php:78, app/Helpers/Options.php:132, app/Helpers/Options.php:167, app/Controllers/Admin/AdminColumns.php:36
 msgid "Email"
 msgstr ""
 
-#: app/Helpers/Fns.php:1753
+#: app/Helpers/Fns.php:1795
 msgid "Phone"
 msgstr ""
 
-#: app/Helpers/Fns.php:1754, app/Helpers/Options.php:86, app/Helpers/Options.php:170, app/Helpers/Options.php:254
+#: app/Helpers/Fns.php:1796, app/Helpers/Options.php:86, app/Helpers/Options.php:170, app/Helpers/Options.php:254
 msgid "Mobile"
 msgstr ""
 
-#: app/Helpers/Fns.php:1755, app/Helpers/Options.php:90, app/Helpers/Options.php:171
+#: app/Helpers/Fns.php:1797, app/Helpers/Options.php:90, app/Helpers/Options.php:171
 msgid "Fax"
 msgstr ""
 
-#: app/Helpers/Fns.php:1756, app/Helpers/Options.php:98, app/Helpers/Options.php:172, app/Controllers/Admin/AdminColumns.php:37
+#: app/Helpers/Fns.php:1798, app/Helpers/Options.php:98, app/Helpers/Options.php:172, app/Controllers/Admin/AdminColumns.php:37
 msgid "Location"
 msgstr ""
 
-#: app/Helpers/Fns.php:1757, app/Helpers/Options.php:133
+#: app/Helpers/Fns.php:1799, app/Helpers/Options.php:133
 msgid "Website"
 msgstr ""
 
-#: app/Helpers/Fns.php:1758, app/Widgets/Elementor/Sections/Settings.php:431
+#: app/Helpers/Fns.php:1800, app/Widgets/Elementor/Sections/Settings.php:431
 msgid "Social"
 msgstr ""
 
-#: app/Helpers/Fns.php:3132, app/Helpers/Options.php:40, app/Helpers/Options.php:1078, app/Controllers/Hooks/FilterHooks.php:94
+#: app/Helpers/Fns.php:3174, app/Helpers/Options.php:40, app/Helpers/Options.php:1078, app/Controllers/Hooks/FilterHooks.php:94
 msgid "Layout 3"
 msgstr ""
 
-#: app/Helpers/Fns.php:3137, app/Helpers/Options.php:41, app/Helpers/Options.php:43, app/Controllers/Hooks/FilterHooks.php:98
+#: app/Helpers/Fns.php:3179, app/Helpers/Options.php:41, app/Helpers/Options.php:43, app/Controllers/Hooks/FilterHooks.php:98
 msgid "Layout 4"
 msgstr ""
 
-#: app/Helpers/Fns.php:3142, app/Controllers/Hooks/FilterHooks.php:102
+#: app/Helpers/Fns.php:3184, app/Controllers/Hooks/FilterHooks.php:102
 msgid "Layout 5"
 msgstr ""
 
-#: app/Helpers/Fns.php:3147, app/Controllers/Hooks/FilterHooks.php:106
+#: app/Helpers/Fns.php:3189, app/Controllers/Hooks/FilterHooks.php:106
 msgid "Layout 6"
 msgstr ""
 
-#: app/Helpers/Fns.php:3152, app/Controllers/Hooks/FilterHooks.php:110
+#: app/Helpers/Fns.php:3194, app/Controllers/Hooks/FilterHooks.php:110
 msgid "Layout 7"
 msgstr ""
 
-#: app/Helpers/Fns.php:3157, app/Controllers/Hooks/FilterHooks.php:114
+#: app/Helpers/Fns.php:3199, app/Controllers/Hooks/FilterHooks.php:114
 msgid "Layout 8"
 msgstr ""
 
-#: app/Helpers/Fns.php:3162, app/Controllers/Hooks/FilterHooks.php:118
+#: app/Helpers/Fns.php:3204, app/Controllers/Hooks/FilterHooks.php:118
 msgid "Layout 9"
 msgstr ""
 
-#: app/Helpers/Fns.php:3167, app/Controllers/Hooks/FilterHooks.php:122
+#: app/Helpers/Fns.php:3209, app/Controllers/Hooks/FilterHooks.php:122
 msgid "Layout 10"
 msgstr ""
 
-#: app/Helpers/Fns.php:3172, app/Controllers/Hooks/FilterHooks.php:126
+#: app/Helpers/Fns.php:3214, app/Controllers/Hooks/FilterHooks.php:126
 msgid "Layout 11"
 msgstr ""
 
-#: app/Helpers/Fns.php:3177, app/Controllers/Hooks/FilterHooks.php:130
+#: app/Helpers/Fns.php:3219, app/Controllers/Hooks/FilterHooks.php:130
 msgid "Layout 12"
 msgstr ""
 
-#: app/Helpers/Fns.php:3182, app/Controllers/Hooks/FilterHooks.php:134
+#: app/Helpers/Fns.php:3224, app/Controllers/Hooks/FilterHooks.php:134
 msgid "Layout 13"
 msgstr ""
 
-#: app/Helpers/Fns.php:3187
+#: app/Helpers/Fns.php:3229
 msgid "Layout 17"
 msgstr ""
 
-#: app/Helpers/Fns.php:3192
+#: app/Helpers/Fns.php:3234
 msgid "Layout 18"
 msgstr ""
 
-#: app/Helpers/Fns.php:3197, app/Controllers/Hooks/FilterHooks.php:150
+#: app/Helpers/Fns.php:3239, app/Controllers/Hooks/FilterHooks.php:150
 msgid "Special 01"
 msgstr ""
 
@@ -1644,7 +1644,7 @@ msgstr ""
 msgid "Styling"
 msgstr ""
 
-#: app/Controllers/Admin/Notices/BlackFriday.php:111
+#: app/Controllers/Admin/Notices/BlackFriday.php:116
 msgid "🚀 Exciting News: <b>Team Pro’s Black Friday Sale Has Officially Begun! </b>"
 msgstr ""
 

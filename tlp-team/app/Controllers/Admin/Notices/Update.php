@@ -34,6 +34,12 @@ class Update {
 	 */
 	public function notice() {
 
+		// Only administrators see (and can dismiss) this notice, so display and the
+		// dismiss handler agree; non-admins never get a notice they cannot clear.
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
 		$installed_version = get_option( rttlp_team()->options['installed_version'] );
 		$migration_version = rttlp_team()->migration_version;
 
@@ -112,6 +118,10 @@ class Update {
 					'wp_ajax_rtteam_shortcodedismiss_admin_notice',
 					function () {
 						check_ajax_referer( 'rtteam-rtshortcodedismissable', 'nonce' );
+
+						if ( ! current_user_can( 'manage_options' ) ) {
+							wp_send_json_error( [ 'success' => false ], 403 );
+						}
 
 						update_option( 'rtteam_rtshortcodedismissable_3_0_0', '1' );
 						wp_send_json_success(

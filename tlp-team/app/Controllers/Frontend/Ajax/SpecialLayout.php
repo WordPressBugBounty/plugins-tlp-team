@@ -39,7 +39,7 @@ class SpecialLayout {
 
 		$memberId = ! empty( $_REQUEST['memberId'] ) ? absint( $_REQUEST['memberId'] ) : null;
 		$toggleId = ! empty( $_REQUEST['toggleId'] ) ? absint( $_REQUEST['toggleId'] ) : null;
-		$scID     = ! empty( $_REQUEST['scID'] ) ? absint( $_REQUEST['scID'] ) : null;
+		$scID     = ! empty( $_REQUEST['scID'] ) ? Fns::validShortcodeId( $_REQUEST['scID'] ) : null;
 		$html     = $toggle_image_src = null;
 		$error    = true;
 
@@ -51,7 +51,7 @@ class SpecialLayout {
 
 		}
         $post = get_post( $memberId );
-		if ( $memberId && $post && $post->post_status == 'publish' ) {
+		if ( $memberId && Fns::isMemberViewable( $post ) ) {
 			$name        = get_the_title( $memberId );
 			$designation = wp_strip_all_tags(
 				get_the_term_list(

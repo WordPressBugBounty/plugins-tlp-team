@@ -51,7 +51,7 @@ class SmartPopup {
 
 		$member_post = get_post( absint( $_REQUEST['id'] ?? 0 ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
-		if ( ! $member_post || $member_post->post_type !== rttlp_team()->post_type || 'publish' !== $member_post->post_status ) {
+		if ( ! Fns::isMemberViewable( $member_post ) ) {
 			wp_send_json_error( [ 'error' => __( 'Unauthorized or member not found', 'tlp-team' ) ], 403 );
 		}
 

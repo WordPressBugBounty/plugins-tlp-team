@@ -54,7 +54,7 @@ class LoadMore {
 			] );
 		}
 
-		$scID = isset( $_REQUEST['scID'] ) ? absint( $_REQUEST['scID'] ): '';
+		$scID = isset( $_REQUEST['scID'] ) ? Fns::validShortcodeId( $_REQUEST['scID'] ): '';
 
 		if ( $scID && ! is_null( get_post( $scID ) ) ) {
 			$scMeta = get_post_meta( $scID );
@@ -68,7 +68,7 @@ class LoadMore {
 			$isIsotope  = preg_match( '/isotope/', $layout );
 			$isCarousel = preg_match( '/carousel/', $layout );
 			$isGrid     = preg_match( '/layout/', $layout );
-			$allCol     = ! empty( $scMeta['ttp_column'][0] ) ? unserialize( $scMeta['ttp_column'][0] ) : [];
+			$allCol     = ! empty( $scMeta['ttp_column'][0] ) ? maybe_unserialize( $scMeta['ttp_column'][0] ) : [];
 			$dCol       = ( ! empty( $allCol['desktop'] ) ? absint( $allCol['desktop'] ) : 4 );
 			$tCol       = ( ! empty( $allCol['tab'] ) ? absint( $allCol['tab'] ) : 2 );
 			$mCol       = ( ! empty( $allCol['mobile'] ) ? absint( $allCol['mobile'] ) : 1 );
@@ -88,7 +88,7 @@ class LoadMore {
 			$fImg            = ( ! empty( $scMeta['ttp_image'][0] ) ? true : false );
 			$fImgSize        = ( isset( $scMeta['ttp_image_size'][0] ) ? $scMeta['ttp_image_size'][0] : 'medium' );
 			$defaultImgId    = ( ! empty( $scMeta['default_preview_image'][0] ) ? absint( $scMeta['default_preview_image'][0] ) : null );
-			$customImgSize   = ( ! empty( $scMeta['ttp_custom_image_size'][0] ) ? unserialize( $scMeta['ttp_custom_image_size'][0] ) : [] );
+			$customImgSize   = ( ! empty( $scMeta['ttp_custom_image_size'][0] ) ? maybe_unserialize( $scMeta['ttp_custom_image_size'][0] ) : [] );
 			$character_limit = ( isset( $scMeta['character_limit'][0] ) ? absint( $scMeta['character_limit'][0] ) : 0 );
             $my_resume_text = isset( $scMeta['ttp_my_resume_text'][0] ) ? $scMeta['ttp_my_resume_text'][0] : esc_html__('Hire Me','tlp-team');
 			$hire_me_text = isset( $scMeta['ttp_hire_me_text'][0] ) ? $scMeta['ttp_hire_me_text'][0] : esc_html__('Hire Me','tlp-team');
@@ -188,7 +188,7 @@ class LoadMore {
 			}
 
 			if ( $isCarousel ) {
-				$cOpt                   = isset( $scMeta['carousel'][0] ) ? unserialize( $scMeta['carousel'][0] ) : [];
+				$cOpt                   = isset( $scMeta['carousel'][0] ) ? maybe_unserialize( $scMeta['carousel'][0] ) : [];
 				$args['posts_per_page'] = isset( $cOpt['total_items'] ) ? ( $cOpt['total_items'] ? intval( $cOpt['total_items'] ) : 8 ) : 8;
 			}
 

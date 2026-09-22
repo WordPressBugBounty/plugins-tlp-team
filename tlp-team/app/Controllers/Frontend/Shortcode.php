@@ -310,7 +310,7 @@ class Shortcode {
 			}
 
 			$arg['class']      .= $round_img;
-			$arg['image_style'] = ( $scMeta['image_style'][0] );
+			$arg['image_style'] = $scMeta['image_style'][0] ?? '';
 
 			$arg['anchorClass'] = null;
 
@@ -859,7 +859,7 @@ class Shortcode {
 	private function metas( array $meta ) {
 		return [
 			'layout'             => ! empty( $meta['layout'][0] ) ? esc_attr( $meta['layout'][0] ) : 'layout1',
-            'allCol'             => (!empty($meta['ttp_column'][0]) && is_string($meta['ttp_column'][0])) ? unserialize($meta['ttp_column'][0]) : [],
+            'allCol'             => !empty($meta['ttp_column'][0]) ? maybe_unserialize($meta['ttp_column'][0]) : [],
 			'popupBg'            => ! empty( $meta['ttp_popup_bg_color'][0] ) ? esc_attr( $meta['ttp_popup_bg_color'][0] ) : '',
 			'postIn'             => ! empty( $meta['ttp_post__in'] ) && is_array( $meta['ttp_post__in'] ) ? $meta['ttp_post__in'] : [],
 			'postNotIn'          => ! empty( $meta['ttp_post__not_in'] ) && is_array( $meta['ttp_post__not_in'] ) ? $meta['ttp_post__not_in'] : [],
@@ -897,7 +897,7 @@ class Shortcode {
 				? $meta['ttp_load_more_button_text'][0]
 				: esc_html__( 'Load More', 'tlp-team' ),
 			'defaultImgId'       => ! empty( $meta['default_preview_image'][0] ) ? absint( $meta['default_preview_image'][0] ) : null,
-            'customImgSize'      => (!empty($meta['ttp_custom_image_size'][0]) && is_string($meta['ttp_custom_image_size'][0])) ? unserialize($meta['ttp_custom_image_size'][0]) : [],
+            'customImgSize'      => !empty($meta['ttp_custom_image_size'][0]) ? maybe_unserialize($meta['ttp_custom_image_size'][0]) : [],
             'visibility'         => ! empty( $meta['ttp_selected_field'] ) ? $meta['ttp_selected_field'] : [ 'name', 'designation', 'ttp_my_resume', 'ttp_hire_me', 'short_bio', 'social' ],
 			'filters'            => ! empty( $meta['ttp_filter'] ) ? $meta['ttp_filter'] : [],
 			'taxFilter'          => ! empty( $meta['ttp_filter_taxonomy'][0] ) ? $meta['ttp_filter_taxonomy'][0] : null,
@@ -918,7 +918,7 @@ class Shortcode {
 		$cOpt = ! empty( $meta_value['ttp_carousel_options'] ) ? $meta_value['ttp_carousel_options'] : [];
 
 		$fImg          = ! empty( $meta_value['ttp_image'][0] ) ? true : false;
-		$customImgSize = ! empty( $meta_value['ttp_custom_image_size'][0] ) ? unserialize( $meta_value['ttp_custom_image_size'][0] ) : [];
+		$customImgSize = ! empty( $meta_value['ttp_custom_image_size'][0] ) ? maybe_unserialize( $meta_value['ttp_custom_image_size'][0] ) : [];
 		$defaultImgId  = ! empty( $meta_value['default_preview_image'][0] ) ? absint( $meta_value['default_preview_image'][0] ) : null;
 		$fImgSize      = isset( $meta_value['ttp_image_size'][0] ) ? $meta_value['ttp_image_size'][0] : 'medium';
 		$round_img     = ! empty( $meta_value['image_style'][0] ) && $meta_value['image_style'][0] == 'round' ? esc_attr( ' round-img' ) : '';

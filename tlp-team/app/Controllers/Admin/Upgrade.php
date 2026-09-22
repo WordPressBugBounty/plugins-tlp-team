@@ -68,11 +68,23 @@ class Upgrade {
 			]
 		);
 
-		foreach ( $sc_ids as $sc_id ) {
-			Fns::generatorShortcodeCss( $sc_id );
-		}
-
+		/*
+		 * Mark the version as done BEFORE rebuilding. This runs on every admin_init
+		 * until the option matches, so if a rebuild ever dies with an error that
+		 * cannot be caught (memory, timeout), recording it afterwards would repeat
+		 * the crash on every admin page and lock the site owner out of wp-admin.
+		 */
 		update_option( self::CSS_VERSION_OPTION, TLP_TEAM_VERSION );
+
+		foreach ( $sc_ids as $sc_id ) {
+			// One broken shortcode must not stop the rest or take the admin down.
+			try {
+				Fns::generatorShortcodeCss( $sc_id );
+			} catch ( \Throwable $e ) {
+				/* phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log */
+				error_log( sprintf( 'TLP Team: could not rebuild CSS for shortcode #%d: %s', $sc_id, $e->getMessage() ) );
+			}
+		}
 
 		/**
 		 * Fires after every shortcode's generated CSS has been rebuilt.
