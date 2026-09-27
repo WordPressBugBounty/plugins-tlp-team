@@ -8,7 +8,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language-Team: RadiusTheme\n"
 "Last-Translator: RadiusTheme\n"
-"POT-Creation-Date: 2026-09-22 08:44+0000\n"
+"POT-Creation-Date: 2026-09-27 09:55+0000\n"
 "Report-Msgid-Bugs-To: https://radiustheme.com/tlp-team-for-wordpress/\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
@@ -298,11 +298,11 @@ msgstr ""
 msgid "Resume"
 msgstr ""
 
-#: app/Helpers/Fns.php:635, app/Helpers/Fns.php:818, app/Helpers/Fns.php:1048, app/Controllers/Frontend/Shortcode.php:891, app/Controllers/Admin/Ajax/Preview.php:276, app/Controllers/Frontend/Ajax/LoadMore.php:93, app/Controllers/Frontend/Ajax/LoadMore.php:94
+#: app/Helpers/Fns.php:635, app/Helpers/Fns.php:818, app/Helpers/Fns.php:1048, app/Controllers/Frontend/Shortcode.php:935, app/Controllers/Admin/Ajax/Preview.php:276, app/Controllers/Frontend/Ajax/LoadMore.php:93, app/Controllers/Frontend/Ajax/LoadMore.php:94
 msgid "Hire Me"
 msgstr ""
 
-#: app/Helpers/Fns.php:738, app/Helpers/Fns.php:977, app/Helpers/Fns.php:1195, app/Controllers/Frontend/Shortcode.php:892, app/Controllers/Admin/Ajax/Preview.php:279, app/Controllers/Frontend/Ajax/LoadMore.php:95, app/Controllers/Frontend/Ajax/SpecialLayout.php:94
+#: app/Helpers/Fns.php:738, app/Helpers/Fns.php:977, app/Helpers/Fns.php:1195, app/Controllers/Frontend/Shortcode.php:936, app/Controllers/Admin/Ajax/Preview.php:279, app/Controllers/Frontend/Ajax/LoadMore.php:95, app/Controllers/Frontend/Ajax/SpecialLayout.php:94
 msgid "Read More"
 msgstr ""
 
@@ -991,7 +991,7 @@ msgstr ""
 msgid "Default Order"
 msgstr ""
 
-#: app/Helpers/Options.php:715, app/Controllers/Frontend/Shortcode.php:477, app/Controllers/Frontend/Shortcode.php:483, app/Controllers/Admin/Ajax/Preview.php:493, app/Controllers/Admin/Ajax/Preview.php:499
+#: app/Helpers/Options.php:715, app/Controllers/Frontend/Shortcode.php:521, app/Controllers/Frontend/Shortcode.php:527, app/Controllers/Admin/Ajax/Preview.php:493, app/Controllers/Admin/Ajax/Preview.php:499
 msgid "Sort By None"
 msgstr ""
 
@@ -1268,7 +1268,7 @@ msgstr ""
 msgid "Team Widget (With Carousel)"
 msgstr ""
 
-#: app/Widgets/TeamCarousel.php:118, app/Widgets/TeamWidget.php:123, app/Controllers/Frontend/Shortcode.php:838, app/Controllers/Admin/Ajax/Preview.php:825
+#: app/Widgets/TeamCarousel.php:118, app/Widgets/TeamWidget.php:123, app/Controllers/Frontend/Shortcode.php:882, app/Controllers/Admin/Ajax/Preview.php:825
 msgid "No member found"
 msgstr ""
 
@@ -1360,23 +1360,23 @@ msgstr ""
 msgid "Team Member Showcase"
 msgstr ""
 
-#: app/Controllers/Frontend/Shortcode.php:441, app/Controllers/Frontend/Shortcode.php:391, app/Controllers/Frontend/Shortcode.php:423, app/Controllers/Admin/Ajax/Preview.php:457, app/Controllers/Admin/Ajax/Preview.php:406, app/Controllers/Admin/Ajax/Preview.php:438
+#: app/Controllers/Frontend/Shortcode.php:485, app/Controllers/Frontend/Shortcode.php:435, app/Controllers/Frontend/Shortcode.php:467, app/Controllers/Admin/Ajax/Preview.php:457, app/Controllers/Admin/Ajax/Preview.php:406, app/Controllers/Admin/Ajax/Preview.php:438
 msgid "All"
 msgstr ""
 
-#: app/Controllers/Frontend/Shortcode.php:512, app/Controllers/Admin/Ajax/Preview.php:527, app/Widgets/Elementor/Render/GridView.php:114, app/Widgets/Elementor/Render/IsotopeView.php:100, app/Widgets/Elementor/Render/SliderView.php:83
+#: app/Controllers/Frontend/Shortcode.php:556, app/Controllers/Admin/Ajax/Preview.php:527, app/Widgets/Elementor/Render/GridView.php:114, app/Widgets/Elementor/Render/IsotopeView.php:100, app/Widgets/Elementor/Render/SliderView.php:83
 msgid "Loading ..."
 msgstr ""
 
-#: app/Controllers/Frontend/Shortcode.php:552, app/Controllers/Admin/Ajax/Preview.php:567, app/Widgets/Elementor/Render/RenderHelpers.php:449
+#: app/Controllers/Frontend/Shortcode.php:596, app/Controllers/Admin/Ajax/Preview.php:567, app/Widgets/Elementor/Render/RenderHelpers.php:449
 msgid "Show all"
 msgstr ""
 
-#: app/Controllers/Frontend/Shortcode.php:890, app/Controllers/Admin/Ajax/Preview.php:278
+#: app/Controllers/Frontend/Shortcode.php:934, app/Controllers/Admin/Ajax/Preview.php:278
 msgid "My Resume"
 msgstr ""
 
-#: app/Controllers/Frontend/Shortcode.php:898, app/Controllers/Admin/Ajax/Preview.php:282, app/Widgets/Elementor/Render/RenderHelpers.php:185
+#: app/Controllers/Frontend/Shortcode.php:942, app/Controllers/Admin/Ajax/Preview.php:282, app/Widgets/Elementor/Render/RenderHelpers.php:185
 msgid "Load More"
 msgstr ""
 

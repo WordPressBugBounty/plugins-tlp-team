@@ -11248,7 +11248,8 @@ div#rt-smart-modal-container .tlp-team-skill{
 	width: 100%;
 	max-width: 1000px;
 	height: 70%;
-	z-index: 2000;
+	/* Above sticky theme headers (Divi's #main-header is 99999), like the multi/smart popups. */
+	z-index: 999999;
 	visibility: hidden;
 	-webkit-backface-visibility: hidden;
 	-moz-backface-visibility: hidden;
@@ -11264,7 +11265,7 @@ div#rt-smart-modal-container .tlp-team-skill{
 	visibility: hidden;
 	top: 0;
 	left: 0;
-	z-index: 1000;
+	z-index: 999998;
 	opacity: 0;
 	background: rgba(0, 0, 0, 0.9);
 	-webkit-transition: all 0.3s;

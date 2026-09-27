@@ -49,11 +49,14 @@ class Shortcode {
 		 * Hook it up front in that mode instead. `wp_enqueue_scripts` is late enough
 		 * for Elementor to have resolved preview mode, which it sets on
 		 * `template_redirect`.
+		 *
+		 * The Divi Visual Builder has the same problem: its modules are drawn by the
+		 * builder app after load, so the shortcode never runs in this request either.
 		 */
 		add_action(
 			'wp_enqueue_scripts',
 			function () {
-				if ( self::isElementorEditorPreview() ) {
+				if ( self::isBuilderPreview() ) {
 					add_action( 'wp_footer', [ $this, 'register_scripts' ] );
 				}
 			}
@@ -78,6 +81,24 @@ class Shortcode {
 		return ! empty( $elementor->preview ) && $elementor->preview->is_preview_mode();
 	}
 
+	/**
+	 * Is this request the Divi Visual Builder (Divi theme or Divi Builder plugin)?
+	 *
+	 * @return boolean
+	 */
+	public static function isDiviBuilderPreview() {
+		return function_exists( 'et_core_is_fb_enabled' ) && et_core_is_fb_enabled();
+	}
+
+	/**
+	 * Is this request a page-builder canvas that renders shortcodes after page load?
+	 *
+	 * @return boolean
+	 */
+	public static function isBuilderPreview() {
+		return self::isElementorEditorPreview() || self::isDiviBuilderPreview();
+	}
+
 	function register_scripts() {
 		$iso    = false;
 		$script = [];
@@ -96,7 +117,7 @@ class Shortcode {
 		 * and there is no layout to inspect. Load the whole bundle — any layout may be
 		 * dropped onto the canvas next.
 		 */
-		$editorPreview = self::isElementorEditorPreview();
+		$editorPreview = self::isBuilderPreview();
 
 		if ( $editorPreview ) {
 			$iso = true;
@@ -176,9 +197,15 @@ class Shortcode {
 	 * initTlpTeam() skips containers it has already bound, so re-running it per widget
 	 * is safe.
 	 *
+	 * Divi's Visual Builder has no per-module ready hook, and it draws (and on every
+	 * edit, redraws) module markup after load — so there, and only there, watch the DOM
+	 * for team containers arriving and initialise them then. Elementor keeps using its
+	 * own element_ready hook alone.
+	 *
 	 * @return void
 	 */
 	private function editorPreviewReInit() {
+		$diviBuilder = self::isDiviBuilderPreview();
 		?>
 		<script>
 			( function ( $ ) {
@@ -187,6 +214,23 @@ class Shortcode {
 						window.initTlpTeam();
 					}
 				};
+
+				if ( <?php echo $diviBuilder ? 'true' : 'false'; ?> && window.MutationObserver ) {
+					var timer = null;
+
+					new MutationObserver( function ( mutations ) {
+						var found = mutations.some( function ( m ) {
+							return Array.prototype.some.call( m.addedNodes, function ( node ) {
+								return node.nodeType === 1 && ( $( node ).is( '.rt-team-container' ) || $( node ).find( '.rt-team-container' ).length );
+							} );
+						} );
+
+						if ( found ) {
+							clearTimeout( timer );
+							timer = setTimeout( reInit, 150 );
+						}
+					} ).observe( document.documentElement, { childList: true, subtree: true } );
+				}
 
 				$( window ).on( 'elementor/frontend/init', function () {
 					if ( ! window.elementorFrontend || ! elementorFrontend.hooks ) {
