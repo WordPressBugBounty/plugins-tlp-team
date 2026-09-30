@@ -263,9 +263,9 @@ class Shortcode {
 			'tlpteam'
 		);
 
-		$scID = isset( $atts['id'] ) ? absint( $atts['id'] ) : null;
+		$scID = isset( $atts['id'] ) ? Fns::validShortcodeId( $atts['id'] ) : 0;
 
-		if ( $scID && ! is_null( get_post( $scID ) ) ) {
+		if ( $scID ) {
 			$this->scId = $scID;
 			$scMeta     = $this->scMeta = get_post_meta( $scID );
 			$buildMetas = $this->metas( $scMeta, $scID );
@@ -431,7 +431,7 @@ class Shortcode {
 
 
 						if ( ! $filterType || $filterType == 'dropdown' ) {
-							$html           .= "<div class='rt-filter-item-wrap rt-tax-filter rt-filter-dropdown-wrap' data-taxonomy='{$taxFilter}'>";
+							$html           .= "<div class='rt-filter-item-wrap rt-tax-filter rt-filter-dropdown-wrap' data-taxonomy='" . esc_attr( $taxFilter ) . "'>";
 							$termDefaultText = esc_html__( 'All', 'tlp-team' );
 							$dataTerm        = 'all';
 							$htmlButton      = '';
@@ -449,7 +449,7 @@ class Shortcode {
 												$termDefaultText = $term;
 												$dataTerm        = $id;
 											} else {
-												$htmlButton .= "<span class='term-dropdown-item rt-filter-dropdown-item' data-term='{$id}'>{$term}</span>";
+												$htmlButton .= "<span class='term-dropdown-item rt-filter-dropdown-item' data-term='{$id}'>" . esc_html( $term ) . "</span>";
 											}
 										}
 									} else {
@@ -457,7 +457,7 @@ class Shortcode {
 											$termDefaultText = $term;
 											$dataTerm        = $id;
 										} else {
-											$htmlButton .= "<span class='term-dropdown-item rt-filter-dropdown-item' data-term='{$id}'>{$term}</span>";
+											$htmlButton .= "<span class='term-dropdown-item rt-filter-dropdown-item' data-term='{$id}'>" . esc_html( $term ) . "</span>";
 										}
 									}
 								}
@@ -471,15 +471,15 @@ class Shortcode {
 							}
 							$htmlButton .= '</span>';
 
-							$showAllhtml = '<span class="term-default rt-filter-dropdown-default" data-term="' . $dataTerm . '">
-                                                <span class="rt-text">' . $termDefaultText . '</span>
+							$showAllhtml = '<span class="term-default rt-filter-dropdown-default" data-term="' . esc_attr( $dataTerm ) . '">
+                                                <span class="rt-text">' . esc_html( $termDefaultText ) . '</span>
                                                 <i class="fa fa-angle-down rt-arrow-angle" aria-hidden="true"></i>
                                             </span>';
 
 							$html .= $showAllhtml . $htmlButton;
 							$html .= '</div>';
 						} else {
-							$html .= "<div class='rt-filter-item-wrap rt-tax-filter rt-filter-button-wrap' data-taxonomy='{$taxFilter}'>";
+							$html .= "<div class='rt-filter-item-wrap rt-tax-filter rt-filter-button-wrap' data-taxonomy='" . esc_attr( $taxFilter ) . "'>";
 
 							if ( ! $hide_all_button ) {
 								$html .= "<span class='term-button-item rt-filter-button-item {$allSelect}' data-term='all'>" . esc_html__(
@@ -496,10 +496,10 @@ class Shortcode {
 									}
 									if ( is_array( $taxFilterTerms ) && ! empty( $taxFilterTerms ) ) {
 										if ( in_array( $id, $taxFilterTerms ) ) {
-											$html .= "<span class='term-button-item rt-filter-button-item {$termSelected}' data-term='{$id}'>{$term}" . Fns::rt_filter_count_badge( $termCounts, $id ) . '</span>';
+											$html .= "<span class='term-button-item rt-filter-button-item " . esc_attr( $termSelected ) . "' data-term='{$id}'>" . esc_html( $term ) . Fns::rt_filter_count_badge( $termCounts, $id ) . '</span>';
 										}
 									} else {
-										$html .= "<span class='term-button-item rt-filter-button-item {$termSelected}' data-term='{$id}'>{$term}" . Fns::rt_filter_count_badge( $termCounts, $id ) . '</span>';
+										$html .= "<span class='term-button-item rt-filter-button-item " . esc_attr( $termSelected ) . "' data-term='{$id}'>" . esc_html( $term ) . Fns::rt_filter_count_badge( $termCounts, $id ) . '</span>';
 									}
 								}
 							}

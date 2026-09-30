@@ -2,7 +2,7 @@
 Contributors: techlabpro1, mamunnu
 Donate link:
 Tags: team, team showcase, team slider, team plugin, team members
-Stable tag: 6.0.2
+Stable tag: 6.0.3
 Requires at least: 5.0
 Tested up to: 7.1
 Requires PHP: 7.4
@@ -267,6 +267,9 @@ If you like The Team Plugin, then consider checking out our other WordPress Plug
 08. Round Image Layout
 
 == Changelog ==
+
+= 6.0.3  ( September 30, 2026 ) =
+* Fixed: Some minor bugs fixed.
 
 = 6.0.2  ( September 27, 2026 ) =
 * Added: Divi Theme compatibility.

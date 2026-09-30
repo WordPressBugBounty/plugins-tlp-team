@@ -80,9 +80,9 @@ class TaxSorting {
 					'hide_empty' => false,
 				) );
 				if ( ! empty( $terms ) ) {
-					$html .= "<ul id='order-target' data-taxonomy='{$tax}'>";
+					$html .= "<ul id='order-target' data-taxonomy='" . esc_attr( $tax ) . "'>";
 					foreach ( $terms as $term ) {
-						$html .= "<li data-id='{$term->term_id}'><span>{$term->name}</span></li>";
+						$html .= "<li data-id='" . absint( $term->term_id ) . "'><span>" . esc_html( $term->name ) . "</span></li>";
 					}
 					$html .= '</ul>';
 				} else {

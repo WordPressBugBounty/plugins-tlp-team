@@ -55,7 +55,7 @@ class Skill {
             // $skills = get_terms( rttlp_team()->taxonomies['skill'], 'orderby=name&hide_empty=0' );
 			if ( ! empty( $skills ) ) {
 				foreach ( $skills as $skill ) {
-					$html .= "<option value='{$skill->name}'>{$skill->name}</option>";
+					$html .= "<option value='" . esc_attr( $skill->name ) . "'>" . esc_html( $skill->name ) . "</option>";
 				}
 			}
 			$html .= '</select>';
