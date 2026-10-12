@@ -1518,6 +1518,11 @@ class Fns {
 			'alt'   => $alt_tag,
 		];
 
+		// Swiper 9+ dropped its lazy module (`data-src`): lazy images are native ones.
+		if ( $lazy ) {
+			$attr['loading'] = 'lazy';
+		}
+
 		if ( $aID ) {
 			$imgHtml       = wp_get_attachment_image( $aID, $fImgSize, false, $attr );
 			$attachment_id = $aID;
@@ -1539,33 +1544,18 @@ class Fns {
 				$image = self::rtImageReSize( $imgSrc, $w, $h, $c, false );
 
 				if ( ! empty( $image ) ) {
-					if ( $lazy ) {
-						list( $src, $width, $height ) = $image;
+					list( $src, $width, $height ) = $image;
 
-						$hwstring         = image_hwstring( $width, $height );
-						$attachment       = get_post( $attachment_id );
-						$attr             = apply_filters( 'wp_get_attachment_image_attributes', $attr, $attachment, $fImgSize );
-						$attr['data-src'] = $src;
-						$attr             = array_map( 'esc_attr', $attr );
-						$imgHtml          = rtrim( "<img $hwstring" );
-						foreach ( $attr as $name => $value ) {
-							$imgHtml .= " $name=" . '"' . $value . '"';
-						}
-						$imgHtml .= ' />';
-					} else {
-						list( $src, $width, $height ) = $image;
-
-						$hwstring    = image_hwstring( $width, $height );
-						$attachment  = get_post( $attachment_id );
-						$attr        = apply_filters( 'wp_get_attachment_image_attributes', $attr, $attachment, $fImgSize );
-						$attr['src'] = $src;
-						$attr        = array_map( 'esc_attr', $attr );
-						$imgHtml     = rtrim( "<img $hwstring" );
-						foreach ( $attr as $name => $value ) {
-							$imgHtml .= " $name=" . '"' . $value . '"';
-						}
-						$imgHtml .= ' />';
+					$hwstring    = image_hwstring( $width, $height );
+					$attachment  = get_post( $attachment_id );
+					$attr        = apply_filters( 'wp_get_attachment_image_attributes', $attr, $attachment, $fImgSize );
+					$attr['src'] = $src;
+					$attr        = array_map( 'esc_attr', $attr );
+					$imgHtml     = rtrim( "<img $hwstring" );
+					foreach ( $attr as $name => $value ) {
+						$imgHtml .= " $name=" . '"' . $value . '"';
 					}
+					$imgHtml .= ' />';
 				}
 			}
 		}

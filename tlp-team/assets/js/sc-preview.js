@@ -743,6 +743,7 @@
 			navigation: {
 				nextEl: this.$slider.find('.swiper-button-next').get(0),
 				prevEl: this.$slider.find('.swiper-button-prev').get(0),
+				addIcons: false,
 			},
 			pagination: {
 				el: this.$slider.find('.swiper-pagination').get(0),
@@ -753,6 +754,9 @@
 
 		this.slider_enabled = 'function' === typeof Swiper;
 		this.options = Object.assign({}, this.defaultOptions, this.$slider.data('options') || {});
+		// Swiper 9+ has no lazy module; lazy images are native `loading="lazy"` ones.
+		delete this.options.lazy;
+		delete this.options.preloadImages;
 		this.initSlider = function () {
 			if (!this.slider_enabled) {
 				return;
@@ -760,12 +764,17 @@
 			if (this.options.rtl) {
 				this.$slider.attr('dir', 'rtl');
 			}
+			// Read it now, not at construction: rtSliderInit() runs from more than one place,
+			// so another RttmSlider may have initialised this element meanwhile. Two Swiper
+			// instances on one loop slider fight over the slide order.
+			this.swiperSlider = this.slider.swiper || null;
 			if (this.swiperSlider) {
 				this.swiperSlider.parents = this.options;
 				this.swiperSlider.update();
 			} else {
 				this.swiperSlider = new Swiper(this.$slider.get(0), this.options);
 			}
+			rttmLazyImages(this.$slider);
 		};
 		this.imagesLoaded = function () {
 			if(this.$slider.data('options').lazy) {
@@ -836,7 +845,8 @@ function RTElementThumbCarousel(container, options, instance, index) {
 		autoHeight: options.autoHeight ? options.autoHeight : false,
 		navigation: {
 			nextEl: navNext,
-			prevEl: navPrev
+			prevEl: navPrev,
+			addIcons: false
 		},
 		pagination: {
 			el: dotsEl,
@@ -871,16 +881,41 @@ function RTElementThumbCarousel(container, options, instance, index) {
 		};
 	}
 
-	if (options.lazy) {
-		navSliderOptions.preloadImages = false;
-		navSliderOptions.lazy = true;
-	}
-
 	var thumb = new Swiper(navSlider[0], navSliderOptions);
 
-	// Syncing the sliders
-	main.controller.control = thumb;
-	thumb.controller.control = main;
+	// Syncing the sliders. The Controller module drifts between two loop sliders
+	// since Swiper 9 rebuilt loop mode, so each one follows the other's real index.
+	var rttmFollow = function (source, target) {
+		source.on('slideChange', function () {
+			if (target.realIndex !== source.realIndex) {
+				target.slideToLoop(source.realIndex);
+			}
+		});
+	};
+
+	rttmFollow(main, thumb);
+	rttmFollow(thumb, main);
 
 	instance[index] = [main, thumb];
+
+	rttmLazyImages(container);
+}
+
+/**
+ * Native lazy images: Swiper 9+ no longer flags them as loaded, and the CSS keeps
+ * `.swiper-lazy:not(.swiper-lazy-loaded)` hidden until they are.
+ */
+function rttmLazyImages($scope) {
+	$scope.find('img.swiper-lazy').not('.swiper-lazy-loaded').each(function () {
+		var img = this,
+			done = function () {
+				jQuery(img).addClass('swiper-lazy-loaded').siblings('.swiper-lazy-preloader').remove();
+			};
+
+		if (img.complete) {
+			done();
+		} else {
+			jQuery(img).one('load error', done);
+		}
+	});
 }

@@ -205,6 +205,24 @@
       $(this).rttm_slider();
     });
   }
+
+  /**
+   * Native lazy images: Swiper 9+ no longer flags them as loaded, and the CSS keeps
+   * `.swiper-lazy:not(.swiper-lazy-loaded)` hidden until they are.
+   */
+  function rttmLazyImages($scope) {
+    $scope.find('img.swiper-lazy').not('.swiper-lazy-loaded').each(function () {
+      var img = this,
+        done = function done() {
+          $(img).addClass('swiper-lazy-loaded').siblings('.swiper-lazy-preloader').remove();
+        };
+      if (img.complete) {
+        done();
+      } else {
+        $(img).one('load error', done);
+      }
+    });
+  }
   var RttmSlider = function RttmSlider($slider) {
     this.$slider = $slider;
     this.slider = this.$slider.get(0);
@@ -214,7 +232,8 @@
       observer: true,
       navigation: {
         nextEl: this.$slider.find('.swiper-button-next').get(0),
-        prevEl: this.$slider.find('.swiper-button-prev').get(0)
+        prevEl: this.$slider.find('.swiper-button-prev').get(0),
+        addIcons: false
       },
       pagination: {
         el: this.$slider.find('.swiper-pagination').get(0),
@@ -224,6 +243,9 @@
     };
     this.slider_enabled = 'function' === typeof Swiper;
     this.options = Object.assign({}, this.defaultOptions, this.$slider.data('options') || {});
+    // Swiper 9+ has no lazy module; lazy images are native `loading="lazy"` ones.
+    delete this.options.lazy;
+    delete this.options.preloadImages;
     this.initSlider = function () {
       if (!this.slider_enabled) {
         return;
@@ -231,12 +253,17 @@
       if (this.options.rtl) {
         this.$slider.attr('dir', 'rtl');
       }
+      // Read it now, not at construction: rtSliderInit() runs from more than one place,
+      // so another RttmSlider may have initialised this element meanwhile. Two Swiper
+      // instances on one loop slider fight over the slide order.
+      this.swiperSlider = this.slider.swiper || null;
       if (this.swiperSlider) {
         this.swiperSlider.parents = this.options;
         this.swiperSlider.update();
       } else {
         this.swiperSlider = new Swiper(this.$slider.get(0), this.options);
       }
+      rttmLazyImages(this.$slider);
     };
     this.imagesLoaded = function () {
       if (this.$slider.data('options').lazy) {

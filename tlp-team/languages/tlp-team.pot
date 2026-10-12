@@ -8,7 +8,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language-Team: RadiusTheme\n"
 "Last-Translator: RadiusTheme\n"
-"POT-Creation-Date: 2026-09-30 07:00+0000\n"
+"POT-Creation-Date: 2026-10-12 07:38+0000\n"
 "Report-Msgid-Bugs-To: https://radiustheme.com/tlp-team-for-wordpress/\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
@@ -89,7 +89,7 @@ msgstr ""
 msgid "Go Premium for More Features"
 msgstr ""
 
-#: app/Controllers/PostTypesController.php:94, app/Controllers/PostTypesController.php:116, app/Controllers/PostTypesController.php:118, app/Helpers/Fns.php:1792
+#: app/Controllers/PostTypesController.php:94, app/Controllers/PostTypesController.php:116, app/Controllers/PostTypesController.php:118, app/Helpers/Fns.php:1782
 msgid "Member"
 msgstr ""
 
@@ -335,95 +335,95 @@ msgstr ""
 msgid "Custom image size"
 msgstr ""
 
-#: app/Helpers/Fns.php:1578
+#: app/Helpers/Fns.php:1568
 msgid "Default Image"
 msgstr ""
 
-#: app/Helpers/Fns.php:1793
+#: app/Helpers/Fns.php:1783
 msgid "Role"
 msgstr ""
 
-#: app/Helpers/Fns.php:1794, app/Helpers/Options.php:78, app/Helpers/Options.php:132, app/Helpers/Options.php:167, app/Controllers/Admin/AdminColumns.php:36
+#: app/Helpers/Fns.php:1784, app/Helpers/Options.php:78, app/Helpers/Options.php:132, app/Helpers/Options.php:167, app/Controllers/Admin/AdminColumns.php:36
 msgid "Email"
 msgstr ""
 
-#: app/Helpers/Fns.php:1795
+#: app/Helpers/Fns.php:1785
 msgid "Phone"
 msgstr ""
 
-#: app/Helpers/Fns.php:1796, app/Helpers/Options.php:86, app/Helpers/Options.php:170, app/Helpers/Options.php:254
+#: app/Helpers/Fns.php:1786, app/Helpers/Options.php:86, app/Helpers/Options.php:170, app/Helpers/Options.php:254
 msgid "Mobile"
 msgstr ""
 
-#: app/Helpers/Fns.php:1797, app/Helpers/Options.php:90, app/Helpers/Options.php:171
+#: app/Helpers/Fns.php:1787, app/Helpers/Options.php:90, app/Helpers/Options.php:171
 msgid "Fax"
 msgstr ""
 
-#: app/Helpers/Fns.php:1798, app/Helpers/Options.php:98, app/Helpers/Options.php:172, app/Controllers/Admin/AdminColumns.php:37
+#: app/Helpers/Fns.php:1788, app/Helpers/Options.php:98, app/Helpers/Options.php:172, app/Controllers/Admin/AdminColumns.php:37
 msgid "Location"
 msgstr ""
 
-#: app/Helpers/Fns.php:1799, app/Helpers/Options.php:133
+#: app/Helpers/Fns.php:1789, app/Helpers/Options.php:133
 msgid "Website"
 msgstr ""
 
-#: app/Helpers/Fns.php:1800, app/Widgets/Elementor/Sections/Settings.php:431
+#: app/Helpers/Fns.php:1790, app/Widgets/Elementor/Sections/Settings.php:431
 msgid "Social"
 msgstr ""
 
-#: app/Helpers/Fns.php:3174, app/Helpers/Options.php:40, app/Helpers/Options.php:1078, app/Controllers/Hooks/FilterHooks.php:94
+#: app/Helpers/Fns.php:3164, app/Helpers/Options.php:40, app/Helpers/Options.php:1078, app/Controllers/Hooks/FilterHooks.php:94
 msgid "Layout 3"
 msgstr ""
 
-#: app/Helpers/Fns.php:3179, app/Helpers/Options.php:41, app/Helpers/Options.php:43, app/Controllers/Hooks/FilterHooks.php:98
+#: app/Helpers/Fns.php:3169, app/Helpers/Options.php:41, app/Helpers/Options.php:43, app/Controllers/Hooks/FilterHooks.php:98
 msgid "Layout 4"
 msgstr ""
 
-#: app/Helpers/Fns.php:3184, app/Controllers/Hooks/FilterHooks.php:102
+#: app/Helpers/Fns.php:3174, app/Controllers/Hooks/FilterHooks.php:102
 msgid "Layout 5"
 msgstr ""
 
-#: app/Helpers/Fns.php:3189, app/Controllers/Hooks/FilterHooks.php:106
+#: app/Helpers/Fns.php:3179, app/Controllers/Hooks/FilterHooks.php:106
 msgid "Layout 6"
 msgstr ""
 
-#: app/Helpers/Fns.php:3194, app/Controllers/Hooks/FilterHooks.php:110
+#: app/Helpers/Fns.php:3184, app/Controllers/Hooks/FilterHooks.php:110
 msgid "Layout 7"
 msgstr ""
 
-#: app/Helpers/Fns.php:3199, app/Controllers/Hooks/FilterHooks.php:114
+#: app/Helpers/Fns.php:3189, app/Controllers/Hooks/FilterHooks.php:114
 msgid "Layout 8"
 msgstr ""
 
-#: app/Helpers/Fns.php:3204, app/Controllers/Hooks/FilterHooks.php:118
+#: app/Helpers/Fns.php:3194, app/Controllers/Hooks/FilterHooks.php:118
 msgid "Layout 9"
 msgstr ""
 
-#: app/Helpers/Fns.php:3209, app/Controllers/Hooks/FilterHooks.php:122
+#: app/Helpers/Fns.php:3199, app/Controllers/Hooks/FilterHooks.php:122
 msgid "Layout 10"
 msgstr ""
 
-#: app/Helpers/Fns.php:3214, app/Controllers/Hooks/FilterHooks.php:126
+#: app/Helpers/Fns.php:3204, app/Controllers/Hooks/FilterHooks.php:126
 msgid "Layout 11"
 msgstr ""
 
-#: app/Helpers/Fns.php:3219, app/Controllers/Hooks/FilterHooks.php:130
+#: app/Helpers/Fns.php:3209, app/Controllers/Hooks/FilterHooks.php:130
 msgid "Layout 12"
 msgstr ""
 
-#: app/Helpers/Fns.php:3224, app/Controllers/Hooks/FilterHooks.php:134
+#: app/Helpers/Fns.php:3214, app/Controllers/Hooks/FilterHooks.php:134
 msgid "Layout 13"
 msgstr ""
 
-#: app/Helpers/Fns.php:3229
+#: app/Helpers/Fns.php:3219
 msgid "Layout 17"
 msgstr ""
 
-#: app/Helpers/Fns.php:3234
+#: app/Helpers/Fns.php:3224
 msgid "Layout 18"
 msgstr ""
 
-#: app/Helpers/Fns.php:3239, app/Controllers/Hooks/FilterHooks.php:150
+#: app/Helpers/Fns.php:3229, app/Controllers/Hooks/FilterHooks.php:150
 msgid "Special 01"
 msgstr ""
 

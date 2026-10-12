@@ -357,6 +357,56 @@ class ScriptsController {
 	}
 
 	/**
+	 * Swiper JS/CSS URL.
+	 *
+	 * Elementor exposes `window.Swiper` to its own widgets, so when Elementor is
+	 * active we load its copy instead of ours — two different Swiper versions on one
+	 * page would overwrite each other's global. Otherwise, the bundled Swiper 12.
+	 * The JS and CSS always come from the same copy.
+	 *
+	 * @param string $type `js` or `css`.
+	 *
+	 * @return string
+	 */
+	private function get_swiper_src( $type ) {
+		static $elementor_dir = null;
+
+		if ( null === $elementor_dir ) {
+			$elementor_dir = '';
+
+			if ( defined( 'ELEMENTOR_ASSETS_PATH' ) && defined( 'ELEMENTOR_ASSETS_URL' ) ) {
+				// Elementor 3.x shipped Swiper 5 in `lib/swiper/` unless the "Swiper latest"
+				// experiment was on; current Elementor only ships `lib/swiper/v8/`.
+				$legacy = 'active' !== get_option( 'elementor_experiment-e_swiper_latest' )
+					&& file_exists( ELEMENTOR_ASSETS_PATH . 'lib/swiper/swiper.min.js' );
+
+				$dir = $legacy ? 'lib/swiper/' : 'lib/swiper/v8/';
+
+				if ( file_exists( ELEMENTOR_ASSETS_PATH . $dir . 'swiper.min.js' ) ) {
+					$elementor_dir = $dir;
+				}
+			}
+		}
+
+		if ( ! $elementor_dir ) {
+			return rttlp_team()->assets_url() . 'vendor/swiper/swiper.min.' . $type;
+		}
+
+		// Elementor keeps the stylesheet in `css/` next to the script (or beside it in older releases).
+		if ( 'css' === $type ) {
+			foreach ( [ 'css/swiper.min.css', 'swiper.min.css' ] as $css ) {
+				if ( file_exists( ELEMENTOR_ASSETS_PATH . $elementor_dir . $css ) ) {
+					return ELEMENTOR_ASSETS_URL . $elementor_dir . $css;
+				}
+			}
+
+			return rttlp_team()->assets_url() . 'vendor/swiper/swiper.min.css';
+		}
+
+		return ELEMENTOR_ASSETS_URL . $elementor_dir . 'swiper.min.js';
+	}
+
+	/**
 	 * Get all scripts.
 	 *
 	 * @return void
@@ -388,7 +438,7 @@ class ScriptsController {
 
 		$this->styles[] = [
 			'handle' => 'tlp-swiper',
-			'src'    => rttlp_team()->assets_url() . 'vendor/swiper/swiper.min.css',
+			'src'    => $this->get_swiper_src( 'css' ),
 		];
 
 		$this->styles[] = [
@@ -432,35 +482,11 @@ class ScriptsController {
 			'footer' => true,
 		];
 
-		$default_swiper_handle = 'swiper';
-        $default_swiper_path = rttlp_team()->assets_url() . 'vendor/swiper/swiper.min.js';
-
-        if ( defined( 'ELEMENTOR_ASSETS_PATH' ) ) {
-            $is_swiper8_enable = get_option( 'elementor_experiment-e_swiper_latest' );
-
-            if ( $is_swiper8_enable == 'active' ) {
-                $el_swiper_path = 'lib/swiper/v8/swiper.min.js';
-            } else {
-                $el_swiper_path = 'lib/swiper/swiper.min.js';
-            }
-
-            $elementor_swiper_path = ELEMENTOR_ASSETS_PATH . $el_swiper_path;
-
-            if ( file_exists( $elementor_swiper_path ) ) {
-                $default_swiper_path = ELEMENTOR_ASSETS_URL . $el_swiper_path;
-            }
-        }
-
-        $this->scripts[] = [
-            'handle' => $default_swiper_handle,
-            'src'    => $default_swiper_path,
-            'deps'   => [ 'jquery' ],
-            'footer' => false,
-        ];
-
+		// Only our own handle: registering the generic `swiper` handle here (at init,
+		// before Elementor) would hijack Elementor's handle and run its widgets on our copy.
 		$this->scripts[] = [
 			'handle' => 'tlp-swiper',
-			'src'    => $default_swiper_path,
+			'src'    => $this->get_swiper_src( 'js' ),
 			'deps'   => [ 'jquery' ],
 			'footer' => true,
 		];
