@@ -26,15 +26,18 @@ $html .= '<div class="' . esc_attr( $wrapperClass ) . '" data-id="' . absint( $m
 $html .= '<div class="single-team-area">';
 
 // ---- Media: square photo ----
-$html .= '<div class="rttm-iso-media">';
+// Only emit the wrapper when there is an image. `.rttm-iso-media` carries a 1:1
+// aspect-ratio + grey background, so an empty wrapper (Feature Image disabled)
+// would still render as a blank square placeholder on both shortcode + Elementor.
 if ( $imgHtml ) {
+	$html .= '<div class="rttm-iso-media">';
 	if ( $link ) {
 		$html .= '<figure><a class="' . esc_attr( $anchorClass ) . '" data-id="' . absint( $mID ) . '" target="' . esc_attr( $target ) . '" href="' . esc_url( $pLink ) . '">' . Fns::htmlKses( $imgHtml, 'image' ) . '</a></figure>';
 	} else {
 		$html .= '<figure>' . Fns::htmlKses( $imgHtml, 'image' ) . '</figure>';
 	}
+	$html .= '</div>';
 }
-$html .= '</div>';
 
 // ---- Band: name + role on the accent gradient ----
 $band = '';
