@@ -709,6 +709,12 @@ class Shortcode {
 
 				while ( $teamQuery->have_posts() ) :
 					$teamQuery->the_post();
+					// Never render a member the current viewer cannot see. The query
+					// pins post_status=publish, so a published-but-password-protected
+					// member would otherwise leak its profile meta into the grid HTML.
+					if ( ! Fns::isMemberViewable( get_post() ) ) {
+						continue;
+					}
 					if ( $layout == 'layout6' ) {
 						$arg['check'] = $this->check;
 					}
@@ -973,6 +979,9 @@ class Shortcode {
 
 		while ( $query->have_posts() ) :
 			$query->the_post();
+			if ( ! Fns::isMemberViewable( get_post() ) ) {
+				continue;
+			}
 			$iID          = get_the_ID();
 			$arg['iID']   = $iID;
 			$arg['pLink'] = get_permalink();

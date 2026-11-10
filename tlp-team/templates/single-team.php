@@ -30,6 +30,14 @@ $hire_btn_text = isset( $settings['hire_me_text'] ) ? $settings['hire_me_text'] 
 while ( have_posts() ) :
 	the_post();
 
+	// Mirror WordPress core: a password-protected member shows the password
+	// form, never the profile meta, until the viewer enters the password.
+	// post_password_required() is false once the viewer unlocks it or can edit.
+	if ( post_password_required( $post ) ) {
+		Fns::print_html( get_the_password_form( $post ), true );
+		continue;
+	}
+
 	$html            = $htmlCInfo = null;
 	$email           = get_post_meta( $post->ID, 'email', true );
 	$web_url         = get_post_meta( $post->ID, 'web_url', true );

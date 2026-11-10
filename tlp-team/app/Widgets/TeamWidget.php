@@ -66,6 +66,10 @@ class TeamWidget extends WP_Widget {
 		if ( $teamQuery->have_posts() ) {
 			while ( $teamQuery->have_posts() ) :
 				$teamQuery->the_post();
+				// Skip members the viewer cannot see (e.g. password-protected).
+				if ( ! Fns::isMemberViewable( get_post() ) ) {
+					continue;
+				}
 				if ( has_post_thumbnail() ) {
                     $img = wp_get_attachment_image ( get_post_thumbnail_id( get_the_ID() ), rttlp_team()->options['feature_img_size'], false, array("class" => "tlp-team-img") );
 				} else {

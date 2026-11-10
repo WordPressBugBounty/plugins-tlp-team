@@ -106,6 +106,10 @@ class TeamCarousel extends WP_Widget {
 		if ( $teamQuery->have_posts() ) {
 			while ( $teamQuery->have_posts() ) :
 				$teamQuery->the_post();
+				// Skip members the viewer cannot see (e.g. password-protected).
+				if ( ! Fns::isMemberViewable( get_post() ) ) {
+					continue;
+				}
 				$mID      = get_the_id();
 				$fImgSize = 'medium';
 

@@ -110,6 +110,11 @@ class IsotopeView {
 
 			while ( $teamQuery->have_posts() ) {
 				$teamQuery->the_post();
+				// Never render a member the viewer cannot see (e.g. a published-
+				// but-password-protected member for a guest).
+				if ( ! Fns::isMemberViewable( get_post() ) ) {
+					continue;
+				}
 
 				$mID = get_the_ID();
 				$arg = RenderHelpers::loopArgBuilder( $arg, $metas, $mID );

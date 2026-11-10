@@ -78,6 +78,15 @@ class Fns {
 			return false;
 		}
 
+		// Password axis: a published-but-password-protected member stays hidden
+		// until the viewer unlocks it. post_password_required() is false for an
+		// unprotected post, for a viewer who has entered the correct password,
+		// and for users who can edit the post — mirroring WordPress core, which
+		// withholds a protected post's content behind the password form.
+		if ( post_password_required( $post ) ) {
+			return false;
+		}
+
 		return 'publish' === $post->post_status || current_user_can( 'read_post', $post->ID );
 	}
 

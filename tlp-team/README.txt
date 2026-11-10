@@ -2,7 +2,7 @@
 Contributors: techlabpro1, mamunnu
 Donate link:
 Tags: team, team showcase, team slider, team plugin, team members
-Stable tag: 6.0.5
+Stable tag: 6.0.6
 Requires at least: 5.0
 Tested up to: 7.1
 Requires PHP: 7.4
@@ -267,6 +267,9 @@ If you like The Team Plugin, then consider checking out our other WordPress Plug
 08. Round Image Layout
 
 == Changelog ==
+
+= 6.0.6  ( November 10, 2026 ) =
+* Security: Password-protected team members no longer expose their profile fields (short bio, email, telephone, mobile, fax, location, web URL) to unauthenticated visitors through the grid, load-more, the single/multiple/smart popups, the special layout, the Elementor widgets, the classic widgets, or the single member page. Password-protected members now behave like WordPress core, showing the password form until unlocked. Thanks to Respect for the responsible disclosure.
 
 = 6.0.5  ( November 03, 2026 ) =
 * Fixed: Isotope Layout showed an empty image placeholder when the featured image was disabled, in both the shortcode and the Elementor widget.

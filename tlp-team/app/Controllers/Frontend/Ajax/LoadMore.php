@@ -369,6 +369,12 @@ class LoadMore {
 
 				while ( $teamQuery->have_posts() ) {
 					$teamQuery->the_post();
+					// Never render a member the current viewer cannot see (e.g. a
+					// published-but-password-protected member for a guest); mirrors
+					// the same gate in the initial Shortcode grid render.
+					if ( ! Fns::isMemberViewable( get_post() ) ) {
+						continue;
+					}
 					/* Argument for single member */
 					$mID                = get_the_ID();
 					$arg['mID']         = $mID;

@@ -9158,6 +9158,18 @@ div#rt-smart-modal-container .tlp-team-skill{
 	align-items: center;
 	gap: 8px;
 }
+/* A chip is as wide as its min-content, and an email / URL has no break point, so on a
+   phone a long one made the chip wider than the card and it stuck out on both sides.
+   Cap the chip at the row and let the text break anywhere; `anywhere` (not `break-word`)
+   is the value that also shrinks min-content. The icon keeps its size. */
+.rt-team-container .carousel10 .contact-info li {
+	max-width: 100%;
+	min-width: 0;
+	overflow-wrap: anywhere;
+}
+.rt-team-container .carousel10 .contact-info li a,
+.rt-team-container .carousel10 .contact-info li > span { min-width: 0; }
+.rt-team-container .carousel10 .contact-info li i { flex-shrink: 0; }
 
 /* ---------- Social chips (the chip is the <a>) ---------- */
 .rt-team-container .carousel10 .single-team-area .social-icons {
@@ -9868,6 +9880,20 @@ div#rt-smart-modal-container .tlp-team-skill{
 .rt-team-container .rt-row.layout16.ttp-even .single-team-area .short-bio > :last-child,
 .rt-team-container .rt-row.layout16.ttp-even .single-team-area .tlp-team-skill > :last-child {
 	margin-bottom: 0;
+}
+
+/* Contact rows: an email or URL has no break opportunity, so it ran past the card's
+   `overflow:hidden` edge and was cut off mid-address. `anywhere` lets it break and keeps it
+   beside its icon.
+   The right gutter keeps the last row clear of the rotated corner squares (:before/:after),
+   which reach ~45px in from the card's right edge near the bottom -- past the 30px (20px on
+   small screens) card padding. Physical `right`, not logical: the squares sit on the right
+   in RTL too. */
+.rt-team-container .layout16 .contact-info {
+	padding-right: 26px;
+}
+.rt-team-container .layout16 .contact-info li {
+	overflow-wrap: anywhere;
 }
 /************************ Start Layout 17 - "Grayscale spotlight" ******************/
 /* SHORTCODE ONLY. `layout17` shares ONE template with the Elementor path and BOTH stylesheets
@@ -12700,6 +12726,20 @@ figure:has(.rt-flip-container),
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
+/* SHORTCODE: rows WRAP rather than truncate -- an ellipsis hid most of a long Location /
+   address. The hanging indent (40px = 30px icon + 10px gap) lines wrapped lines up under
+   the text, not the icon; logical props keep it right in RTL.
+   Excluded from Elementor with a zero-specificity :where(): its stylesheet makes the row's
+   <a>/<span> inline-block, which inherit the negative text-indent and get pushed out of
+   the card. Elementor keeps the original ellipsis above. */
+.rt-team-container:where(:not(.rt-elementor-container)) .layout1 .contact-info li {
+	white-space: normal;
+	overflow: visible;
+	text-overflow: clip;
+	overflow-wrap: anywhere;
+	padding-inline-start: 40px;
+	text-indent: -40px;
+}
 
 .rt-team-container .layout1 .contact-info li i {
 	width: 30px;
@@ -12714,7 +12754,9 @@ figure:has(.rt-flip-container),
 	-ms-flex-pack: center;
 	justify-content: center;
 	vertical-align: middle;
-	margin: 0 10px 0 0;
+	margin: 0;
+	margin-inline-end: 10px;
+	text-indent: 0;
 	background: var(--l1-primary-50);
 	color: var(--l1-primary);
 	border-radius: 8px;
@@ -13411,6 +13453,20 @@ figure:has(.rt-flip-container),
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
+/* SHORTCODE: rows WRAP rather than truncate -- an ellipsis hid most of a long Location /
+   address. The hanging indent (40px = 30px icon + 10px gap) lines wrapped lines up under
+   the text, not the icon; logical props keep it right in RTL.
+   Excluded from Elementor with a zero-specificity :where(): its stylesheet makes the row's
+   <a>/<span> inline-block, which inherit the negative text-indent and get pushed out of
+   the card. Elementor keeps the original ellipsis above. */
+.rt-team-container:where(:not(.rt-elementor-container)) .layout3 .contact-info li {
+	white-space: normal;
+	overflow: visible;
+	text-overflow: clip;
+	overflow-wrap: anywhere;
+	padding-inline-start: 40px;
+	text-indent: -40px;
+}
 
 .rt-team-container .layout3 .contact-info li i {
 	width: 30px;
@@ -13425,7 +13481,9 @@ figure:has(.rt-flip-container),
 	-ms-flex-pack: center;
 	justify-content: center;
 	vertical-align: middle;
-	margin: 0 10px 0 0;
+	margin: 0;
+	margin-inline-end: 10px;
+	text-indent: 0;
 	background: var(--l3-primary-50);
 	color: var(--l3-primary);
 	border-radius: 8px;
@@ -13978,6 +14036,20 @@ figure:has(.rt-flip-container),
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
+/* SHORTCODE: rows WRAP rather than truncate -- an ellipsis hid most of a long Location /
+   address. The hanging indent (38px = 28px icon + 10px gap) lines wrapped lines up under
+   the text, not the icon; logical props keep it right in RTL.
+   Excluded from Elementor with a zero-specificity :where(): its stylesheet makes the row's
+   <a>/<span> inline-block, which inherit the negative text-indent and get pushed out of
+   the card. Elementor keeps the original ellipsis above. */
+.rt-team-container:where(:not(.rt-elementor-container)) .layout2 .contact-info li {
+	white-space: normal;
+	overflow: visible;
+	text-overflow: clip;
+	overflow-wrap: anywhere;
+	padding-inline-start: 38px;
+	text-indent: -38px;
+}
 
 :where(.rt-team-container .layout2) .contact-info li,
 :where(.rt-team-container .layout2) .contact-info li a {
@@ -14000,7 +14072,9 @@ figure:has(.rt-flip-container),
 	-ms-flex-pack: center;
 	justify-content: center;
 	vertical-align: middle;
-	margin: 0 10px 0 0;
+	margin: 0;
+	margin-inline-end: 10px;
+	text-indent: 0;
 	background: var(--l2-primary-50);
 	color: var(--l2-primary);
 	border-radius: 8px;
@@ -14236,7 +14310,8 @@ figure:has(.rt-flip-container),
 @container (max-width: 400px) {
 	.rt-team-container .layout2 .single-team-area { padding: 12px; }
 	.rt-team-container .layout2 .single-team-area .rttm-content-area { padding-left: 12px; }
-	.rt-team-container .layout2 .contact-info li i { width: 24px; height: 24px; margin-right: 7px; font-size: 10px; }
+	.rt-team-container:where(:not(.rt-elementor-container)) .layout2 .contact-info li { padding-inline-start: 31px; text-indent: -31px; }
+	.rt-team-container .layout2 .contact-info li i { width: 24px; height: 24px; margin-inline-end: 7px; font-size: 10px; }
 	.rt-team-container .layout2 .social-icons { gap: 6px; }
 	.rt-team-container .layout2 .social-icons a { width: 30px; height: 30px; }
 }
@@ -14587,6 +14662,20 @@ figure:has(.rt-flip-container),
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
+/* SHORTCODE: rows WRAP rather than truncate -- an ellipsis hid most of a long Location /
+   address. The hanging indent (38px = 28px icon + 10px gap) lines wrapped lines up under
+   the text, not the icon; logical props keep it right in RTL.
+   Excluded from Elementor with a zero-specificity :where(): its stylesheet makes the row's
+   <a>/<span> inline-block, which inherit the negative text-indent and get pushed out of
+   the card. Elementor keeps the original ellipsis above. */
+.rt-team-container:where(:not(.rt-elementor-container)) .rttm-slider1 .contact-info li {
+	white-space: normal;
+	overflow: visible;
+	text-overflow: clip;
+	overflow-wrap: anywhere;
+	padding-inline-start: 38px;
+	text-indent: -38px;
+}
 :where(.rt-team-container .rttm-slider1) .contact-info li,
 :where(.rt-team-container .rttm-slider1) .contact-info li a {
 	color: var(--s1-ink-2);
@@ -14607,7 +14696,9 @@ figure:has(.rt-flip-container),
 	-ms-flex-pack: center;
 	justify-content: center;
 	vertical-align: middle;
-	margin: 0 10px 0 0;
+	margin: 0;
+	margin-inline-end: 10px;
+	text-indent: 0;
 	background: var(--s1-primary-50);
 	color: var(--s1-primary);
 	border-radius: 8px;
@@ -15050,6 +15141,20 @@ figure:has(.rt-flip-container),
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
+/* SHORTCODE: rows WRAP rather than truncate -- an ellipsis hid most of a long Location /
+   address. The hanging indent (38px = 28px icon + 10px gap) lines wrapped lines up under
+   the text, not the icon; logical props keep it right in RTL.
+   Excluded from Elementor with a zero-specificity :where(): its stylesheet makes the row's
+   <a>/<span> inline-block, which inherit the negative text-indent and get pushed out of
+   the card. Elementor keeps the original ellipsis above. */
+.rt-team-container:where(:not(.rt-elementor-container)) .rttm-iso .contact-info li {
+	white-space: normal;
+	overflow: visible;
+	text-overflow: clip;
+	overflow-wrap: anywhere;
+	padding-inline-start: 38px;
+	text-indent: -38px;
+}
 :where(.rt-team-container .rttm-iso) .contact-info li,
 :where(.rt-team-container .rttm-iso) .contact-info li a {
 	color: var(--iso-ink-2);
@@ -15074,7 +15179,9 @@ figure:has(.rt-flip-container),
 	-ms-flex-pack: center;
 	justify-content: center;
 	vertical-align: middle;
-	margin: 0 10px 0 0;
+	margin: 0;
+	margin-inline-end: 10px;
+	text-indent: 0;
 	background: var(--iso-primary-50);
 	color: var(--iso-primary);
 	border-radius: 8px;

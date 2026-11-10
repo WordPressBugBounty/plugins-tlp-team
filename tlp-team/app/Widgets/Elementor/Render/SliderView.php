@@ -101,6 +101,11 @@ class SliderView {
 
 			while ( $teamQuery->have_posts() ) {
 				$teamQuery->the_post();
+				// Never render a member the viewer cannot see (e.g. a published-
+				// but-password-protected member for a guest).
+				if ( ! Fns::isMemberViewable( get_post() ) ) {
+					continue;
+				}
 
 				$mID = get_the_ID();
 				$arg = RenderHelpers::loopArgBuilder( $arg, $metas, $mID, $lazyLoad );
@@ -175,6 +180,9 @@ class SliderView {
 
 		while ( $query->have_posts() ) :
 			$query->the_post();
+			if ( ! Fns::isMemberViewable( get_post() ) ) {
+				continue;
+			}
 			$iID          = get_the_ID();
 			$arg['iID']   = $iID;
 			$arg['pLink'] = get_permalink();
